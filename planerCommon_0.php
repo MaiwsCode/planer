@@ -12,5 +12,12 @@ class planerCommon extends ModuleCommon {
 	return array('Planer'=>array());
     }
 
+    public static function installer($tableClassName,$ViewText){
+        $rbo = $tableClassName;
+        $install = new $tableClassName();
+        $install->install();
+        $install->add_default_access();
+        $install->set_caption(_M($ViewText));
+    }
 
 }

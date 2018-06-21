@@ -1,0 +1,67 @@
+@CHARSET "ISO-8859-1";
+
+.planer {
+    width:90%;
+    margin-bottom: 15px;
+}
+.planer th{
+    padding:10px;
+}
+.elements{
+    text-align: center;
+    padding:10px;
+}
+.planer tr{
+    text-align: center;
+}
+.vertical-text {
+	transform: rotate(-90deg);
+	/*transform-origin: left bottom 0;*/
+}
+tr:hover >.elements{
+    background-color:#C3FFB0;
+}
+tr:hover > td{
+    color:black;
+
+}
+.easy{
+    background-color: lightgreen;
+}
+
+.hard{
+    background-color: #BB0000;
+}
+.normal{
+    
+}
+
+.hard  a { color:#ECFFAB;}
+.easy  a { color:black;}
+table.planer {
+  font-family: Arial, Helvetica, sans-serif;
+  border: 6px solid #FFFFFF;
+  background-color: #FFFFFF;
+  width: 99%;
+  height: 99%;
+  text-align: center;
+}
+table.planer td, table.planer th {
+  border: 1px solid #947470;
+  padding: 4px 4px;
+}
+table.planer tbody td {
+  font-size: 13px;
+}
+table.planer thead {
+  background: #FFFFFF;
+  background: -moz-linear-gradient(top, #ffffff 0%, #ffffff 66%, #FFFFFF 100%);
+  background: -webkit-linear-gradient(top, #ffffff 0%, #ffffff 66%, #FFFFFF 100%);
+  background: linear-gradient(to bottom, #ffffff 0%, #ffffff 66%, #FFFFFF 100%);
+}
+table.planer thead th {
+  font-size: 17px;
+  font-weight: bold;
+  color: #000000;
+  text-align: center;
+}

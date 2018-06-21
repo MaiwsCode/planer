@@ -9,7 +9,9 @@ defined("_VALID_ACCESS") || die('Direct access forbidden');
 class planerCommon extends ModuleCommon {
 
    public static function menu() {
-	return array('Planer'=>array());
+		return array(__('Module') => array('__submenu__' => 1, __('Plan sprzedaży') => array(
+	    	'__icon__'=>'pig.png','__icon_small__'=>'pig.png'
+			)));
     }
 
     public static function installer($tableClassName,$ViewText){

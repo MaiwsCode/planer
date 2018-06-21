@@ -19,14 +19,14 @@
 	/*transform-origin: left bottom 0;*/
 }
 tr:hover >.elements{
-    background-color:#C3FFB0;
+    background-color:#bdc605;
 }
-tr:hover > td{
+table.planer > tr {
     color:black;
 
 }
 .easy{
-    background-color: lightgreen;
+    background-color: #3C9352;
 }
 
 .hard{
@@ -36,7 +36,7 @@ tr:hover > td{
     
 }
 
-.hard  a { color:#ECFFAB;}
+.hard  a { color:white;}
 .easy  a { color:black;}
 table.planer {
   font-family: Arial, Helvetica, sans-serif;

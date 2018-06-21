@@ -20,6 +20,7 @@ class planerInstall extends ModuleInstall {
         $success = $fields->install();
         $fields->add_default_access();
         $fields->set_caption(_M('Plany sprzedaży tucznika'));
+        $fields->set_icon (Base_ThemeCommon::get_template_filename ( 'planer', 'pig.png' ) );
        /* $install = new planer_Recordset4();
         $install->install();
         $install->add_default_access();
@@ -64,6 +65,7 @@ class planerInstall extends ModuleInstall {
         $fields = new planer_Recordset2();
         $success = $fields->uninstall();
         $ret = true;
+        unlink("settings.txt");
         return $ret; // Return false on success and false on failure
     }
 

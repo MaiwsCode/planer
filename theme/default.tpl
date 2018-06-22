@@ -2,49 +2,70 @@
     <link rel="stylesheet" type='text/css' href='{$css}/planer/default.css' />
     
 </head>
-<div>
 
+<div class="layer" style="padding: 9px; width: 98%;">
+<div style="text-align: left; height:30px">
+<div class="css3_content_shadow">
+<div style="padding: 5px; background-color: #FFFFFF;">
 
 <h1 style="text-align: left;margin-left: 5px;">PLANY SPRZEDAŻY TUCZNIKA </h1>
-<div style="padding:5px;margin:5px;">
     {foreach from=$action_buttons item=button}
         <a class="button" {$button.href}>{$button.label}</a>
     {/foreach}</div>
-    <table  class="planer" border="1" rules="all">
+<br>
+    <table  class="Agrohandel__sale__week" cellspacing=0 >
+     <thead>
         <tr>
-            <th>Dzień tygodnia
-            <h3>Tydzień - {$week_number} </h3</th><th>Zakład</th><th>Zamówione</th><th>Cena</th><th>Kupione</th><th>Dostarczone</th><th>Akcje</th>
+            <td class="header_company">Dzień tygodnia
+            <h3>Tydzień - {$week_number} </h3</td>
+            <td class="header_future">Zakład</td>
+            <td class="header_future">Zamówione</td>
+            <td class="header_future">Cena</td>
+            <td class="header_future">Kupione</td>
+            <td class="header_future">Dostarczone</td>
+            <td class="header_future">Akcje</td>
         </tr>
+     </thead>
+     <tr class='separator'></tr>
         {assign var=val value=1}
         {assign var=arr value=$trans[1]}
         {assign var=row value=1}
         {assign var=iter value=1}
         {assign var=last value="testLocal"}
-
                 {foreach from=$days item=day}
                     {foreach from=$day item=record name=y}
-                        <tr>
+                        {if $smarty.now|date_format:"%Y-%m-%d" == $record.date } 
+                        {if ($record === reset($day))}  
+                            {assign var=useClass value="lineUp"}
+                            {assign var=extra value="border-bottom: 2px solid #336699;"}
+                        {elseif ($record === end($day))} 
+                            {assign var=useClass value="lineDown"}
+                        {else}
+                            {assign var=useClass value=""}
+                        {/if}
+                        {/if}
+                        {if $record.difficulty_level == 2}
+                            <tr class="prop100 {$useClass}">
+                        {elseif  $record.difficulty_level == 3}
+                            <tr class="prop30 {$useClass}">
+                        {else}
+                            <tr class="prop50 {$useClass}">
+                        {/if}
                             {if ($record === reset($day))}      
-                                <td rowspan="{$day|@count}">{$record.date}   <br> {$days_text[$val]}</td>
+                                <td class="inter_future" rowspan="{$day|@count}" style='{$extra}'>{$record.date}   <br> {$days_text[$val]}</td>
                             {/if}
-                            {if $record.difficulty_level == 2}
-                                <td class='elements easy'>{$record.company_name}</td>
-                            {elseif  $record.difficulty_level == 3}
-                                <td class='elements hard'>{$record.company_name}</td>
-                            {else}
-                                <td class='elements'>{$record.company_name}</td>
-                            {/if}
-                                <td class='elements'>{$record.amount}</td>
-                                <td class='elements'>{$record.Price}</td>
+                                <td class="inter_company"> {$record.company_name}</td>
+                                <td class="inter_future">{$record.amount}</td>
+                                <td class="inter_future">{$record.Price}</td>
                             {if ($record === reset($day))}      
-                                <td rowspan="{$day|@count}"> {$amount_sum[$val]} </td>
+                                <td class="inter_future" style="{$extra}" rowspan="{$day|@count}"> {$amount_sum[$val]} </td>
                             {/if}
                             {if $iter == $row}
                                 {assign var=last value=$record.company_name|strip_tags:false|substr:0}
                                 {if $arr.$last}
-                                    <td rowspan="{$indexer[$iter]}">{$arr.$last}</td>
+                                    <td class="inter_future" rowspan="{$indexer[$iter]}">{$arr.$last}</td>
                                 {else}
-                                    <td rowspan="{$indexer[$iter]}">0</td>
+                                    <td class="inter_future" rowspan="{$indexer[$iter]}">0</td>
                                 {/if}
                                  {assign var=row value=$row+$indexer[$iter]}
                                  {assign var=iter value=$iter+1}
@@ -52,7 +73,7 @@
                                 {assign var=row value=$row-1}
                             {/if}
 
-                                <td class='elements'>
+                                <td class="inter_future">
                                     {$record.edit}
                                     <a {$record.delete}><img border="0" src="data/Base_Theme/templates/default/Utils/Calendar/delete.png" alt="Usuń"  ></a>
                                 </td>
@@ -62,29 +83,41 @@
                    {assign var=val value=$val+1}
                    {assign var=arr value=$trans[$val]}
                 {/foreach}      
-    </table>
-    <br>
 
-
-    <table class="planer" border="1" rules="all">
-    <tr>
-        <th>  </th> <th>Zakład</th> <th>Suma zamówionych</th><th>Suma kupionych</th><th>Suma rozładowanych</th>
-    </tr>
+</table><Br><br>
+    <table class="Agrohandel__sale__week">
+    <thead>
+        <td class="header_future"> SUMA Z TYGODNIA </td> 
+        <td class="header_future">Zakład</td> 
+        <td class="header_future">Suma zamówionych</td>
+        <td class="header_future">Suma kupionych</td>
+        <td class="header_future">Suma rozładowanych</td>
+    </thead>
    {foreach from=$sumary_week item=company}
-    <tr>
+    <tr class="changing">
         {if ($company === reset($sumary_week))}      
-            <td style="text-align: center;padding:10px;" rowspan="{$sumary_week|@count}">Suma <br> Tydzień - {$week_number} </td>
+            <td class="header_company" rowspan="{$sumary_week|@count}" style="color:black;background-color:#F0F0F0;">
+            Tydzień - {$week_number} </td>
         {/if}
-        <td style="text-align: center;padding:10px;">{$company.name}</td>
-        <td style="text-align: center;padding:10px;">{$company.val}</td>  
+        <td >{$company.name}</td>
+        <td >{$company.val}</td>  
         {if ($company === reset($sumary_week))}      
-        <td style="text-align: center;padding:10px;" rowspan="{$sumary_week|@count}">{$week_bought}  </td>
-        <td style="text-align: center;padding:10px;" rowspan="{$sumary_week|@count}">{$week_transported}</td>
+        <td  rowspan="{$sumary_week|@count}">{$week_bought}  </td>
+        <td  rowspan="{$sumary_week|@count}">{$week_transported}</td>
         {/if}
             
 
     </tr>
     {/foreach}
+
+
     </table>
+
+    <br>
+
+
     <br><br><br>
-</div>
+    </div>
+    </div>
+    </div>
+    </div>

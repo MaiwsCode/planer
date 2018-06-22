@@ -1,67 +1,447 @@
 @CHARSET "ISO-8859-1";
 
-.planer {
-    width:90%;
-    margin-bottom: 15px;
-}
-.planer th{
-    padding:10px;
-}
-.elements{
-    text-align: center;
-    padding:10px;
-}
-.planer tr{
-    text-align: center;
-}
-.vertical-text {
-	transform: rotate(-90deg);
-	/*transform-origin: left bottom 0;*/
-}
-tr:hover >.elements{
-    background-color:#bdc605;
-}
-table.planer > tr {
-    color:black;
-
-}
-.easy{
-    background-color: #3C9352;
+.Agrohandel__sale__week {
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-o-user-select: none;
+	user-select: none;
+	width: 100%;
+	border-right: 1px solid #B3B3B3;
+	border-bottom: 1px solid #B3B3B3;
 }
 
-.hard{
-    background-color: #BB0000;
-}
-.normal{
-    
+.Agrohandel__sale__week a
+{
+	color: #56543D;
 }
 
-.hard  a { color:white;}
-.easy  a { color:black;}
-table.planer {
-  font-family: Arial, Helvetica, sans-serif;
-  border: 6px solid #FFFFFF;
-  background-color: #FFFFFF;
-  width: 99%;
-  height: 99%;
-  text-align: center;
+.Agrohandel__sale__week td {
+	height: 20px;
 }
-table.planer td, table.planer th {
-  border: 1px solid #947470;
-  padding: 4px 4px;
+
+.Agrohandel__sale__week div.inner
+{
+	text-align: right;
+	vertical-align: middle;
 }
-table.planer tbody td {
-  font-size: 13px;
+
+.Agrohandel__sale__week td.header_company {
+	width: 15%;
+	border: 0px;
+	text-align: center;
+	color: #339933;
+	text-decoration: bold;
+	/*font-weight: bold;*/
+	background-color: #FFFFFF;
 }
-table.planer thead {
-  background: #FFFFFF;
-  background: -moz-linear-gradient(top, #ffffff 0%, #ffffff 66%, #FFFFFF 100%);
-  background: -webkit-linear-gradient(top, #ffffff 0%, #ffffff 66%, #FFFFFF 100%);
-  background: linear-gradient(to bottom, #ffffff 0%, #ffffff 66%, #FFFFFF 100%);
+
+/* header day other */
+
+.Agrohandel__sale__week td.state_header_past,
+.Agrohandel__sale__week td.state_header_future,
+.Agrohandel__sale__week td.header_future,
+.Agrohandel__sale__week td.header_past {
+	vertical-align: middle;
+	border-right: 1px solid #FFFFFF;
+	border-left: 1px solid #B3B3B3;
+/*	width: 14%;*/
+	padding: 0px;
 }
-table.planer thead th {
-  font-size: 17px;
-  font-weight: bold;
-  color: #000000;
-  text-align: center;
+
+.Agrohandel__sale__week td.header_future,
+.Agrohandel__sale__week td.header_past {
+/*	display: block;*/
+	font-weight: bold;
+	font-size: 14px;
+	line-height: 50px;
+	padding-left: 5px;
+	padding-right: 5px;
+	
+	/* css3 gray gradient - calendar */
+	background: #ffffff; /* Old browsers */
+	background: -moz-linear-gradient(top, #ffffff 0%, #F6E989 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#F6E989)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #ffffff 0%,#F6E989 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #ffffff 0%,#F6E989 100%); /* Opera11.10+ */
+	background: -ms-linear-gradient(top, #ffffff 0%,#F6E989 100%); /* IE10+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#F6E989',GradientType=0 ); /* IE6-9 */
+	background: linear-gradient(top, #ffffff 0%,#F6E989 100%); /* W3C */
+	/* end css3 gray gradient - calendar */
+
+}
+
+.Agrohandel__sale__week td.header_future:hover,
+.Agrohandel__sale__week td.header_past:hover {
+	/* css3 v2 gray gradient - calendar */
+	background: #F6E989; /* Old browsers */
+	background: -moz-linear-gradient(top, #F6E989 0%, #ffffff 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#F6E989), color-stop(100%,#ffffff)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #F6E989 0%,#ffffff 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #F6E989 0%,#ffffff 100%); /* Opera11.10+ */
+	background: -ms-linear-gradient(top, #F6E989 0%,#ffffff 100%); /* IE10+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#F6E989', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
+	background: linear-gradient(top, #F6E989 0%,#ffffff 100%); /* W3C */
+	/* end css3 v2 gray gradient - calendar */
+}
+
+/* header current week */
+
+.Agrohandel__sale__week td.state_header_current,
+.Agrohandel__sale__week td.header_current {
+	vertical-align: middle;
+	font-size: 14px;
+	/*width: 14%;*/
+	border-left: 2px solid #336699;
+	border-right: 2px solid #336699;
+	padding: 0px;
+}
+
+.Agrohandel__sale__week td.header_current {
+	/*display: block;*/
+	font-weight: bold;
+	font-size: 14px;
+	line-height: 50px;
+	padding-left: 5px;
+	padding-right: 5px;
+	
+	/* css3 light blue gradient - calendar; day today */
+	background: #ebf1f6; /* Old browsers */
+	background: -moz-linear-gradient(top, #ebf1f6 0%, #abd3ee 50%, #89c3eb 51%, #d5ebfb 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ebf1f6), color-stop(50%,#abd3ee), color-stop(51%,#89c3eb), color-stop(100%,#d5ebfb)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #ebf1f6 0%,#abd3ee 50%,#89c3eb 51%,#d5ebfb 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #ebf1f6 0%,#abd3ee 50%,#89c3eb 51%,#d5ebfb 100%); /* Opera11.10+ */
+	background: -ms-linear-gradient(top, #ebf1f6 0%,#abd3ee 50%,#89c3eb 51%,#d5ebfb 100%); /* IE10+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ebf1f6', endColorstr='#d5ebfb',GradientType=0 ); /* IE6-9 */
+	background: linear-gradient(top, #ebf1f6 0%,#abd3ee 50%,#89c3eb 51%,#d5ebfb 100%); /* W3C */
+	/* end css3 light blue gradient - calendar; day today */
+}
+
+.Agrohandel__sale__week td.header_current:hover {
+	/* css3 v2 light blue gradient - calendar; day today */
+	background: #d5ebfb; /* Old browsers */
+	background: -moz-linear-gradient(top, #d5ebfb 0%, #89c3eb 49%, #abd3ee 50%, #ebf1f6 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d5ebfb), color-stop(49%,#89c3eb), color-stop(50%,#abd3ee), color-stop(100%,#ebf1f6)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #d5ebfb 0%,#89c3eb 49%,#abd3ee 50%,#ebf1f6 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #d5ebfb 0%,#89c3eb 49%,#abd3ee 50%,#ebf1f6 100%); /* Opera11.10+ */
+	background: -ms-linear-gradient(top, #d5ebfb 0%,#89c3eb 49%,#abd3ee 50%,#ebf1f6 100%); /* IE10+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d5ebfb', endColorstr='#ebf1f6',GradientType=0 ); /* IE6-9 */
+	background: linear-gradient(top, #d5ebfb 0%,#89c3eb 49%,#abd3ee 50%,#ebf1f6 100%); /* W3C */
+	/* end css3 v2 light blue gradient - calendar; day today */
+}
+
+/* company */
+
+.Agrohandel__sale__week td.inter_company span a {
+	color: #FFFFFF;
+}
+
+.Agrohandel__sale__week td.inter_company {
+	vertical-align: middle;
+	color: #DDDDDD;
+	border-top: 1px solid #B3B3B3;
+	text-align: left;
+    font-weight: bold;
+	background-color: #336699;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+/* inter */
+
+.Agrohandel__sale__week td.sum_future,
+.Agrohandel__sale__week td.sum_past,
+.Agrohandel__sale__week td.inter_future,
+.Agrohandel__sale__week td.inter_past {
+	color: #000000;
+	border: 1px solid #B3B3B3;
+	border-right: 0px;
+	border-bottom: 0px;
+	text-align: center;
+	padding: 0px;
+}
+.Agrohandel__sale__week .lineUp td.inter_future{
+	border-top: 2px solid #336699;
+}
+
+.Agrohandel__sale__week .lineUp td.inter_company{
+	border-top: 2px solid #336699;
+}
+.Agrohandel__sale__week .lineDown td.inter_future{
+	border-bottom: 2px solid #336699;
+}
+.Agrohandel__sale__week .lineDown td.inter_company{
+	border-bottom: 2px solid #336699;
+}
+.Agrohandel__sale__week td.inter_future:hover,
+.Agrohandel__sale__week td.inter_past:hover {
+	background-color: #e6cfcf !important;
+}
+
+.Agrohandel__sale__week td.inter_past div.inner {
+    width: 100%;
+    height: 20px;
+	background-color: #e6ecf2;
+}
+
+.Agrohandel__sale__week td.inter_past div.inner:hover {
+	background-color: #e6cfcf;
+}
+
+.Agrohandel__sale__week .changing:nth-child(even){
+	background-color: #ffffff;
+}
+.Agrohandel__sale__week td.sum_current,
+.Agrohandel__sale__week td.inter_current {
+	color: #000000;
+	border: 1px solid #B3B3B3;
+	/*border-bottom: 0px;*/
+	text-align: center;
+/*	background-color: #CFDAE6;*/
+	padding: 0px;
+	/*cursor: pointer;*/
+
+	border-bottom: 2px solid #336699;
+	border-top: 2px solid #336699;
+}
+tr{
+	border-bottom: 3px solid red;
+}
+
+.Agrohandel__sale__week td.inter_current div.inner {
+	width: 100%;
+    height: 20px;
+	background-color: #CFDAE6;
+}
+
+.Agrohandel__sale__week td.inter_current div.inner:hover {
+	background-color: #e6cfcf;
+}
+
+.Agrohandel__sale__week td.sum_current div.inner,
+.Agrohandel__sale__week td.sum_future div.inner,
+.Agrohandel__sale__week td.sum_past div.inner,
+.Agrohandel__sale__week td.sumtotal_current div.inner,
+.Agrohandel__sale__week td.sumtotal_future div.inner,
+.Agrohandel__sale__week td.sumtotal_past div.inner {	
+    vertical-align: middle;
+	width: 100%;
+    height: 29px;
+	border-right: 1px solid #FFF;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: right;
+    background: #e6ecf2; /* Old browsers */
+	background: -moz-linear-gradient(top,  #e6ecf2 0%, #e6ecf2 50%, #cfdae6 51%, #cfdae6 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e6ecf2), color-stop(50%,#e6ecf2), color-stop(51%,#cfdae6), color-stop(100%,#cfdae6)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #e6ecf2 0%,#e6ecf2 50%,#cfdae6 51%,#cfdae6 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #e6ecf2 0%,#e6ecf2 50%,#cfdae6 51%,#cfdae6 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #e6ecf2 0%,#e6ecf2 50%,#cfdae6 51%,#cfdae6 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #e6ecf2 0%,#e6ecf2 50%,#cfdae6 51%,#cfdae6 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e6ecf2', endColorstr='#cfdae6',GradientType=0 ); /* IE6-9 */
+}
+
+.Agrohandel__sale__week td.sumpart_current div.inner,
+.Agrohandel__sale__week td.sumpart_future div.inner,
+.Agrohandel__sale__week td.sumpart_past div.inner,
+.Agrohandel__sale__week td.sumpart_company
+{
+    height: 20px;
+    vertical-align: middle;
+	width: 100%;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: right;
+    background: #E6ECF2;
+}
+
+.Agrohandel__sale__week td.sumpart_current div.inner
+{
+	background-color: #CFDAE6;
+}
+
+.Agrohandel__sale__week td.sumpart_current {
+	color: #000000;
+	border: 1px solid #B3B3B3;
+	/*border-bottom: 0px;*/
+	text-align: left;
+/*	background-color: #CFDAE6;*/
+	padding: 0px;
+	/*cursor: pointer;*/
+
+	border-left: 2px solid #336699;
+	border-right: 2px solid #336699;
+}
+
+.Agrohandel__sale__week td.sumpart_future,
+.Agrohandel__sale__week td.sumpart_past
+{
+	border-left: 1px solid #B3B3B3;
+	border-top: 1px solid #B3B3B3;
+}
+
+.Agrohandel__sale__week td.sumtotal_company,
+.Agrohandel__sale__week td.sum_company
+{
+	text-align: right;
+	font-size: 14px;
+    font-weight: bold;
+    vertical-align: middle;
+	border-top: 1px solid #B3B3B3;
+	background: #e6ecf2; /* Old browsers */
+	background: -moz-linear-gradient(top,  #e6ecf2 0%, #e6ecf2 50%, #cfdae6 51%, #cfdae6 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e6ecf2), color-stop(50%,#e6ecf2), color-stop(51%,#cfdae6), color-stop(100%,#cfdae6)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #e6ecf2 0%,#e6ecf2 50%,#cfdae6 51%,#cfdae6 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #e6ecf2 0%,#e6ecf2 50%,#cfdae6 51%,#cfdae6 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #e6ecf2 0%,#e6ecf2 50%,#cfdae6 51%,#cfdae6 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #e6ecf2 0%,#e6ecf2 50%,#cfdae6 51%,#cfdae6 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e6ecf2', endColorstr='#cfdae6',GradientType=0 ); /* IE6-9 */
+	padding-top: 0px;
+	padding-bottom: 0px;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.Agrohandel__sale__week td.sumtotal_current div.inner,
+.Agrohandel__sale__week td.sumtotal_future div.inner,
+.Agrohandel__sale__week td.sumtotal_past div.inner,
+.Agrohandel__sale__week td.sumtotal_company
+{
+	vertical-align: middle;
+	font-size: 14px;
+	color: #FFF;
+	background: #7b9cbd; /* Old browsers */
+	background: -moz-linear-gradient(top,  #7b9cbd 0%, #7b9cbd 50%, #306090 51%, #7b9cbd 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#7b9cbd), color-stop(50%,#7b9cbd), color-stop(51%,#306090), color-stop(100%,#7b9cbd)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #7b9cbd 0%,#7b9cbd 50%,#306090 51%,#7b9cbd 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #7b9cbd 0%,#7b9cbd 50%,#306090 51%,#7b9cbd 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #7b9cbd 0%,#7b9cbd 50%,#306090 51%,#7b9cbd 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #7b9cbd 0%,#7b9cbd 50%,#306090 51%,#7b9cbd 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7b9cbd', endColorstr='#7b9cbd',GradientType=0 ); /* IE6-9 */
+}
+
+.Agrohandel__sale__week tr.separator,
+.Agrohandel__sale__week tr.separator td
+{
+	height: 10px;
+}
+
+.Agrohandel__sale__week td.inter_company a
+{
+	color: #FFFFFF;	
+}
+
+.Agrohandel__sale__week td.inter_company a:hover
+{
+	color: yellow;
+}
+.Agrohandel__sale__week tr > td{
+	text-align: center;
+}
+.Agrohandel__sale__week tr.prop100 td.inter_company
+{
+	background: #149314;
+}
+.Agrohandel__sale__week tr.prop100:hover td.inter_company
+{
+	background: #34B334;
+}
+
+.Agrohandel__sale__week tr.prop50 td.inter_company
+{
+	background: #df8500;
+}
+.Agrohandel__sale__week tr.prop50:hover td.inter_company
+{
+	background: #ffa520;
+}
+
+.Agrohandel__sale__week tr.prop30 td.inter_company
+{
+	background: #8f0d00;
+}
+
+.Agrohandel__sale__week tr.prop30:hover td.inter_company
+{
+	background: #Af2d20;
+}
+
+.Agrohandel__sale__week tr.prop0 td.inter_company
+{
+	background: #808080;
+}
+
+.Agrohandel__sale__week tr.prop0:hover td.inter_company
+{
+	background: #A0A0A0;
+}
+.Agrohandel__sale__week td.state_header_past,
+.Agrohandel__sale__week td.state_header_future
+{
+	background: #ffffff;
+}
+
+.Agrohandel__sale__week td.state_header_current
+{
+	background: #ebf1f6;
+}
+
+.Agrohandel__sale__week table.state
+{
+	height: 100%;
+	width: 100%;
+}
+
+.Agrohandel__sale__week td.sum_current *,
+.Agrohandel__sale__week td.sum_future *,
+.Agrohandel__sale__week td.sum_past *,
+.Agrohandel__sale__week td.sumtotal_current *,
+.Agrohandel__sale__week td.sumtotal_future *,
+.Agrohandel__sale__week td.sumtotal_past *
+{
+	font-size: 14px;
+}
+
+.Agrohandel__sale__week table.state tr td
+{
+	padding-right: 5px;
+	border-right: 1px dotted #B3B3B3;
+	height: 100%;
+}
+.Agrohandel__sale__week table.state tr td:last-child
+{
+	border-right: none;
+}
+
+.Agrohandel__sale__week td.state_header_current,
+.Agrohandel__sale__week td.state_header_past,
+.Agrohandel__sale__week td.state_header_future
+{
+	text-align: center;
+}
+
+.Agrohandel__sale__week table.state tr td.sold,
+.Agrohandel__sale__week table.state tr td.planning,
+.Agrohandel__sale__week table.state tr td.discarded,
+.Agrohandel__sale__week table.state tr td.potential
+{
+	font-weight: bold;
+}
+
+.Agrohandel__sale__week table.state tr td.sold
+{
+	color: #3da25c;
+}
+
+.Agrohandel__sale__week table.state tr td.potential,
+.Agrohandel__sale__week table.state tr td.planning
+{
+    color: #ab6812;
+}
+
+.Agrohandel__sale__week table.state tr td.discarded
+{
+    color: #e01c2a;
 }

@@ -10,7 +10,7 @@ class planer extends Module {
 public function settings(){
     }    
 
-    public function body($week_number, $copy){
+    public function body($week_number, $copy,$delete_record){
 
 	//see record
         Base_LangCommon::install_translations('planer');
@@ -27,6 +27,10 @@ public function settings(){
         }
         else{
             $week_num= $_REQUEST ['week_number'];   
+        }
+        if(isset ($_REQUEST["delete_record"])){
+            $delete_record = $_REQUEST['delete_record'];
+            $rbo->delete_record($delete_record);
         }
         if(isset ( $_REQUEST['copy'])){
             if(Addons::can_copy()){
@@ -66,27 +70,38 @@ public function settings(){
         $pon = $rbo->get_records(array('date' => $date->monday_of_week($week_num)),array(),array('company_name' => "ASC"));
         $pon = Rbo_Futures::set_related_fields($pon, 'company_name');
         foreach($pon as $p){
-            $p["link"] = $p->record_link('<img class="action_button" src="data/Base_Theme/templates/default/Utils/GenericBrowser/edit.png" border="0">',$nolink=false,'edit');
+            $p["edit"] = $p->record_link('<img class="action_button" src="data/Base_Theme/templates/default/Utils/GenericBrowser/edit.png" border="0" alt="Edytuj">',$nolink=false,'edit');
+            $del = $this->create_href(array("delete_record" => $p['id']));
+            $p["delete"] = $del;
+            
         }
         $wt = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 1)),array(),array('company_name' => "ASC"));
         $wt = Rbo_Futures::set_related_fields($wt, 'company_name');
         foreach($wt as $p){
-            $p["link"] = $p->record_link('<img class="action_button" src="data/Base_Theme/templates/default/Utils/GenericBrowser/edit.png" border="0">',$nolink=false,'edit');
+            $p["edit"] = $p->record_link('<img class="action_button" src="data/Base_Theme/templates/default/Utils/GenericBrowser/edit.png" border="0" alt="Edytuj">',$nolink=false,'edit');
+            $del = $this->create_href(array("delete_record" => $p['id']));
+            $p["delete"] = $del;
         }
         $sr = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 2)),array(),array('company_name' => "ASC"));
         $sr = Rbo_Futures::set_related_fields($sr, 'company_name');
         foreach($sr as $p){
-            $p["link"] = $p->record_link('<img class="action_button" src="data/Base_Theme/templates/default/Utils/GenericBrowser/edit.png" border="0">',$nolink=false,'edit');
+            $p["edit"] = $p->record_link('<img class="action_button" src="data/Base_Theme/templates/default/Utils/GenericBrowser/edit.png" border="0" alt="Edytuj">',$nolink=false,'edit');
+            $del = $this->create_href(array("delete_record" => $p['id']));
+            $p["delete"] = $del;
         }
         $czw = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 3)),array(),array('company_name' => "ASC"));
         $czw = Rbo_Futures::set_related_fields($czw, 'company_name');
         foreach($czw as $p){
-            $p["link"] = $p->record_link('<img class="action_button" src="data/Base_Theme/templates/default/Utils/GenericBrowser/edit.png" border="0">',$nolink=false,'edit');
+            $p["edit"] = $p->record_link('<img class="action_button" src="data/Base_Theme/templates/default/Utils/GenericBrowser/edit.png" border="0" alt="Edytuj">',$nolink=false,'edit');
+            $del = $this->create_href(array("delete_record" => $p['id']));
+            $p["delete"] = $del;
         }
         $pt = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 4)),array(),array('company_name' => "ASC"));
         $pt = Rbo_Futures::set_related_fields($pt, 'company_name');
         foreach($pt as $p){
-            $p["link"] = $p->record_link('<img class="action_button" src="data/Base_Theme/templates/default/Utils/GenericBrowser/edit.png" border="0">',$nolink=false,'edit');
+            $p["edit"] = $p->record_link('<img class="action_button" src="data/Base_Theme/templates/default/Utils/GenericBrowser/edit.png" border="0" alt="Edytuj">',$nolink=false,'edit');
+            $del = $this->create_href(array("delete_record" => $p['id']));
+            $p["delete"] = $del;
         }
         //potrzeba wstawić prawidłową nazwe tabeli
         $bought = new RBO_RecordsetAccessor('custom_agrohandel_purchase_plans');
@@ -150,37 +165,37 @@ public function settings(){
         }
         //dostarczone
         //potrzena tabela z Raport z rozladunku
-        $transported = new RBO_RecordsetAccessor("Transport");
+        $transported = new RBO_RecordsetAccessor("custom_agrohandel_transporty");
         $trans_pon = array();
         $trans_wt = array();
         $trans_sr = array();
         $trans_czw = array();
         $trans_pt = array();
         $transports = [];
-        $t_pon = $transported->get_records(array('date' => $date->monday_of_week($week_num)),array(),array('company_name' => "ASC"));
+        $t_pon = $transported->get_records(array('date' => $date->monday_of_week($week_num)),array(),array('company' => "ASC"));
         foreach($t_pon as $t){
-            $x = $t->get_val("company_name",$nolink = TRUE);
-            $trans_pon[$x] += $t['amount'];
+            $x = $t->get_val("company",$nolink = TRUE);
+            $trans_pon[$x] += $t['iloscrozl'];
         }
-        $t_wt = $transported->get_records(array('date' =>$date->add_days($date->monday_of_week($week_num), 1)),array(),array('company_name' => "ASC"));
+        $t_wt = $transported->get_records(array('date' =>$date->add_days($date->monday_of_week($week_num), 1)),array(),array('company' => "ASC"));
         foreach($t_wt as $t){
-            $x = $t->get_val("company_name",$nolink = TRUE);
-            $trans_wt[$x] += $t['amount'];
+            $x = $t->get_val("company",$nolink = TRUE);
+            $trans_wt[$x] += $t['iloscrozl'];
         }
-        $t_sr = $transported->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 2)),array(),array('company_name' => "ASC"));
+        $t_sr = $transported->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 2)),array(),array('company' => "ASC"));
         foreach($t_sr as $t){
-            $x = $t->get_val("company_name",$nolink = TRUE);
-            $trans_sr[$x] += $t['amount'];
+            $x = $t->get_val("company",$nolink = TRUE);
+            $trans_sr[$x] += $t['iloscrozl'];
         }
-        $t_czw = $transported->get_records(array('date' =>$date->add_days($date->monday_of_week($week_num), 3)),array(),array('company_name' => "ASC"));
+        $t_czw = $transported->get_records(array('date' =>$date->add_days($date->monday_of_week($week_num), 3)),array(),array('company' => "ASC"));
         foreach($t_czw as $t){
-            $x = $t->get_val("company_name",$nolink = TRUE);
-            $trans_czw[$x] += $t['amount'];
+            $x = $t->get_val("company",$nolink = TRUE);
+            $trans_czw[$x] += $t['iloscrozl'];
         }
-        $t_pt = $transported->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 4)),array(),array('company_name' => "ASC"));
+        $t_pt = $transported->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 4)),array(),array('company' => "ASC"));
         foreach($t_pt as $t){
-            $x = $t->get_val("company_name",$nolink = TRUE);
-            $trans_pt[$x] += $t['amount'];
+            $x = $t->get_val("company",$nolink = TRUE);
+            $trans_pt[$x] += $t['iloscrozl'];
         }
         $transports[1] = $trans_pon;
         $transports[2] = $trans_wt;
@@ -225,7 +240,7 @@ public function settings(){
             $sum_week[$sum->get_val("company_name",$nolink=true)] = array("val" => $value,
                                                                         "name" =>$sum->get_val("company_name",$nolink=true));
         }
-        $week_transported = $this->sum_records($week_transported,"amount");
+        $week_transported = $this->sum_records($week_transported,"iloscrozl");
         $week_bought = $this->sum_records($week_bought,'Amount');
         $theme->assign("sumary_week",$sum_week);
         $theme->assign("week_bought",$week_bought);

@@ -13,13 +13,16 @@ class planerCommon extends ModuleCommon {
 	    	'__icon__'=>'pig.png','__icon_small__'=>'pig.png'
 			)));
     }
-
-    public static function installer($tableClassName,$ViewText){
-        $rbo = $tableClassName;
-        $install = new $tableClassName();
-        $install->install();
-        $install->add_default_access();
-        $install->set_caption(_M($ViewText));
+    public static function watchdog_label($rid = null, $events = array(), $details = true)
+    {
+    	return Utils_RecordBrowserCommon::watchdog_label(
+    			'Sales_plan',
+    			__('Plan sprzedaży tucznika'),
+    			$rid,
+    			$events,
+    			'text',
+    			$details
+    	);
     }
 
 }

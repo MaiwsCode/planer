@@ -51,6 +51,7 @@ class planerInstall extends ModuleInstall {
         $now = date("Y-m-d H:i:s");
         $event->created_on = $now;
         $event->save();
+        Utils_RecordBrowserCommon::enable_watchdog('Sales_plan', array($this->get_type () . 'Common','watchdog_label'));
 	$ret = true;
        // Base_BoxCommon::push_module();
 

@@ -3,14 +3,13 @@
     
 </head>
 <div>
-    <div>
-{foreach from=$action_buttons item=button}
-&nbsp;&nbsp;<a class="button" {$button.href}>{$button.label}</a>
-{/foreach}
-    </div>
 
 
 <h1 style="text-align: left;margin-left: 5px;">PLANY SPRZEDAŻY TUCZNIKA </h1>
+<div style="padding:5px;margin:5px;">
+    {foreach from=$action_buttons item=button}
+        <a class="button" {$button.href}>{$button.label}</a>
+    {/foreach}</div>
     <table  class="planer" border="1" rules="all">
         <tr>
             <th>Dzień tygodnia
@@ -53,7 +52,10 @@
                                 {assign var=row value=$row-1}
                             {/if}
 
-                                <td class='elements'>{$record.link}</td>
+                                <td class='elements'>
+                                    {$record.edit}
+                                    <a {$record.delete}><img border="0" src="data/Base_Theme/templates/default/Utils/Calendar/delete.png" alt="Usuń"  ></a>
+                                </td>
                             
                         </tr>
                     {/foreach}

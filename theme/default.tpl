@@ -31,19 +31,20 @@
         {assign var=arr value=$trans[1]}
         {assign var=row value=1}
         {assign var=iter value=1}
+        {assign var=extra value=""}
         {assign var=last value="testLocal"}
                 {foreach from=$days item=day}
                     {foreach from=$day item=record name=y}
-                        {if $smarty.now|date_format:"%Y-%m-%d" == $record.date } 
-                        {if ($record === reset($day))}  
-                            {assign var=useClass value="lineUp"}
-                            {assign var=extra value="border-bottom: 2px solid #336699;"}
-                        {elseif ($record === end($day))} 
-                            {assign var=useClass value="lineDown"}
+                        {if $smarty.now|date_format:"%Y-%m-%d" == $record.date} 
+                            {if ($record === reset($day))}  
+                                {assign var=useClass value="lineUp"}
+                                {assign var=extra value="border-bottom: 2px solid #336699;"}
+                            {elseif ($record === end($day))} 
+                                {assign var=useClass value="lineDown"}
+                            {else}
+                                {assign var=useClass value=""}
+                            {/if}
                         {else}
-                            {assign var=useClass value=""}
-                        {/if}
-                        {esle}
                             {assign var=useClass value=""}
                         {/if}
                         {if $record.difficulty_level == 2}
@@ -53,33 +54,31 @@
                         {else}
                             <tr class="prop50 {$useClass}">
                         {/if}
-                            {if ($record === reset($day))}      
-                                <td class="inter_future" rowspan="{$day|@count}" style='{$extra}'>{$record.date}   <br> {$days_text[$val]}</td>
+                        {if ($record === reset($day))}      
+                            <td class="inter_future" rowspan="{$day|@count}" style='{$extra}'>{$record.date}   <br> {$days_text[$val]}</td>
+                        {/if}
+                        <td class="inter_company"> {$record.company_name}</td>
+                        <td class="inter_future">{$record.amount}</td>
+                        <td class="inter_future">{$record.Price}</td>
+                        {if ($record === reset($day))}      
+                            <td class="inter_future" style="{$extra}" rowspan="{$day|@count}"> {$amount_sum[$val]} </td>
+                        {/if}
+                        {if $iter == $row}
+                            {assign var=last value=$record.company_name|strip_tags:false|substr:0}
+                            {if $arr.$last}
+                                <td class="inter_future" style="{$extra}" rowspan="{$indexer[$iter]}">{$arr.$last}</td>
+                            {else}
+                                <td class="inter_future" style="{$extra}" rowspan="{$indexer[$iter]}">0as</td>
                             {/if}
-                                <td class="inter_company"> {$record.company_name}</td>
-                                <td class="inter_future">{$record.amount}</td>
-                                <td class="inter_future">{$record.Price}</td>
-                            {if ($record === reset($day))}      
-                                <td class="inter_future" style="{$extra}" rowspan="{$day|@count}"> {$amount_sum[$val]} </td>
-                            {/if}
-                            {if $iter == $row}
-                                {assign var=last value=$record.company_name|strip_tags:false|substr:0}
-                                {if $arr.$last}
-                                    <td class="inter_future" rowspan="{$indexer[$iter]}">{$arr.$last}</td>
-                                {else}
-                                    <td class="inter_future" rowspan="{$indexer[$iter]}">0</td>
-                                {/if}
-                                 {assign var=row value=$row+$indexer[$iter]}
-                                 {assign var=iter value=$iter+1}
+                                {assign var=row value=$row+$indexer[$iter]}
+                                {assign var=iter value=$iter+1}
                             {else}
                                 {assign var=row value=$row-1}
                             {/if}
-
-                                <td class="inter_future">
-                                    {$record.edit}
-                                    <a {$record.delete}><img border="0" src="data/Base_Theme/templates/default/Utils/Calendar/delete.png" alt="Usuń"  ></a>
-                                </td>
-                            
+                            <td class="inter_future">
+                                {$record.edit}
+                                <a {$record.delete}><img border="0" src="data/Base_Theme/templates/default/Utils/Calendar/delete.png" alt="Usuń" ></a>
+                            </td>
                         </tr>
                     {/foreach}
                    {assign var=val value=$val+1}
@@ -107,19 +106,11 @@
         <td  rowspan="{$sumary_week|@count}">{$week_bought}  </td>
         <td  rowspan="{$sumary_week|@count}">{$week_transported}</td>
         {/if}
-            
-
     </tr>
     {/foreach}
-
-
     </table>
-
-    <br>
-
-
-    <br><br><br>
-    </div>
-    </div>
-    </div>
+    <br><br><br><br>
+                </div>
+            </div>
+        </div>
     </div>

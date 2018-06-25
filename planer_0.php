@@ -33,7 +33,7 @@ public function settings(){
             $rbo->delete_record($delete_record);
         }
         if(isset ( $_REQUEST['copy'])){
-            if(Addons::can_copy()){
+            if(Addons::can_copy($week_num)){
                 $sales = new RBO_RecordsetAccessor("Sales_plan");
                 $start_date = $date->monday_of_week($week_num-1); ;
                 $end_date = $date->add_days($date->monday_of_week($week_num-1),4);
@@ -165,15 +165,15 @@ public function settings(){
         }
         //dostarczone
         //potrzena tabela z Raport z rozladunku
-        $transported = new RBO_RecordsetAccessor("custom_agrohandel_transporty");
+        $transported = new RBO_RecordsetAccessor("custom_agrohandel_transporty"); //custom_agrohandel_transporty Transport
         $trans_pon = array();
         $trans_wt = array();
         $trans_sr = array();
         $trans_czw = array();
         $trans_pt = array();
         $transports = [];
-        $company_field = "company"; ///company_name
-        $amount = "iloscrozl"; //amount
+        $company_field = "company"; ///company company_name
+        $amount = "iloscrozl"; //iloscrozl amount
         $t_pon = $transported->get_records(array('date' => $date->monday_of_week($week_num)),array(),array($company_field => "ASC"));
         foreach($t_pon as $t){
             $x = $t->get_val($company_field,$nolink = TRUE);
@@ -242,7 +242,7 @@ public function settings(){
             $sum_week[$sum->get_val("company_name",$nolink=true)] = array("val" => $value,
                                                                         "name" =>$sum->get_val("company_name",$nolink=true));
         }
-        $week_transported = $this->sum_records($week_transported,"iloscrozl");
+        $week_transported = $this->sum_records($week_transported,$amount);
         $week_bought = $this->sum_records($week_bought,'Amount');
         $theme->assign("sumary_week",$sum_week);
         $theme->assign("week_bought",$week_bought);
@@ -334,7 +334,7 @@ class Addons{
         $data =  explode("\n", $data);
         $saved_last_week_copied = $data[0];
         $saved_is_copied = $data[1];
-        if($this_week - intval($saved_last_week_copied) <= 1 && $saved_is_copied == "1"){
+        if($this_week - intval($saved_last_week_copied) <= 1){
             $can = false;   
         }
         return $can;

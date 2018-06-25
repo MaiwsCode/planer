@@ -43,6 +43,8 @@
                         {else}
                             {assign var=useClass value=""}
                         {/if}
+                        {esle}
+                            {assign var=useClass value=""}
                         {/if}
                         {if $record.difficulty_level == 2}
                             <tr class="prop100 {$useClass}">

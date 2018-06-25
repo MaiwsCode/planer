@@ -172,30 +172,32 @@ public function settings(){
         $trans_czw = array();
         $trans_pt = array();
         $transports = [];
-        $t_pon = $transported->get_records(array('date' => $date->monday_of_week($week_num)),array(),array('company' => "ASC"));
+        $company_field = "company"; ///company_name
+        $amount = "iloscrozl"; //amount
+        $t_pon = $transported->get_records(array('date' => $date->monday_of_week($week_num)),array(),array($company_field => "ASC"));
         foreach($t_pon as $t){
-            $x = $t->get_val("company",$nolink = TRUE);
-            $trans_pon[$x] += $t['iloscrozl'];
+            $x = $t->get_val($company_field,$nolink = TRUE);
+            $trans_pon[$x] += $t[$amount];
         }
-        $t_wt = $transported->get_records(array('date' =>$date->add_days($date->monday_of_week($week_num), 1)),array(),array('company' => "ASC"));
+        $t_wt = $transported->get_records(array('date' =>$date->add_days($date->monday_of_week($week_num), 1)),array(),array($company_field => "ASC"));
         foreach($t_wt as $t){
-            $x = $t->get_val("company",$nolink = TRUE);
-            $trans_wt[$x] += $t['iloscrozl'];
+            $x = $t->get_val($company_field,$nolink = TRUE);
+            $trans_wt[$x] += $t[$amount];
         }
-        $t_sr = $transported->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 2)),array(),array('company' => "ASC"));
+        $t_sr = $transported->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 2)),array(),array($company_field => "ASC"));
         foreach($t_sr as $t){
-            $x = $t->get_val("company",$nolink = TRUE);
-            $trans_sr[$x] += $t['iloscrozl'];
+            $x = $t->get_val($company_field,$nolink = TRUE);
+            $trans_sr[$x] += $t[$amount];
         }
-        $t_czw = $transported->get_records(array('date' =>$date->add_days($date->monday_of_week($week_num), 3)),array(),array('company' => "ASC"));
+        $t_czw = $transported->get_records(array('date' =>$date->add_days($date->monday_of_week($week_num), 3)),array(),array($company_field => "ASC"));
         foreach($t_czw as $t){
-            $x = $t->get_val("company",$nolink = TRUE);
-            $trans_czw[$x] += $t['iloscrozl'];
+            $x = $t->get_val($company_field,$nolink = TRUE);
+            $trans_czw[$x] += $t[$amount];
         }
-        $t_pt = $transported->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 4)),array(),array('company' => "ASC"));
+        $t_pt = $transported->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 4)),array(),array($company_field => "ASC"));
         foreach($t_pt as $t){
-            $x = $t->get_val("company",$nolink = TRUE);
-            $trans_pt[$x] += $t['iloscrozl'];
+            $x = $t->get_val($company_field,$nolink = TRUE);
+            $trans_pt[$x] += $t[$amount];
         }
         $transports[1] = $trans_pon;
         $transports[2] = $trans_wt;

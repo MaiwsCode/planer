@@ -43,9 +43,11 @@
                                 {assign var=useClass value="lineDown"}
                             {else}
                                 {assign var=useClass value=""}
+                                {assign var=extra value=""}
                             {/if}
                         {else}
                             {assign var=useClass value=""}
+                            {assign var=extra value=""}
                         {/if}
                         {if $record.difficulty_level == 2}
                             <tr class="prop100 {$useClass}">
@@ -66,9 +68,9 @@
                         {if $iter == $row}
                             {assign var=last value=$record.company_name|strip_tags:false|substr:0}
                             {if $arr.$last}
-                                <td class="inter_future" style="{$extra}" rowspan="{$indexer[$iter]}">{$arr.$last}</td>
+                                <td class="inter_future"  rowspan="{$indexer[$iter]}">{$arr.$last}</td>
                             {else}
-                                <td class="inter_future" style="{$extra}" rowspan="{$indexer[$iter]}">0as</td>
+                                <td class="inter_future"  rowspan="{$indexer[$iter]}">0</td>
                             {/if}
                                 {assign var=row value=$row+$indexer[$iter]}
                                 {assign var=iter value=$iter+1}

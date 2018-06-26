@@ -11,7 +11,7 @@
 <h1 style="text-align: left;margin-left: 5px;">PLANY SPRZEDAŻY TUCZNIKA </h1>
     {foreach from=$action_buttons item=button}
         <a class="button" {$button.href}>{$button.label}</a>
-    {/foreach}</div>
+    {/foreach}
 <br>
     <table  class="Agrohandel__sale__week" cellspacing=0 >
      <thead>

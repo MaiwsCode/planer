@@ -10,7 +10,7 @@ class planer extends Module {
 public function settings(){
     }    
 
-    public function body($week_number, $copy,$delete_record){
+    public function body(){
 
 	//see record
         Base_LangCommon::install_translations('planer');

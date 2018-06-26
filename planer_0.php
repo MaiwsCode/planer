@@ -22,11 +22,12 @@ public function settings(){
         $companes = new RBO_RecordsetAccessor("Company");
         $date = new PickDate();
         $days = array();
-        if (!isset ( $_REQUEST ['week_number'] )){
-            $week_num= $date->get_week_number();        
+        if (!isset($_REQUEST['week_number'])){
+            $today = date("Y-m-d");
+            $week_num = $date->get_week_number($today);        
         }
         else{
-            $week_num= $_REQUEST ['week_number'];   
+            $week_num= $_REQUEST['week_number'];   
         }
         if(isset ($_REQUEST["delete_record"])){
             $delete_record = $_REQUEST['delete_record'];
@@ -342,7 +343,8 @@ class Addons{
     public static function copied(){
 
         $date = new PickDate(); 
-        $this_week = $date->get_week_number();
+        $today = date("Y-m-d");
+        $this_week = $date->get_week_number($today);
         $last_week = $this_week - 1;
         $settings = fopen("settings.txt", "w");
         $txt = $last_week."\n";

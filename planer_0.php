@@ -33,11 +33,12 @@ public function settings(){
             $delete_record = $_REQUEST['delete_record'];
             $rbo->delete_record($delete_record);
         }
-        if(isset ( $_REQUEST['copy'])){
+        if(isset($_REQUEST['copy'])){
             if(Addons::can_copy($week_num)){
                 $sales = new RBO_RecordsetAccessor("Sales_plan");
-                $start_date = $date->monday_of_week($week_num-1); ;
-                $end_date = $date->add_days($date->monday_of_week($week_num-1),4);
+                $from = $week_num - 1;
+                $start_date = $date->monday_of_week($from); ;
+                $end_date = $date->add_days($date->monday_of_week($from),4);
                 $records = $sales->get_records(array('>=date' => $start_date, '<=date' => $end_date));
                 foreach($records as $record){
                     $new_record = array("company_name" => $record['company_name'] , "amount" => $record['amount'] ,
@@ -50,22 +51,26 @@ public function settings(){
                     $id = $user->id;
                     $new->save();    
                 }
-                Addons::copied();
+                Addons::copied($week_num);
             }
         }
         if(Addons::can_copy($week_num)){
-           Base_ActionBarCommon::add('add', __('Copy from last month'), $this->create_href ( array ('copy' => TRUE)));
+           Base_ActionBarCommon::add('add', __('Copy from last week'), $this->create_href ( array ('copy' => TRUE,'week_number' => $week_num )));
         }
         $prev = $week_num -1;
-        $buttons[] = array(
-            'label' => __ ('<<' ),
-            'href' => $this->create_href ( array ('week_number' => $prev))
-        );
+        if($prev > 0){
+            $buttons[] = array(
+                'label' => __ ('<<' ),
+                'href' => $this->create_href ( array ('week_number' => $prev))
+            );
+        }
         $next = $week_num + 1;
-        $buttons[] = array(
-            'label' => __ ('>>' ),
-            'href' => $this->create_href ( array ('week_number' => $next))
-        );
+        if($next <=52){
+            $buttons[] = array(
+                'label' => __ ('>>' ),
+                'href' => $this->create_href ( array ('week_number' => $next))
+            );
+        }
 
         // zamowione 
         $pon = $rbo->get_records(array('date' => $date->monday_of_week($week_num)),array(),array('company_name' => "ASC"));
@@ -200,6 +205,13 @@ public function settings(){
             $x = $t->get_val($company_field,$nolink = TRUE);
             $trans_pt[$x] += $t[$amount];
         }
+        $week_trans = array();
+        $week_transported = $transported->get_records(array('>=date' => $date->add_days($date->monday_of_week($week_num)),
+        '<=date' => $date->add_days($date->monday_of_week($week_num), 4)),array(),array($company_field => "ASC"));
+        foreach($week_transported as $t){
+            $x = $t->get_val($company_field,$nolink = TRUE);
+            $week_trans[$x] += $t[$amount];
+        }
         $transports[1] = $trans_pon;
         $transports[2] = $trans_wt;
         $transports[3] = $trans_sr;
@@ -243,11 +255,11 @@ public function settings(){
             $sum_week[$sum->get_val("company_name",$nolink=true)] = array("val" => $value,
                                                                         "name" =>$sum->get_val("company_name",$nolink=true));
         }
-        $week_transported = $this->sum_records($week_transported,$amount);
+       // $week_transported = $this->sum_records($week_transported,$amount);
         $week_bought = $this->sum_records($week_bought,'Amount');
         $theme->assign("sumary_week",$sum_week);
         $theme->assign("week_bought",$week_bought);
-        $theme->assign("week_transported",$week_transported);
+        $theme->assign("week_transported",$week_trans);
         $theme->assign('days_text',$days_text);
         $theme->assign('amount_sum',$amount_sum);
         $theme->assign('start',1);
@@ -330,27 +342,22 @@ class Addons{
         $date = new PickDate(); 
         $this_week = $week_selected;
         $last_week = $this_week - 1;
-        $data = fread($settings,64);
+        $data = fread($settings,filesize('settings.txt'));
         fclose($settings);
         $data =  explode("\n", $data);
-        $saved_last_week_copied = $data[0];
-        $saved_is_copied = $data[1];
-        if($this_week - intval($saved_last_week_copied) <= 1){
-            $can = false;   
+        foreach($data as $day){
+            if($day == $this_week){
+                $can = false;
+            }
         }
         return $can;
     }
-    public static function copied(){
+    public static function copied($week){
 
         $date = new PickDate(); 
         $today = date("Y-m-d");
-        $this_week = $date->get_week_number($today);
-        $last_week = $this_week - 1;
-        $settings = fopen("settings.txt", "w");
-        $txt = $last_week."\n";
-        fwrite ($settings, $txt);
-        $txt = "1";
-        fwrite ($settings, $txt);
+        $settings = fopen("settings.txt", "a");
+        fwrite($settings, "\n". $week);
         fclose($settings);
     }
 }

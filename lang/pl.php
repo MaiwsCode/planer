@@ -11,7 +11,7 @@ $translations['Price']='Cena';
 $translations['Description trader']='Notatka Handlowa ';
 $translations['Description Manager']='Notatka Menagera';
 $translations['Difficulty level']='Poziom Trudności';
-$translations['Copy from last month']='Dodaj z poprzedniego miesiąca';
+$translations['Copy from last week']='Dodaj z poprzedniego tygodnia';
 
 ?>
 

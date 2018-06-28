@@ -29,6 +29,7 @@
      <tr class='separator'></tr>
         {assign var=val value=1}
         {assign var=arr value=$trans[1]}
+        {assign var=transported value=$week_trans}
         {assign var=row value=1}
         {assign var=iter value=1}
         {assign var=extra value=""}
@@ -36,7 +37,10 @@
                 {foreach from=$days item=day}
                     {foreach from=$day item=record name=y}
                         {if $smarty.now|date_format:"%Y-%m-%d" == $record.date} 
-                            {if ($record === reset($day))}  
+                            {if ($record === reset($day)) && $day|@count == 1}  
+                                {assign var=useClass value="lineUp lineDown"}
+                                {assign var=extra value="border-bottom: 2px solid #336699;"}
+                            {elseif ($record === reset($day))}
                                 {assign var=useClass value="lineUp"}
                                 {assign var=extra value="border-bottom: 2px solid #336699;"}
                             {elseif ($record === end($day))} 
@@ -102,11 +106,19 @@
             <td class="header_company" rowspan="{$sumary_week|@count}" style="color:black;background-color:#F0F0F0;">
             Tydzień - {$week_number} </td>
         {/if}
-        <td >{$company.name}</td>
-        <td >{$company.val}</td>  
+        {assign var=last value=$company.name}
+        <td class="inter_future" >{$company.name}</td>
+        <td class="inter_future" >{$company.val}</td>  
         {if ($company === reset($sumary_week))}      
-        <td  rowspan="{$sumary_week|@count}">{$week_bought}  </td>
-        <td  rowspan="{$sumary_week|@count}">{$week_transported}</td>
+        <td class="inter_future"  rowspan="{$sumary_week|@count}">{$week_bought}  </td>
+        {/if}
+        <td class="inter_future">
+        {if $week_transported.$last == ""}
+            0
+        </td>
+        {else}
+            {$week_transported.$last}
+        </td>
         {/if}
     </tr>
     {/foreach}

@@ -204,7 +204,7 @@ public function settings(){
             $trans_pt[$x] += $t[$amount];
         }
         $week_trans = array();
-        $week_transported = $transported->get_records(array('>=date' => $date->add_days($date->monday_of_week($week_num)),
+        $week_transported = $transported->get_records(array('>=date' => $date->add_days($date->monday_of_week($week_num),0),
         '<=date' => $date->add_days($date->monday_of_week($week_num), 4)),array(),array($company_field => "ASC"));
         foreach($week_transported as $t){
             $x = $t->get_val($company_field,$nolink = TRUE);

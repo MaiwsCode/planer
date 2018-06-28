@@ -10,7 +10,8 @@ class planerInstall extends ModuleInstall {
     public function install() {
 // Here you can place installation process for the module
   
-        
+        Base_LangCommon::install_translations('planer');
+        Base_ThemeCommon::install_default_theme ('planer');
         Base_ThemeCommon::install_default_theme($this->get_type());
         $fields1 = new planer_Recordset2();
         $success = $fields1->install();

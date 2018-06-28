@@ -13,8 +13,6 @@ public function settings(){
     public function body(){
 
 	//see record
-        Base_LangCommon::install_translations('planer');
-        Base_ThemeCommon::install_default_theme ('planer');
         Base_ActionBarCommon::add('add',__('New'), Utils_RecordBrowserCommon::create_new_record_href('Sales_plan', $this->custom_defaults));
         $theme = $this->init_module('Base/Theme');
         $theme->assign("css", Base_ThemeCommon::get_template_dir());

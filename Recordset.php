@@ -19,7 +19,7 @@ class planer_Recordset  extends RBO_Recordset {
         $company = new RBO_Field_Select(_M('Company Name'));
         $company->from('company')->fields('company_name')->set_visible()->set_required();
         
-        $price = new RBO_Field_Float(_M("Price"));
+        $price = new RBO_Field_Currency(_M("Price"));
         $price->set_required()->set_visible();
         
         $date = new RBO_Field_Date(_M('Date'));

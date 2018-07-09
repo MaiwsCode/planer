@@ -7,12 +7,15 @@
 <div style="text-align: left; height:30px">
 <div class="css3_content_shadow">
 <div style="padding: 5px; background-color: #FFFFFF;">
-
 <h1 style="text-align: left;margin-left: 5px;">PLANY SPRZEDAŻY TUCZNIKA </h1>
     {foreach from=$action_buttons item=button}
         <a class="button" {$button.href}>{$button.label}</a>
     {/foreach}
+    <br><br>
+    {$select}
+    {$test}
 <br>
+
     <table  class="Agrohandel__sale__week" cellspacing=0 >
      <thead>
         <tr>
@@ -65,7 +68,7 @@
                         {/if}
                         <td class="inter_company"> {$record.company_name}</td>
                         <td class="inter_future">{$record.amount}</td>
-                        <td class="inter_future">{$record.Price}</td>
+                        <td class="inter_future">{$record.Price|floatval}</td>
                         {if ($record === reset($day))}      
                             <td class="inter_future" style="{$extra}" rowspan="{$day|@count}"> {$amount_sum[$val]} </td>
                         {/if}

@@ -12,20 +12,34 @@ public function settings(){
 
     public function body(){
 
-	//see record
-        Base_ActionBarCommon::add('add',__('New'), Utils_RecordBrowserCommon::create_new_record_href('Sales_plan', $this->custom_defaults));
+    //see record
+        Base_LangCommon::install_translations('planer');
+        Base_ThemeCommon::install_default_theme ('planer');
+        Base_ThemeCommon::install_default_theme($this->get_type());
+        Base_ActionBarCommon::add(
+            'add',
+            __('New'), 
+            Utils_RecordBrowserCommon::create_new_record_href('Sales_plan', $this->custom_defaults),
+            null
+            
+    );
         $theme = $this->init_module('Base/Theme');
         $theme->assign("css", Base_ThemeCommon::get_template_dir());
         $rbo = new RBO_RecordsetAccessor("Sales_plan");
         $companes = new RBO_RecordsetAccessor("Company");
         $date = new PickDate();
         $days = array();
-        if (!isset($_REQUEST['week_number'])){
+        if(!isset($_REQUEST['week_number']) && !isset($_SESSION['week'])){
             $today = date("Y-m-d");
-            $week_num = $date->get_week_number($today);        
+            $week_num = $date->get_week_number($today);  
+            $_SESSION['week'] = $week_num;     
         }
-        else{
+        elseif(isset($_REQUEST['week_number'])){
             $week_num= $_REQUEST['week_number'];   
+            $_SESSION['week'] = $week_num;  
+        }
+        elseif(isset($_SESSION['week']) && !isset($_REQUEST['week_number'])){
+            $week_num= $_SESSION['week'];  
         }
         if(isset ($_REQUEST["delete_record"])){
             $delete_record = $_REQUEST['delete_record'];
@@ -53,23 +67,52 @@ public function settings(){
             }
         }
         if(Addons::can_copy($week_num)){
-           Base_ActionBarCommon::add('add', __('Copy from last week'), $this->create_href ( array ('copy' => TRUE,'week_number' => $week_num )));
+           Base_ActionBarCommon::add('add', 
+                    __('Copy from last week'), 
+                    $this->create_href ( array ('copy' => TRUE,'week_number' => $week_num )),
+                    null
+                );
         }
-        $prev = $week_num -1;
-        if($prev > 0){
-            $buttons[] = array(
-                'label' => __ ('<<' ),
-                'href' => $this->create_href ( array ('week_number' => $prev))
-            );
-        }
-        $next = $week_num + 1;
+    /*    $next = $week_num + 1;
         if($next <=52){
             $buttons[] = array(
                 'label' => __ ('>>' ),
                 'href' => $this->create_href ( array ('week_number' => $next))
             );
-        }
+        }*/
+        if($week_num != 52){
+        Base_ActionBarCommon::add(
+            Base_ThemeCommon::get_template_file($this->get_type(), 'next.png'),
+            "Następny tydzień",
+            $this->create_href ( array ('week_number' => $week_num+1)),
+            null
+        );
+    }
+        $x = 3;
+        for($i = $week_num + 3 ; $i > $week_num - 4;$i--){
+            if($i > 52 || $i <  1) {}
+                else{
+            if($week_num == $i){ $icon = 'cal2.png'; }else{ $icon = 'cal.png'; }
+        Base_ActionBarCommon::add(
+            Base_ThemeCommon::get_template_file($this->get_type(), $icon),
+            "Tydzień - ".$i,
+            $this->create_href ( array ('week_number' => $i)),
+            null
+        );
+    }
+        $x = $x +1;
+    }
 
+        $select_options = "<li><a ".$this->create_href(array('week_number' => $date->get_week_number(date('Y-m-d'))))."> Wróć do obecnego tygodnia </a></li>";
+        for($i = 1; $i<=52;$i++){
+            $select_options .= "<li><a ".$this->create_href(array('week_number' => $i))."> Tydzień - ".$i." </a></li>";
+        }
+        
+        $select = "<ul>
+                    <li>
+                        <a href='#'>Wybierz tydzień </a>
+                            <ul>".$select_options."
+                        </ul></li></ul>";
         // zamowione 
         $pon = $rbo->get_records(array('date' => $date->monday_of_week($week_num)),array(),array('company_name' => "ASC"));
         $pon = Rbo_Futures::set_related_fields($pon, 'company_name');
@@ -167,17 +210,24 @@ public function settings(){
             $indexer[$i] = $com;
             $i++;
         }
+        if($week_num != 1){
+        Base_ActionBarCommon::add(
+            Base_ThemeCommon::get_template_file($this->get_type(), 'prev.png'),
+            "Poprzedni tydzień",
+            $this->create_href ( array ('week_number' => $week_num-1)),
+            null
+        );}
         //dostarczone
         //potrzena tabela z Raport z rozladunku
-        $transported = new RBO_RecordsetAccessor("custom_agrohandel_transporty"); //custom_agrohandel_transporty Transport
+        $transported = new RBO_RecordsetAccessor("Transport"); //custom_agrohandel_transporty Transport
         $trans_pon = array();
         $trans_wt = array();
         $trans_sr = array();
         $trans_czw = array();
         $trans_pt = array();
         $transports = [];
-        $company_field = "company"; ///company company_name
-        $amount = "iloscrozl"; //iloscrozl amount
+        $company_field = "company_name"; ///company company_name
+        $amount = "amount"; //iloscrozl amount
         $t_pon = $transported->get_records(array('date' => $date->monday_of_week($week_num)),array(),array($company_field => "ASC"));
         foreach($t_pon as $t){
             $x = $t->get_val($company_field,$nolink = TRUE);
@@ -219,6 +269,7 @@ public function settings(){
         $starter = $indexer[0];
         $theme->assign('starter',$starter);
         $theme->assign('indexer',$indexer);
+        $theme->assign('select',$select);
         //purchased or Kupione => Status   Amount   Company  planed_purchase_date  Company
         $amount_sum = array(1=>$this->sum_records($pon_bought,'Amount'),
         2=>$this->sum_records($wt_bought,'Amount'),3=>$this->sum_records($sr_bought,'Amount'),

@@ -7,12 +7,12 @@ defined("_VALID_ACCESS") || die('Direct access forbidden');
  */
 
 class planerCommon extends ModuleCommon {
-
+	
    public static function menu() {
 		return array(__('Module') => array('__submenu__' => 1, __('Plan sprzedaży') => array(
 	    	'__icon__'=>'pig.png','__icon_small__'=>'pig.png'
 			)));
-    }
+	}
     public static function watchdog_label($rid = null, $events = array(), $details = true)
     {
     	return Utils_RecordBrowserCommon::watchdog_label(
@@ -23,6 +23,13 @@ class planerCommon extends ModuleCommon {
     			'text',
     			$details
     	);
-    }
+	}
+	public static function write_date(){
+		$settings = fopen("data.txt", "w");
+		$txt = date("Y-m-d H:i:s");
+        fwrite($settings, $txt);
+        fclose($settings);
+
+	}
 
 }

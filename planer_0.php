@@ -227,7 +227,7 @@ public function settings(){
         $trans_pt = array();
         $transports = [];
         $company_field = "company"; ///company company_name
-        $amount = "iloscrozl"; //iloscrozl amount
+        $amount = "amount"; //iloscrozl amount
         $t_pon = $transported->get_records(array('date' => $date->monday_of_week($week_num)),array(),array($company_field => "ASC"));
         foreach($t_pon as $t){
             $x = $t->get_val($company_field,$nolink = TRUE);

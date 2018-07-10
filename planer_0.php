@@ -13,8 +13,6 @@ public function settings(){
     public function body(){
 
     //see record
-        Base_LangCommon::install_translations('planer');
-        Base_ThemeCommon::install_default_theme ('planer');
         Base_ThemeCommon::install_default_theme($this->get_type());
         Base_ActionBarCommon::add(
             'add',

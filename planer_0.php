@@ -73,13 +73,6 @@ public function settings(){
                     null
                 );
         }
-    /*    $next = $week_num + 1;
-        if($next <=52){
-            $buttons[] = array(
-                'label' => __ ('>>' ),
-                'href' => $this->create_href ( array ('week_number' => $next))
-            );
-        }*/
         if($week_num != 52){
         Base_ActionBarCommon::add(
             Base_ThemeCommon::get_template_file($this->get_type(), 'next.png'),
@@ -103,20 +96,29 @@ public function settings(){
         $x = $x +1;
     }
 
-        $select_options = "<li><a ".$this->create_href(array('week_number' => $date->get_week_number(date('Y-m-d'))))."> Wróć do obecnego tygodnia </a></li>";
+        $select_options = "<li><a ".$this->create_href(array('week_number' => $date->get_week_number(date('Y-m-d'))))."> Wróć do bieżącego tygodnia </a></li>";
         for($i = 1; $i<=52;$i++){
             $select_options .= "<li><a ".$this->create_href(array('week_number' => $i))."> Tydzień - ".$i." </a></li>";
         }
         
-        $select = "<ul>
+        $select = "<ul class='drops'>
                     <li>
-                        <a href='#'>Wybierz tydzień </a>
+                        <a href='#'>Wybierz tydzień </a> <img src='data/Base_Theme/templates/default/planer/drop.png' width=25 height=25 />
                             <ul>".$select_options."
                         </ul></li></ul>";
         // zamowione 
         $pon = $rbo->get_records(array('date' => $date->monday_of_week($week_num)),array(),array('company_name' => "ASC"));
         $pon = Rbo_Futures::set_related_fields($pon, 'company_name');
         foreach($pon as $p){
+            if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
+                //$tip = "<h3>Handlowiec: </h3><p>".$p['Description trader']."</p><BR><h3>Manager: </h3><p>".$p['Description Manager']."</p>";
+               // $infobox = Utils_TooltipCommon::create($text = 'Dodatkowe informacje', $tip, $help=true, $max_width=300);
+               $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].
+               "</div>", "Manager: " => "<div class='custom_info'>".$p['Description Manager']."</div>");
+               $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
+               $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
+            }else{$infobox = "---";}
+            $p['notka'] = $infobox;
             $p["edit"] = $p->record_link('<img class="action_button" src="data/Base_Theme/templates/default/Utils/GenericBrowser/edit.png" border="0" alt="Edytuj">',$nolink=false,'edit');
             $del = $this->create_href(array("delete_record" => $p['id']));
             $p["delete"] = $del;
@@ -219,15 +221,15 @@ public function settings(){
         );}
         //dostarczone
         //potrzena tabela z Raport z rozladunku
-        $transported = new RBO_RecordsetAccessor("Transport"); //custom_agrohandel_transporty Transport
+        $transported = new RBO_RecordsetAccessor("custom_agrohandel_transporty"); //custom_agrohandel_transporty Transport
         $trans_pon = array();
         $trans_wt = array();
         $trans_sr = array();
         $trans_czw = array();
         $trans_pt = array();
         $transports = [];
-        $company_field = "company_name"; ///company company_name
-        $amount = "amount"; //iloscrozl amount
+        $company_field = "company"; ///company company_name
+        $amount = "iloscrozl"; //iloscrozl amount
         $t_pon = $transported->get_records(array('date' => $date->monday_of_week($week_num)),array(),array($company_field => "ASC"));
         foreach($t_pon as $t){
             $x = $t->get_val($company_field,$nolink = TRUE);

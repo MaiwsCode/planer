@@ -8,7 +8,6 @@ class planer_Recordset  extends RBO_Recordset {
         return 'Sales_plan';
  
     }
- 
     function fields() { // - here you choose the fields to add to the record browser
 
       //  Base_LangCommon::
@@ -17,8 +16,8 @@ class planer_Recordset  extends RBO_Recordset {
         $ammount->set_required()->set_visible();
                     
         $company = new RBO_Field_Select(_M('Company Name'));
-        $company->from('company')->fields('company_name')->set_visible()->set_required();
-        
+        $company->from('company')->set_crits_callback("planerCommon::critOnlyUbojnia")->fields('company_name')->set_visible()->set_required();
+       // $company->from('company')->fields('company_name')->set_visible()->set_required();
         $price = new RBO_Field_Currency(_M("Price"));
         $price->set_required()->set_visible();
         

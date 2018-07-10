@@ -31,5 +31,20 @@ class planerCommon extends ModuleCommon {
         fclose($settings);
 
 	}
-
+	public static function critOnlyUbojnia() {
+    	return array('group' => array('ubojnia') );
+	}
+	public static function on_create_new($defaults, $mode){
+		if ($mode === 'adding'){
+			$defaults['difficulty_level'] = '1';
+			$week = $_SESSION['week'];
+			if($week< 10){
+				$week = "0".$week;
+			}
+			$Y = date('Y');
+			$week = date("Y-m-d", strtotime($Y.'W'.$week));
+			$defaults['date'] = $week;
+			return $defaults;
+		}
+	}
 }

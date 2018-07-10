@@ -26,6 +26,7 @@
             <td class="header_future">Cena</td>
             <td class="header_future">Kupione</td>
             <td class="header_future">Dostarczone</td>
+            <td class="header_future">Informacje</td>
             <td class="header_future">Akcje</td>
         </tr>
      </thead>
@@ -84,6 +85,7 @@
                             {else}
                                 {assign var=row value=$row-1}
                             {/if}
+                            <td class="inter_future">{$record.notka}</td>
                             <td class="inter_future">
                                 {$record.edit}
                                 <a {$record.delete}><img border="0" src="data/Base_Theme/templates/default/Utils/Calendar/delete.png" alt="Usuń" ></a>

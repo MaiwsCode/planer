@@ -14,13 +14,6 @@ public function settings(){
 
     //see record
         Base_ThemeCommon::install_default_theme($this->get_type());
-        Base_ActionBarCommon::add(
-            'add',
-            __('New'), 
-            Utils_RecordBrowserCommon::create_new_record_href('Sales_plan', $this->custom_defaults),
-            null
-            
-    );
         $theme = $this->init_module('Base/Theme');
         $theme->assign("css", Base_ThemeCommon::get_template_dir());
         $rbo = new RBO_RecordsetAccessor("Sales_plan");
@@ -64,36 +57,63 @@ public function settings(){
                 Addons::copied($week_num);
             }
         }
+        //nowy record
+        $x = 0;
+        Base_ActionBarCommon::add(
+            'add',
+            __('New'), 
+            Utils_RecordBrowserCommon::create_new_record_href('Sales_plan', $this->custom_defaults),
+            null,
+            $x
+        );
+        $x++;
+        //Kopiuj z poprzedni tydzien
         if(Addons::can_copy($week_num)){
            Base_ActionBarCommon::add('add', 
                     __('Copy from last week'), 
                     $this->create_href ( array ('copy' => TRUE,'week_number' => $week_num )),
-                    null
+                    null,
+                    $x
                 );
+            $x++;
         }
-        if($week_num != 52){
-        Base_ActionBarCommon::add(
-            Base_ThemeCommon::get_template_file($this->get_type(), 'next.png'),
-            "Następny tydzień",
-            $this->create_href ( array ('week_number' => $week_num+1)),
-            null
-        );
-    }
-        $x = 3;
+        //poprzedni tydzien
+        if($week_num != 1){
+            Base_ActionBarCommon::add(
+                Base_ThemeCommon::get_template_file($this->get_type(), 'prev.png'),
+                "Poprzedni tydzień",
+                $this->create_href ( array ('week_number' => $week_num-1)),
+                null,
+                $x
+            );
+            $x++;
+        }
+        // 7 tygodni do wyboru
         for($i = $week_num + 3 ; $i > $week_num - 4;$i--){
             if($i > 52 || $i <  1) {}
-                else{
-            if($week_num == $i){ $icon = 'cal2.png'; }else{ $icon = 'cal.png'; }
-        Base_ActionBarCommon::add(
-            Base_ThemeCommon::get_template_file($this->get_type(), $icon),
-            "Tydzień - ".$i,
-            $this->create_href ( array ('week_number' => $i)),
-            null
-        );
-    }
-        $x = $x +1;
-    }
-
+            else{
+                if($week_num == $i){ $icon = 'cal2.png'; }else{ $icon = 'cal.png'; }
+                    Base_ActionBarCommon::add(
+                        Base_ThemeCommon::get_template_file($this->get_type(), $icon),
+                        "Tydzień - ".$i,
+                        $this->create_href ( array ('week_number' => $i)),
+                        null,
+                        $x
+                    );
+                }
+            $x = $x +1;
+        }
+        //nastepny tydzien
+        if($week_num != 52){
+            Base_ActionBarCommon::add(
+                Base_ThemeCommon::get_template_file($this->get_type(), 'next.png'),
+                "Następny tydzień",
+                $this->create_href ( array ('week_number' => $week_num+1)),
+                null,
+                $x
+            );
+            $x++;
+        }
         $select_options = "<li><a ".$this->create_href(array('week_number' => $date->get_week_number(date('Y-m-d'))))."> Wróć do bieżącego tygodnia </a></li>";
         for($i = 1; $i<=52;$i++){
             $select_options .= "<li><a ".$this->create_href(array('week_number' => $i))."> Tydzień - ".$i." </a></li>";
@@ -125,6 +145,15 @@ public function settings(){
         $wt = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 1)),array(),array('company_name' => "ASC"));
         $wt = Rbo_Futures::set_related_fields($wt, 'company_name');
         foreach($wt as $p){
+            if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
+                //$tip = "<h3>Handlowiec: </h3><p>".$p['Description trader']."</p><BR><h3>Manager: </h3><p>".$p['Description Manager']."</p>";
+               // $infobox = Utils_TooltipCommon::create($text = 'Dodatkowe informacje', $tip, $help=true, $max_width=300);
+               $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].
+               "</div>", "Manager: " => "<div class='custom_info'>".$p['Description Manager']."</div>");
+               $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
+               $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
+            }else{$infobox = "---";}
+            $p['notka'] = $infobox;
             $p["edit"] = $p->record_link('<img class="action_button" src="data/Base_Theme/templates/default/Utils/GenericBrowser/edit.png" border="0" alt="Edytuj">',$nolink=false,'edit');
             $del = $this->create_href(array("delete_record" => $p['id']));
             $p["delete"] = $del;
@@ -132,6 +161,15 @@ public function settings(){
         $sr = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 2)),array(),array('company_name' => "ASC"));
         $sr = Rbo_Futures::set_related_fields($sr, 'company_name');
         foreach($sr as $p){
+            if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
+                //$tip = "<h3>Handlowiec: </h3><p>".$p['Description trader']."</p><BR><h3>Manager: </h3><p>".$p['Description Manager']."</p>";
+               // $infobox = Utils_TooltipCommon::create($text = 'Dodatkowe informacje', $tip, $help=true, $max_width=300);
+               $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].
+               "</div>", "Manager: " => "<div class='custom_info'>".$p['Description Manager']."</div>");
+               $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
+               $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
+            }else{$infobox = "---";}
+            $p['notka'] = $infobox;
             $p["edit"] = $p->record_link('<img class="action_button" src="data/Base_Theme/templates/default/Utils/GenericBrowser/edit.png" border="0" alt="Edytuj">',$nolink=false,'edit');
             $del = $this->create_href(array("delete_record" => $p['id']));
             $p["delete"] = $del;
@@ -139,6 +177,15 @@ public function settings(){
         $czw = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 3)),array(),array('company_name' => "ASC"));
         $czw = Rbo_Futures::set_related_fields($czw, 'company_name');
         foreach($czw as $p){
+            if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
+                //$tip = "<h3>Handlowiec: </h3><p>".$p['Description trader']."</p><BR><h3>Manager: </h3><p>".$p['Description Manager']."</p>";
+               // $infobox = Utils_TooltipCommon::create($text = 'Dodatkowe informacje', $tip, $help=true, $max_width=300);
+               $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].
+               "</div>", "Manager: " => "<div class='custom_info'>".$p['Description Manager']."</div>");
+               $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
+               $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
+            }else{$infobox = "---";}
+            $p['notka'] = $infobox;
             $p["edit"] = $p->record_link('<img class="action_button" src="data/Base_Theme/templates/default/Utils/GenericBrowser/edit.png" border="0" alt="Edytuj">',$nolink=false,'edit');
             $del = $this->create_href(array("delete_record" => $p['id']));
             $p["delete"] = $del;
@@ -146,6 +193,15 @@ public function settings(){
         $pt = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 4)),array(),array('company_name' => "ASC"));
         $pt = Rbo_Futures::set_related_fields($pt, 'company_name');
         foreach($pt as $p){
+            if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
+                //$tip = "<h3>Handlowiec: </h3><p>".$p['Description trader']."</p><BR><h3>Manager: </h3><p>".$p['Description Manager']."</p>";
+               // $infobox = Utils_TooltipCommon::create($text = 'Dodatkowe informacje', $tip, $help=true, $max_width=300);
+               $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].
+               "</div>", "Manager: " => "<div class='custom_info'>".$p['Description Manager']."</div>");
+               $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
+               $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
+            }else{$infobox = "---";}
+            $p['notka'] = $infobox;
             $p["edit"] = $p->record_link('<img class="action_button" src="data/Base_Theme/templates/default/Utils/GenericBrowser/edit.png" border="0" alt="Edytuj">',$nolink=false,'edit');
             $del = $this->create_href(array("delete_record" => $p['id']));
             $p["delete"] = $del;
@@ -210,13 +266,6 @@ public function settings(){
             $indexer[$i] = $com;
             $i++;
         }
-        if($week_num != 1){
-        Base_ActionBarCommon::add(
-            Base_ThemeCommon::get_template_file($this->get_type(), 'prev.png'),
-            "Poprzedni tydzień",
-            $this->create_href ( array ('week_number' => $week_num-1)),
-            null
-        );}
         //dostarczone
         //potrzena tabela z Raport z rozladunku
         $transported = new RBO_RecordsetAccessor("custom_agrohandel_transporty"); //custom_agrohandel_transporty Transport

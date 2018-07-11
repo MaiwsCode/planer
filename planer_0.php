@@ -67,16 +67,6 @@ public function settings(){
             $x
         );
         $x++;
-        //Kopiuj z poprzedni tydzien
-        if(Addons::can_copy($week_num)){
-           Base_ActionBarCommon::add('add', 
-                    __('Copy from last week'), 
-                    $this->create_href ( array ('copy' => TRUE,'week_number' => $week_num )),
-                    null,
-                    $x
-                );
-            $x++;
-        }
         //poprzedni tydzien
         if($week_num != 1){
             Base_ActionBarCommon::add(
@@ -114,6 +104,16 @@ public function settings(){
             );
             $x++;
         }
+        //Kopiuj z poprzedni tydzien
+        if(Addons::can_copy($week_num)){
+            Base_ActionBarCommon::add('add', 
+                     __('Copy from last week'), 
+                     $this->create_href ( array ('copy' => TRUE,'week_number' => $week_num )),
+                     null,
+                     $x
+                 );
+             $x++;
+         }
         $select_options = "<li><a ".$this->create_href(array('week_number' => $date->get_week_number(date('Y-m-d'))))."> Wróć do bieżącego tygodnia </a></li>";
         for($i = 1; $i<=52;$i++){
             $select_options .= "<li><a ".$this->create_href(array('week_number' => $i))."> Tydzień - ".$i." </a></li>";

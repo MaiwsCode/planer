@@ -89,7 +89,7 @@ public function settings(){
             $x++;
         }
         // 7 tygodni do wyboru
-        for($i = $week_num + 3 ; $i > $week_num - 4;$i--){
+        for($i = $week_num - 3 ; $i < $week_num + 4;$i++){
             if($i > 52 || $i <  1) {}
             else{
                 if($week_num == $i){ $icon = 'cal2.png'; }else{ $icon = 'cal.png'; }

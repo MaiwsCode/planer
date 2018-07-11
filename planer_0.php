@@ -13,7 +13,7 @@ public function settings(){
     public function body(){
 
     //see record
-        Base_ThemeCommon::install_default_theme($this->get_type());
+        //Base_ThemeCommon::install_default_theme($this->get_type());
         $theme = $this->init_module('Base/Theme');
         $theme->assign("css", Base_ThemeCommon::get_template_dir());
         $rbo = new RBO_RecordsetAccessor("Sales_plan");

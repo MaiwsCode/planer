@@ -266,6 +266,7 @@ public function settings(){
             $indexer[$i] = $com;
             $i++;
         }
+        
         //dostarczone
         //potrzena tabela z Raport z rozladunku
         $transported = new RBO_RecordsetAccessor("custom_agrohandel_transporty"); //custom_agrohandel_transporty Transport
@@ -342,7 +343,7 @@ public function settings(){
         array(),array());
         $week_bought = $bought->get_records(array('>=planed_purchase_date' => $date->monday_of_week($week_num),
         '<=planed_purchase_date' => $date->add_days($date->monday_of_week($week_num), 4), 
-        '(status' => "purchased",'|status' => "purchased_waiting",'|status' => "purchased_confirmed"),array());
+        '|status' => "purchased",'|status' => "purchased_waiting",'|status' => "purchased_confirmed"),array());
         $week_transported = $transported->get_records(array('>=date' => $date->monday_of_week($week_num), 
                         '<=date' => $date->add_days($date->monday_of_week($week_num), 4)),array(),array());                              
         $sum_week = array();

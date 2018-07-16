@@ -128,83 +128,158 @@ public function settings(){
         $pon = $rbo->get_records(array('date' => $date->monday_of_week($week_num)),array(),array('company_name' => "ASC"));
         $pon = Rbo_Futures::set_related_fields($pon, 'company_name');
         foreach($pon as $p){
-            if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
-                //$tip = "<h3>Handlowiec: </h3><p>".$p['Description trader']."</p><BR><h3>Manager: </h3><p>".$p['Description Manager']."</p>";
-               // $infobox = Utils_TooltipCommon::create($text = 'Dodatkowe informacje', $tip, $help=true, $max_width=300);
-               $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].
-               "</div>", "Manager: " => "<div class='custom_info'>".$p['Description Manager']."</div>");
-               $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
-               $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
-            }else{$infobox = "---";}
-            $p['notka'] = $infobox;
-            $p["edit"] = $p->record_link('<img class="action_button" src="data/Base_Theme/templates/default/Utils/GenericBrowser/edit.png" border="0" alt="Edytuj">',$nolink=false,'edit');
-            $del = $this->create_href(array("delete_record" => $p['id']));
-            $p["delete"] = $del;
+            if(Base_AclCommon::check_permission("manager") == "1" || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
+                if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
+                    $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].
+                    "</div>", "Manager: " => "<div class='custom_info'>".$p['Description Manager']."</div>");
+                    $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
+                    $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
+                }else{$infobox = "---";}
+            
+                $p['notka'] = $infobox;
+                $p["edit"] = $p->record_link('<img class="action_button" src="data/Base_Theme/templates/default/Utils/GenericBrowser/edit.png" border="0" alt="Edytuj">',$nolink=false,'edit');
+                $del = $this->create_href(array("delete_record" => $p['id']));
+                $deli = "<a $del> <img border='0' src='data/Base_Theme/templates/default/Utils/Calendar/delete.png' alt='Usuń' /></a>";
+                $p["delete"] = $deli;
+            }
+            else{
+                if(strlen($p['Description trader']) > 0){
+                    $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader']. "</div>");
+                    $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
+                    $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
+                }else{
+                    $infobox = "---";
+                }
+                $p['notka'] = $infobox;
+                $p["delete"] = '';
+                $p["edit"] = '';
+            }
             
         }
         $wt = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 1)),array(),array('company_name' => "ASC"));
         $wt = Rbo_Futures::set_related_fields($wt, 'company_name');
         foreach($wt as $p){
-            if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
-                //$tip = "<h3>Handlowiec: </h3><p>".$p['Description trader']."</p><BR><h3>Manager: </h3><p>".$p['Description Manager']."</p>";
-               // $infobox = Utils_TooltipCommon::create($text = 'Dodatkowe informacje', $tip, $help=true, $max_width=300);
-               $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].
-               "</div>", "Manager: " => "<div class='custom_info'>".$p['Description Manager']."</div>");
-               $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
-               $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
-            }else{$infobox = "---";}
-            $p['notka'] = $infobox;
-            $p["edit"] = $p->record_link('<img class="action_button" src="data/Base_Theme/templates/default/Utils/GenericBrowser/edit.png" border="0" alt="Edytuj">',$nolink=false,'edit');
-            $del = $this->create_href(array("delete_record" => $p['id']));
-            $p["delete"] = $del;
+            if(Base_AclCommon::check_permission("manager") == "1" || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
+                if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
+                    $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].
+                    "</div>", "Manager: " => "<div class='custom_info'>".$p['Description Manager']."</div>");
+                    $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
+                    $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
+                }
+                else{
+                    $infobox = "---";
+                }
+                $p['notka'] = $infobox;
+                $p["edit"] = $p->record_link('<img class="action_button" src="data/Base_Theme/templates/default/Utils/GenericBrowser/edit.png" border="0" alt="Edytuj">',$nolink=false,'edit');
+                $del = $this->create_href(array("delete_record" => $p['id']));
+                $del = "<a $del> <img border='0' src='data/Base_Theme/templates/default/Utils/Calendar/delete.png' alt='Usuń' /></a>";
+                $p["delete"] = $del;
+            }
+            else{
+                if(strlen($p['Description trader']) > 0){
+                    $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader']. "</div>");
+                    $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
+                    $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
+                }else{
+                    $infobox = "---";
+                }
+                $p['notka'] = $infobox;
+                $p["delete"] = '';
+                $p["edit"] = '';
+            }
         }
         $sr = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 2)),array(),array('company_name' => "ASC"));
         $sr = Rbo_Futures::set_related_fields($sr, 'company_name');
         foreach($sr as $p){
-            if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
-                //$tip = "<h3>Handlowiec: </h3><p>".$p['Description trader']."</p><BR><h3>Manager: </h3><p>".$p['Description Manager']."</p>";
-               // $infobox = Utils_TooltipCommon::create($text = 'Dodatkowe informacje', $tip, $help=true, $max_width=300);
-               $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].
-               "</div>", "Manager: " => "<div class='custom_info'>".$p['Description Manager']."</div>");
-               $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
-               $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
-            }else{$infobox = "---";}
-            $p['notka'] = $infobox;
-            $p["edit"] = $p->record_link('<img class="action_button" src="data/Base_Theme/templates/default/Utils/GenericBrowser/edit.png" border="0" alt="Edytuj">',$nolink=false,'edit');
-            $del = $this->create_href(array("delete_record" => $p['id']));
-            $p["delete"] = $del;
+            if(Base_AclCommon::check_permission("manager") == "1" || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
+                if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
+                    $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].
+                    "</div>", "Manager: " => "<div class='custom_info'>".$p['Description Manager']."</div>");
+                    $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
+                    $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
+                }else{
+                    $infobox = "---";
+                }
+                $p['notka'] = $infobox;
+                $p["edit"] = $p->record_link('<img class="action_button" src="data/Base_Theme/templates/default/Utils/GenericBrowser/edit.png" border="0" alt="Edytuj">',$nolink=false,'edit');
+                $del = $this->create_href(array("delete_record" => $p['id']));
+                $del = "<a $del> <img border='0' src='data/Base_Theme/templates/default/Utils/Calendar/delete.png' alt='Usuń' /></a>";
+                $p["delete"] = $del;
+            }
+            else{
+                if(strlen($p['Description trader']) > 0){
+                    $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader']. "</div>");
+                    $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
+                    $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
+                }else{
+                    $infobox = "---";
+                }
+                $p['notka'] = $infobox;
+                $p["delete"] = '';
+                $p["edit"] = '';
+            }
         }
         $czw = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 3)),array(),array('company_name' => "ASC"));
         $czw = Rbo_Futures::set_related_fields($czw, 'company_name');
         foreach($czw as $p){
-            if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
-                //$tip = "<h3>Handlowiec: </h3><p>".$p['Description trader']."</p><BR><h3>Manager: </h3><p>".$p['Description Manager']."</p>";
-               // $infobox = Utils_TooltipCommon::create($text = 'Dodatkowe informacje', $tip, $help=true, $max_width=300);
-               $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].
-               "</div>", "Manager: " => "<div class='custom_info'>".$p['Description Manager']."</div>");
-               $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
-               $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
-            }else{$infobox = "---";}
-            $p['notka'] = $infobox;
-            $p["edit"] = $p->record_link('<img class="action_button" src="data/Base_Theme/templates/default/Utils/GenericBrowser/edit.png" border="0" alt="Edytuj">',$nolink=false,'edit');
-            $del = $this->create_href(array("delete_record" => $p['id']));
-            $p["delete"] = $del;
+            if(Base_AclCommon::check_permission("manager") == "1" || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
+                if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
+                    $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].
+                    "</div>", "Manager: " => "<div class='custom_info'>".$p['Description Manager']."</div>");
+                    $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
+                    $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
+                }else{
+                    $infobox = "---";
+                }
+                $p['notka'] = $infobox;
+                $p["edit"] = $p->record_link('<img class="action_button" src="data/Base_Theme/templates/default/Utils/GenericBrowser/edit.png" border="0" alt="Edytuj">',$nolink=false,'edit');
+                $del = $this->create_href(array("delete_record" => $p['id']));
+                $del = "<a $del> <img border='0' src='data/Base_Theme/templates/default/Utils/Calendar/delete.png' alt='Usuń' /></a>";
+                $p["delete"] = $del;
+            }
+            else{
+                if(strlen($p['Description trader']) > 0){
+                    $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader']. "</div>");
+                    $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
+                    $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
+                }else{
+                    $infobox = "---";
+                }
+                $p['notka'] = $infobox;
+                $p["delete"] = '';
+                $p["edit"] = '';
+            }
         }
         $pt = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 4)),array(),array('company_name' => "ASC"));
         $pt = Rbo_Futures::set_related_fields($pt, 'company_name');
         foreach($pt as $p){
-            if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
-                //$tip = "<h3>Handlowiec: </h3><p>".$p['Description trader']."</p><BR><h3>Manager: </h3><p>".$p['Description Manager']."</p>";
-               // $infobox = Utils_TooltipCommon::create($text = 'Dodatkowe informacje', $tip, $help=true, $max_width=300);
-               $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].
-               "</div>", "Manager: " => "<div class='custom_info'>".$p['Description Manager']."</div>");
-               $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
-               $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
-            }else{$infobox = "---";}
-            $p['notka'] = $infobox;
-            $p["edit"] = $p->record_link('<img class="action_button" src="data/Base_Theme/templates/default/Utils/GenericBrowser/edit.png" border="0" alt="Edytuj">',$nolink=false,'edit');
-            $del = $this->create_href(array("delete_record" => $p['id']));
-            $p["delete"] = $del;
+            if(Base_AclCommon::check_permission("manager") == "1" || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
+                if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
+                    $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].
+                    "</div>", "Manager: " => "<div class='custom_info'>".$p['Description Manager']."</div>");
+                    $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
+                    $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
+                }else{
+                    $infobox = "---";
+                }
+                $p['notka'] = $infobox;
+                $p["edit"] = $p->record_link('<img class="action_button" src="data/Base_Theme/templates/default/Utils/GenericBrowser/edit.png" border="0" alt="Edytuj">',$nolink=false,'edit');
+                $del = $this->create_href(array("delete_record" => $p['id']));
+                $del = "<a $del> <img border='0' src='data/Base_Theme/templates/default/Utils/Calendar/delete.png' alt='Usuń' /></a>";
+                $p["delete"] = $del;
+            }
+            else{
+                if(strlen($p['Description trader']) > 0){
+                    $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader']. "</div>");
+                    $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
+                    $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
+                }else{
+                    $infobox = "---";
+                }
+                $p['notka'] = $infobox;
+                $p["delete"] = '';
+                $p["edit"] = '';
+                }
         }
         //potrzeba wstawić prawidłową nazwe tabeli
         $bought = new RBO_RecordsetAccessor('custom_agrohandel_purchase_plans');
@@ -343,7 +418,7 @@ public function settings(){
         array(),array());
         $week_bought = $bought->get_records(array('>=planed_purchase_date' => $date->monday_of_week($week_num),
         '<=planed_purchase_date' => $date->add_days($date->monday_of_week($week_num), 4), 
-        '|status' => "purchased",'|status' => "purchased_waiting",'|status' => "purchased_confirmed"),array());
+        'status' => "purchased"),array());
         $week_transported = $transported->get_records(array('>=date' => $date->monday_of_week($week_num), 
                         '<=date' => $date->add_days($date->monday_of_week($week_num), 4)),array(),array());                              
         $sum_week = array();
@@ -356,7 +431,7 @@ public function settings(){
                                                                         "name" =>$sum->get_val("company_name",$nolink=true));
         }
        // $week_transported = $this->sum_records($week_transported,$amount);
-        $week_bought = $this->sum_records($week_bought,'Amount');
+        $week_bought = $this->sum_records($week_bought,'amount');
         $theme->assign("sumary_week",$sum_week);
         $theme->assign("week_bought",$week_bought);
         $theme->assign("week_transported",$week_trans);

@@ -88,7 +88,7 @@
                             <td class="inter_future">{$record.notka}</td>
                             <td class="inter_future">
                                 {$record.edit}
-                                <a {$record.delete}><img border="0" src="data/Base_Theme/templates/default/Utils/Calendar/delete.png" alt="Usuń" ></a>
+                                {$record.delete}
                             </td>
                         </tr>
                     {/foreach}

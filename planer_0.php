@@ -283,15 +283,15 @@ public function settings(){
         }
         //potrzeba wstawić prawidłową nazwe tabeli
         $bought = new RBO_RecordsetAccessor('custom_agrohandel_purchase_plans');
-        $pon_bought = $bought->get_records(array('planed_purchase_date' => $date->monday_of_week($week_num),'status' => "purchased"),
+        $pon_bought = $bought->get_records(array('planed_purchase_date' => $date->monday_of_week($week_num),'~status' => "%purchased%"),
                                            array("Company" => "ASC"));
-        $wt_bought = $bought->get_records(array('planed_purchase_date' => $date->add_days($date->monday_of_week($week_num), 1),'status' => "purchased"),
+        $wt_bought = $bought->get_records(array('planed_purchase_date' => $date->add_days($date->monday_of_week($week_num), 1),'~status' => "%purchased%"),
                                            array("Company" => "ASC"));
-        $sr_bought = $bought->get_records(array('planed_purchase_date' => $date->add_days($date->monday_of_week($week_num), 2),'status' => "purchased"),
+        $sr_bought = $bought->get_records(array('planed_purchase_date' => $date->add_days($date->monday_of_week($week_num), 2),'~status' => "%purchased%"),
                                            array("Company" => "ASC"));
-        $czw_bought = $bought->get_records(array('planed_purchase_date' => $date->add_days($date->monday_of_week($week_num), 3),'status' => "purchased"),
+        $czw_bought = $bought->get_records(array('planed_purchase_date' => $date->add_days($date->monday_of_week($week_num), 3),'~status' => "%purchased%"),
                                            array("Company" => "ASC"));
-        $pt_bought = $bought->get_records(array('planed_purchase_date' => $date->add_days($date->monday_of_week($week_num), 4),'status' => "purchased"),
+        $pt_bought = $bought->get_records(array('planed_purchase_date' => $date->add_days($date->monday_of_week($week_num), 4),'~status' => "%purchased%"),
                                            array("Company" => "ASC"));
         // kupione
         $pon_companes = array();
@@ -416,11 +416,20 @@ public function settings(){
         $sumary_week = $rbo->get_records(array('>=date' => $date->monday_of_week($week_num), 
         '<=date' => $date->add_days($date->monday_of_week($week_num), 4)), 
         array(),array());
-        $week_bought = $bought->get_records(array('>=planed_purchase_date' => $date->monday_of_week($week_num),
-        '<=planed_purchase_date' => $date->add_days($date->monday_of_week($week_num), 4), 
-        '|status' => "purchased",'|status' => "purchased_waiting",'|status' => "purchased_confirmed"),array());
+        $week_bought = $transported->get_records(array('>=date' => $date->monday_of_week($week_num),
+        '<=date' => $date->add_days($date->monday_of_week($week_num), 4)),array());
         $week_transported = $transported->get_records(array('>=date' => $date->monday_of_week($week_num), 
-                        '<=date' => $date->add_days($date->monday_of_week($week_num), 4)),array(),array());                              
+                        '<=date' => $date->add_days($date->monday_of_week($week_num), 4)),array(),array());   
+        $week_amount_sum = 0;   
+        foreach($week_bought as $day){
+            $once = $day->to_array();
+            $once = $once["zakupy"];
+            foreach($once as $one){
+                $value  = $bought->get_record($one);
+                $week_amount_sum += $value['amount'];
+            }
+        }                  
+
         $sum_week = array();
         foreach($sumary_week as $sum){
             try{
@@ -431,9 +440,9 @@ public function settings(){
                                                                         "name" =>$sum->get_val("company_name",$nolink=true));
         }
        // $week_transported = $this->sum_records($week_transported,$amount);
-        $week_bought = $this->sum_records($week_bought,'amount');
+       // $week_bought = $this->sum_records($week_bought,'amount');
         $theme->assign("sumary_week",$sum_week);
-        $theme->assign("week_bought",$week_bought);
+        $theme->assign("week_bought",$week_amount_sum);
         $theme->assign("week_transported",$week_trans);
         $theme->assign('days_text',$days_text);
         $theme->assign('amount_sum',$amount_sum);

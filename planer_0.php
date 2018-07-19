@@ -456,7 +456,7 @@ public function settings(){
                 }
                 if($exist == false){
                     $amount = 0;
-                    $once = $day->to_array();
+                    $once = $trans->to_array();
                     $once = $once["zakupy"];
                     foreach($once as $one){
                         $value  = $bought->get_record($one);

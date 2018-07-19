@@ -132,7 +132,7 @@
       {if ($company === reset($missing))}   
        <td class="header_company" rowspan="{$company|@count}" style="color:#8f0d00;background-color:#F0F0F0;"> Brakujące plany</td>
        {/if}
-       <td class="inter_future" >{$company.company_name}</td>
+       <td class="inter_future" >{$company.company}</td>
        <td class="inter_future" >---</td>
         <td class="inter_future" >{$company.amm}</td>
         <td class="inter_future" >{$company.iloscrozl}</td>

@@ -154,7 +154,11 @@
         <td class="inter_future" >{$company.iloscrozl}</td>
     </tr>
     {/foreach}
-
+<tr class="changing">
+    <td colspan="3" >Razem:</td>
+    <td>{$all_bought}</td>
+    <td>{$all_transp}</td>
+</tr>
 
     </table>
     <br><br><br><br>

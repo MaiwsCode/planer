@@ -303,6 +303,8 @@ public function settings(){
                 $p["edit"] = '';
                 }
         }
+        $all_bought_week =0;
+        $all_transported_week = 0;
         $pt = sortByCompanyName($pt);
         //potrzeba wstawić prawidłową nazwe tabeli
         $bought = new RBO_RecordsetAccessor('custom_agrohandel_purchase_plans');
@@ -380,26 +382,31 @@ public function settings(){
         foreach($t_pon as $t){
             $x = $t->get_val($company_field,$nolink = TRUE);
             $trans_pon[$x] += $t[$amount];
+            $all_transported_week +=  $t[$amount];
         }
         $t_wt = $transported->get_records(array('date' =>$date->add_days($date->monday_of_week($week_num), 1)),array(),array($company_field => "ASC"));
         foreach($t_wt as $t){
             $x = $t->get_val($company_field,$nolink = TRUE);
             $trans_wt[$x] += $t[$amount];
+            $all_transported_week +=  $t[$amount];
         }
         $t_sr = $transported->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 2)),array(),array($company_field => "ASC"));
         foreach($t_sr as $t){
             $x = $t->get_val($company_field,$nolink = TRUE);
             $trans_sr[$x] += $t[$amount];
+            $all_transported_week +=  $t[$amount];
         }
         $t_czw = $transported->get_records(array('date' =>$date->add_days($date->monday_of_week($week_num), 3)),array(),array($company_field => "ASC"));
         foreach($t_czw as $t){
             $x = $t->get_val($company_field,$nolink = TRUE);
             $trans_czw[$x] += $t[$amount];
+            $all_transported_week +=  $t[$amount];
         }
         $t_pt = $transported->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 4)),array(),array($company_field => "ASC"));
         foreach($t_pt as $t){
             $x = $t->get_val($company_field,$nolink = TRUE);
             $trans_pt[$x] += $t[$amount];
+            $all_transported_week +=  $t[$amount];
         }
         $week_trans = array();
         $week_transported = $transported->get_records(array('>=date' => $date->add_days($date->monday_of_week($week_num),0),
@@ -423,6 +430,9 @@ public function settings(){
         2=>$this->sum_records($wt_bought,'Amount'),3=>$this->sum_records($sr_bought,'Amount'),
         4=>$this->sum_records($czw_bought,'Amount'),
         5=>$this->sum_records($pt_bought,'Amount'));
+        foreach($amount_sum as $sum){
+            $all_bought_week += $sum;
+        }
         array_push($days,$pon);
         array_push($days,$wt);
         array_push($days,$sr);
@@ -466,6 +476,8 @@ public function settings(){
                     foreach($once as $one){
                         $value  = $bought->get_record($one);
                         $amount += $value['amount'];
+                        $all_bought_week += $value['amount'];
+                        $all_transported_week += $value['iloscrozl'];
                     }
                     $trans['amm'] = $amount; 
                     $missing_all[] = $trans;
@@ -512,7 +524,6 @@ public function settings(){
             $sum_week[$sum->get_val("company_name",$nolink=true)] = array("val" => $value,
                                                                         "name" =>$sum->get_val("company_name",$nolink=true));
         }
-
         $week_transported = $this->sum_records($week_transported,$amount);
         $theme->assign("sumary_week",$sum_week);
         $theme->assign("week_bought",$week_amount_sum);
@@ -520,6 +531,8 @@ public function settings(){
         $theme->assign('days_text',$days_text);
         $theme->assign('missing',$missing);
         $theme->assign('missing_all',$missing_all);
+        $theme->assign('all_bought',$all_bought_week);
+        $theme->assign('all_transp',$all_transported_week);
         $theme->assign('amount_sum',$amount_sum);
         $theme->assign('start',1);
         $theme->assign('days',$days);

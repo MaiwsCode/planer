@@ -92,10 +92,10 @@
                             </td>
                         </tr>
                         {if ($record === end($day))} 
-                            {foreach from=$missing.$val item=$rec}
+                            {foreach from=$missing[$val] item=$rec}
                             <tr class="changing">
-                                 {if ($rec === reset($missing.$val))}   
-                                    <td class="header_company" rowspan="{$missing.$val|@count}" style="color:red;background-color:#F0F0F0;"> Brakujące plany</td>
+                                 {if ($rec === reset($missing[$val]))}   
+                                    <td class="header_company" rowspan="{$missing[$val]|@count}" style="color:red;background-color:#F0F0F0;"> Brakujące plany</td>
                                  {/if}
                                  <td class="inter_company">{$rec.company}</td>
                                  <td class="inter_future">---</td>

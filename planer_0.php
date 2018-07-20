@@ -478,7 +478,7 @@ public function settings(){
                         $amount += $value['amount'];
                         $all_transported_week += $value['iloscrozl'];
                     }
-                    $trans = Rbo_Futures::set_related_fields($trans, 'company');
+                    $trans['company'] =  $trans->get_val('company');
                     $trans['amm'] = $amount; 
                     $missing_all[] = $trans;
                     $dayofweek = date('w', strtotime($trans['date']));  

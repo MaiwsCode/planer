@@ -449,6 +449,7 @@ public function settings(){
         $missing_sr = array();
         $missing_czw = array();
         $missing_pt = array();
+        $missing_all = array();
         if(count($mach_week_with_tr) != count($mach_tr_with_week)){
             foreach($mach_tr_with_week as $trans){
                 $exist = false;
@@ -467,21 +468,22 @@ public function settings(){
                         $amount += $value['amount'];
                     }
                     $trans['amm'] = $amount; 
+                    $missing_all[] = $trans;
                     $dayofweek = date('w', strtotime($trans['date']));  
                     if($dayofweek == 1){ $missing_pon[] = $trans;}
                     else if($dayofweek == 2){ $missing_wt[] = $trans;}
                     else if($dayofweek == 3){ $missing_sr[] = $trans;}
                     else if($dayofweek == 4){ $missing_czw[] = $trans;}
-                    else if($dayofweek == 5){ $missing_pt[] = $trans;}
-                    
+                    else if($dayofweek == 5){ $missing_pt[] = $trans;}                
                 }
             }
-        }
+        }       
         $missing_pon = Rbo_Futures::set_related_fields($missing_pon, 'company');
         $missing_wt = Rbo_Futures::set_related_fields($missing_wt, 'company');
         $missing_sr = Rbo_Futures::set_related_fields($missing_sr, 'company');
         $missing_czw = Rbo_Futures::set_related_fields($missing_czw, 'company');
         $missing_pt = Rbo_Futures::set_related_fields($missing_pt, 'company');
+        $missing_all = Rbo_Futures::set_related_fields($missing_all, 'company');
         $week_amount_sum = 0;   
         for($i=0;$i<=4;$i++){
             $week_bought = $transported->get_records(array('date' =>$date->add_days($date->monday_of_week($week_num), $i)),array(),array());
@@ -510,12 +512,14 @@ public function settings(){
             $sum_week[$sum->get_val("company_name",$nolink=true)] = array("val" => $value,
                                                                         "name" =>$sum->get_val("company_name",$nolink=true));
         }
+
         $week_transported = $this->sum_records($week_transported,$amount);
         $theme->assign("sumary_week",$sum_week);
         $theme->assign("week_bought",$week_amount_sum);
         $theme->assign("week_transported",$week_trans);
         $theme->assign('days_text',$days_text);
         $theme->assign('missing',$missing);
+        $theme->assign('missing_all',$missing_all);
         $theme->assign('amount_sum',$amount_sum);
         $theme->assign('start',1);
         $theme->assign('days',$days);

@@ -97,12 +97,12 @@
                                  {if ($rec === reset($missing[$val]))}   
                                     <td class="header_company" rowspan="{$missing[$val]|@count}" style="color:red;background-color:#F0F0F0;"> Brakujące plany</td>
                                  {/if}
-                                 <td class="inter_company">{$rec.company}</td>
+                                 <td class="inter_future">{$rec.company}</td>
                                  <td class="inter_future">---</td>
                                  <td class="inter_future">---</td>
                                  <td class="inter_future">{$rec.amm}<td>
                                  <td class="inter_future">{$rec.iloscrozl}</td>
-                                 <td class="inter_future"></td>
+                                 <td class="inter_future">---</td>
                                  <td class="inter_future"></td>
                                  </tr>
                             {/foreach}

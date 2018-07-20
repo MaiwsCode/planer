@@ -64,7 +64,7 @@ public function settings(){
             foreach($array as $record){
                     $list_of_company[] = strip_tags($record['company_name']);
             }
-            rsort($list_of_company);
+            sort($list_of_company);
             foreach($list_of_company as $alfabetic){
                 foreach($array as $record){
                     if(strip_tags($record['company_name']) == $alfabetic){
@@ -509,11 +509,11 @@ public function settings(){
             }                 
         } 
         $missing = array();
-        array_push($missing,$missing_pon);
-        array_push($missing,$missing_wt);
-        array_push($missing,$missing_sr);
-        array_push($missing,$missing_czw);
-        array_push($missing,$missing_pt);
+        $missing[1] = $missing_pon;
+        $missing[2] = $missing_wt;
+        $missing[3] = $missing_sr;
+        $missing[4] = $missing_czw;
+        $missing[5] = $missing_pt;
         // missing[0] = missing_pon -> records
         $sum_week = array();
         foreach($sumary_week as $sum){

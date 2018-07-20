@@ -100,7 +100,7 @@
                                  <td class="inter_company">{$rec.company}</td>
                                  <td class="inter_future">---</td>
                                  <td class="inter_future">---</td>
-                                 <td class="inter_future">{$rec.amm}td>
+                                 <td class="inter_future">{$rec.amm}<td>
                                  <td class="inter_future">{$rec.iloscrozl}</td>
                                  <td class="inter_future"></td>
                                  <td class="inter_future"></td>
@@ -145,8 +145,8 @@
     {/foreach}
     {foreach from=$missing_all item=company}
     <tr class="changing">  
-      {if ($company === reset($missing))}   
-        <td class="header_company" rowspan="{$missing_all|@count}" style="color:#8f0d00;background-color:#F0F0F0;"> Brakujące plany</td>
+      {if ($company === reset($missing_all))}   
+        <td class="header_company" rowspan="{$missing_all|@count}" style="color:red;background-color:#F0F0F0;"> Brakujące plany</td>
       {/if}
         <td class="inter_future" >{$company.company}</td>
         <td class="inter_future" >---</td>
@@ -156,8 +156,8 @@
     {/foreach}
 <tr class="changing">
     <td colspan="3" >Razem:</td>
-    <td>{$all_bought}</td>
-    <td>{$all_transp}</td>
+    <td class="inter_future">{$all_bought}</td>
+    <td class="inter_future">{$all_transp}</td>
 </tr>
 
     </table>

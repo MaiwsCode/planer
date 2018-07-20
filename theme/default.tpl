@@ -100,7 +100,7 @@
                                  <td class="inter_future">{$rec.company}</td>
                                  <td class="inter_future">---</td>
                                  <td class="inter_future">---</td>
-                                 <td class="inter_future">{$rec.amm}<td>
+                                 <td class="inter_future">{$rec.amm}</td>
                                  <td class="inter_future">{$rec.iloscrozl}</td>
                                  <td class="inter_future">---</td>
                                  <td class="inter_future"></td>

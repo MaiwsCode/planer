@@ -91,7 +91,7 @@
                                 {$record.delete}
                             </td>
                         </tr>
-                        {elseif ($record === end($day))} 
+                        {if ($record === end($day))} 
                             {foreach from=$missing.$val item=$rec}
                             <tr class="changing">
                                  {if ($rec === reset($missing.$val))}   

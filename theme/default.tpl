@@ -106,7 +106,7 @@
                                  <td class="inter_future"></td>
                                  </tr>
                             {/foreach}
-                        {/elseif}
+                        {/if}
                     {/foreach}
                    {assign var=val value=$val+1}
                    {assign var=arr value=$trans[$val]}

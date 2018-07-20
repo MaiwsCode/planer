@@ -476,7 +476,6 @@ public function settings(){
                     foreach($once as $one){
                         $value  = $bought->get_record($one);
                         $amount += $value['amount'];
-                        $all_bought_week += $value['amount'];
                         $all_transported_week += $value['iloscrozl'];
                     }
                     $trans['amm'] = $amount; 
@@ -599,9 +598,6 @@ class Rbo_Futures{
             $edit[$name] = ($edit->get_val($name));
         }
         return $varible;
-    }
-    public static function tezt(){
-        print("TEST");
     }
 }
 

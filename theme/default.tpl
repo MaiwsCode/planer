@@ -91,6 +91,18 @@
                                 {$record.delete}
                             </td>
                         </tr>
+                        {elseif ($record === end($day))} 
+                            {foreach from=$missing.$val item=$rec}
+                                 {if ($rec === reset($missing.$val))}   
+                                    <td class="header_company" rowspan="{$missing.$val|@count}" style="color:red;background-color:#F0F0F0;"> Brakujące plany</td>
+                                 {/if}
+                                 <td>{$rec.company}</td>
+                                 <td>---</td>
+                                 <td>---</td>
+                                 <td{$rec.amm}td>
+                                 <td>{$rec.iloscrozl}</td>
+                            {/foreach}
+                        {/elseif}
                     {/foreach}
                    {assign var=val value=$val+1}
                    {assign var=arr value=$trans[$val]}
@@ -125,17 +137,6 @@
             {$week_transported.$last}
         </td>
         {/if}
-    </tr>
-    {/foreach}
-   {foreach from=$missing item=company}
-    <tr class="changing">  
-      {if ($company === reset($missing))}   
-       <td class="header_company" rowspan="{$company|@count}" style="color:#8f0d00;background-color:#F0F0F0;"> Brakujące plany</td>
-       {/if}
-       <td class="inter_future" >{$company.company}</td>
-       <td class="inter_future" >---</td>
-        <td class="inter_future" >{$company.amm}</td>
-        <td class="inter_future" >{$company.iloscrozl}</td>
     </tr>
     {/foreach}
     </table>

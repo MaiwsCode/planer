@@ -444,7 +444,11 @@ public function settings(){
         array(),array());
         $mach_tr_with_week = $transported->get_records(array('>=date' => $date->monday_of_week($week_num), 
         '<=date' => $date->add_days($date->monday_of_week($week_num), 4)),array(),array());  
-        $missing = array();
+        $missing_pon = array();
+        $missing_wt = array();
+        $missing_sr = array();
+        $missing_czw = array();
+        $missing_pt = array();
         if(count($mach_week_with_tr) != count($mach_tr_with_week)){
             foreach($mach_tr_with_week as $trans){
                 $exist = false;
@@ -462,12 +466,22 @@ public function settings(){
                         $value  = $bought->get_record($one);
                         $amount += $value['amount'];
                     }
-                    $trans['amm'] = $amount;   
-                    $missing[] = $trans;
+                    $trans['amm'] = $amount; 
+                    $dayofweek = date('w', strtotime($trans['date']));  
+                    if($dayofweek == 1){ $missing_pon[] = $trans;}
+                    else if($dayofweek == 2){ $missing_wt[] = $trans;}
+                    else if($dayofweek == 3){ $missing_sr[] = $trans;}
+                    else if($dayofweek == 4){ $missing_czw[] = $trans;}
+                    else if($dayofweek == 5){ $missing_pt[] = $trans;}
+                    
                 }
             }
         }
-        $missing = Rbo_Futures::set_related_fields($missing, 'company');
+        $missing_pon = Rbo_Futures::set_related_fields($missing_pon, 'company');
+        $missing_wt = Rbo_Futures::set_related_fields($missing_wt, 'company');
+        $missing_sr = Rbo_Futures::set_related_fields($missing_sr, 'company');
+        $missing_czw = Rbo_Futures::set_related_fields($missing_czw, 'company');
+        $missing_pt = Rbo_Futures::set_related_fields($missing_pt, 'company');
         $week_amount_sum = 0;   
         for($i=0;$i<=4;$i++){
             $week_bought = $transported->get_records(array('date' =>$date->add_days($date->monday_of_week($week_num), $i)),array(),array());
@@ -480,7 +494,13 @@ public function settings(){
                 }
             }                 
         } 
-
+        $missing = array();
+        array_push($missing,$missing_pon);
+        array_push($missing,$missing_wt);
+        array_push($missing,$missing_sr);
+        array_push($missing,$missing_czw);
+        array_push($missing,$missing_pt);
+        // missing[0] = missing_pon -> records
         $sum_week = array();
         foreach($sumary_week as $sum){
             try{

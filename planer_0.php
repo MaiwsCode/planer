@@ -474,6 +474,7 @@ public function settings(){
                     $ubojnia = true;
                     $_transport = $companes->get_record($trans['company']);
                     $groups = $_transport['group'];
+                    print_r($groups);
                     foreach($groups as $group){
                         if($group == "baza_tr"){
                             $ubojnia = false;

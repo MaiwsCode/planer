@@ -20,7 +20,6 @@ public function settings(){
         $companes = new RBO_RecordsetAccessor("company");
         $date = new PickDate();
         $days = array();
-        print("BAZA TRANSPORTOWA TEST 5");
         if(!isset($_REQUEST['week_number']) && !isset($_SESSION['week'])){
             $today = date("Y-m-d");
             $week_num = $date->get_week_number($today);  

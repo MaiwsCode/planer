@@ -470,23 +470,33 @@ public function settings(){
                     }
                 }
                 if($exist == false){
-                    $amount = 0;
-                    $once = $trans->to_array();
-                    $once = $once["zakupy"];
-                    foreach($once as $one){
-                        $value  = $bought->get_record($one);
-                        $amount += $value['amount'];
-                        $all_transported_week += $value['iloscrozl'];
+                    $ubojnia = true;
+                    $_transport = $companes->get_record($trans['company']);
+                    $groups = $_transport['group'];
+                    foreach($groups as $group){
+                        if($group == "Baza transportowa"){
+                            $ubojnia = false;
+                        }
                     }
-                    $trans['company'] =  $trans->get_val('company');
-                    $trans['amm'] = $amount; 
-                    $missing_all[] = $trans;
-                    $dayofweek = date('w', strtotime($trans['date']));  
-                    if($dayofweek == 1){ $missing_pon[] = $trans;}
-                    else if($dayofweek == 2){ $missing_wt[] = $trans;}
-                    else if($dayofweek == 3){ $missing_sr[] = $trans;}
-                    else if($dayofweek == 4){ $missing_czw[] = $trans;}
-                    else if($dayofweek == 5){ $missing_pt[] = $trans;}                
+                    if($ubojnia == true){
+                        $amount = 0;
+                        $once = $trans->to_array();
+                        $once = $once["zakupy"];
+                        foreach($once as $one){
+                            $value  = $bought->get_record($one);
+                            $amount += $value['amount'];
+                            $all_transported_week += $value['iloscrozl'];
+                        }
+                        $trans['company'] =  $trans->get_val('company');
+                        $trans['amm'] = $amount; 
+                        $missing_all[] = $trans;
+                        $dayofweek = date('w', strtotime($trans['date']));  
+                        if($dayofweek == 1){ $missing_pon[] = $trans;}
+                        else if($dayofweek == 2){ $missing_wt[] = $trans;}
+                        else if($dayofweek == 3){ $missing_sr[] = $trans;}
+                        else if($dayofweek == 4){ $missing_czw[] = $trans;}
+                        else if($dayofweek == 5){ $missing_pt[] = $trans;} 
+                    }               
                 }
             }
         }       

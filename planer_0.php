@@ -20,7 +20,7 @@ public function settings(){
         $companes = new RBO_RecordsetAccessor("Company");
         $date = new PickDate();
         $days = array();
-        print("BAZA TRANSPORTOWA TEST 3");
+        print("BAZA TRANSPORTOWA TEST 4");
         if(!isset($_REQUEST['week_number']) && !isset($_SESSION['week'])){
             $today = date("Y-m-d");
             $week_num = $date->get_week_number($today);  
@@ -472,13 +472,9 @@ public function settings(){
                 }
                 if($exist == false){
                     $ubojnia = true;
-                    $_transport = $companes->get_record($trans['company']);
-                    $groups = $_transport->get_val('group',$nolink=true);
-                    print_r($groups);
-                    foreach($groups as $group){
-                        if($group == "baza_tr"){
-                            $ubojnia = false;
-                        }
+                    $_transport = $companes->get_records(array('id' => $trans['company'], 'group' => 'baza_tr'),array(),array());
+                    if($_transport != null){
+                        $ubojnia = false;
                     }
                     if($ubojnia == true){
                         $amount = 0;

@@ -17,10 +17,10 @@ public function settings(){
         $theme = $this->init_module('Base/Theme');
         $theme->assign("css", Base_ThemeCommon::get_template_dir());
         $rbo = new RBO_RecordsetAccessor("Sales_plan");
-        $companes = new RBO_RecordsetAccessor("Company");
+        $companes = new RBO_RecordsetAccessor("company");
         $date = new PickDate();
         $days = array();
-        print("BAZA TRANSPORTOWA TEST 4");
+        print("BAZA TRANSPORTOWA TEST 5");
         if(!isset($_REQUEST['week_number']) && !isset($_SESSION['week'])){
             $today = date("Y-m-d");
             $week_num = $date->get_week_number($today);  

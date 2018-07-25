@@ -49,7 +49,7 @@ class planerCommon extends ModuleCommon {
 		if ($mode === 'added'){
 			$records = Utils_RecordBrowserCommon::get_records('Sales_plan', array("date"=> $defaults['date']),array(),array());
 			foreach($records as $record_){
-			Utils_RecordBrowserCommon::update_record('Sales_plan', $record_['id'], array('difficulty_level' => $record_['difficulty_level']),$full_update=false, 
+			Utils_RecordBrowserCommon::update_record('Sales_plan', $record_['id'], array('difficulty_level' => $defaults['difficulty_level']),$all_fields=false, 
 			$date=null, $dont_notify=false); 
 			}
 		}
@@ -59,9 +59,8 @@ class planerCommon extends ModuleCommon {
 			Utils_RecordBrowserCommon::update_record('Sales_plan', $record_['id'], array('difficulty_level' => $record['difficulty_level']),$full_update=false, 
 			$date=null, $dont_notify=false); 
 			}*/
-			Base_StatusBarCommon::message("edit");
 		}
-		if($mode != "display"|| $mode != "view"){
+		if($mode != "display" || $mode != "view"){
 		Base_StatusBarCommon::message($mode);}
 	}
 

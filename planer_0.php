@@ -21,6 +21,18 @@ public function settings(){
         $companes = new RBO_RecordsetAccessor("company");
         $date = new PickDate();
         $days = array();
+        //array('change_status' => '2018-07-19','status'=> '1'))
+        if(isset ($_REQUEST["change_status"])){
+            $date = $_REQUEST["change_status"];
+            $status = $_REQUEST["status"];
+            $records = Utils_RecordBrowserCommon::get_records('Sales_plan', array("date"=> $date),array(),array());
+			foreach($records as $record_){
+			Utils_RecordBrowserCommon::update_record('Sales_plan', $record_['id'], array('difficulty_level' => $status),$all_fields=false, 
+			$date=null, $dont_notify=false);
+
+        }
+
+
         if(!isset($_REQUEST['week_number']) && !isset($_SESSION['week'])){
             $today = date("Y-m-d");
             $week_num = $date->get_week_number($today);  
@@ -459,6 +471,16 @@ public function settings(){
             4=>"CZWARTEK",
             5=>"PIĄTEK",
         );
+        $sel_opt = "";
+        $sel_opt .= "<li><a ".$this->create_href(array('change_status' => '2018-07-19','status'=> '1'))."> Normalny </a></li>";
+        $sel_opt .= "<li><a ".$this->create_href(array('change_status' => '2018-07-19','status'=> '2'))."> Łatwy </a></li>";
+        $sel_opt .= "<li><a ".$this->create_href(array('change_status' => '2018-07-19','status'=> '3'))."> Trudny </a></li>";
+        $sel = "<ul class='drops'>
+        <li>
+            <a href='#'>Wybierz status  </a> <img src='data/Base_Theme/templates/default/planer/drop.png' width=25 height=25 />
+                <ul>".$sel_opt."
+            </ul></li></ul>";
+        $theme->assign('sel',$sel);
         $sumary_week = $rbo->get_records(array('>=date' => $date->monday_of_week($week_num), 
         '<=date' => $date->add_days($date->monday_of_week($week_num), 4)), 
         array(),array());

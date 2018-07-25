@@ -26,7 +26,7 @@
    {foreach from=$sumary_week item=company}
     <tr class="changing">
         {if ($company === reset($sumary_week))}      
-            <td class="inter_future" rowspan="{$sumary_week|@count}" style="color:black;background-color:#F0F0F0;">
+            <td class="inter_future" rowspan="{$sumary_week|@count}" style="color:black;background-color:#FFFFFF;">
             <span style='font-size:18px;'><b>Tydzień - {$week_number} </b></span>
             </td>
         {/if}
@@ -49,7 +49,7 @@
     {foreach from=$missing_all item=company}
     <tr class="changing">  
       {if ($company === reset($missing_all))}   
-        <td class="inter_future" rowspan="{$missing_all|@count}" style="color:red;background-color:#F0F0F0;"> Brakujące plany</td>
+        <td class="inter_future" rowspan="{$missing_all|@count}" style="color:red;background-color:#FFFFFF;"> Brakujące plany</td>
       {/if}
         <td class="inter_future" >{$company.company}</td>
         <td class="inter_future" >---</td>
@@ -69,8 +69,8 @@
     <table  class="Agrohandel__sale__week" cellspacing=0 style="margin-top:15px;margin-bottom:15px;">
      <thead>
         <tr>
-            <td class="header_company">Dzień tygodnia <br>
-            <span><b>Tydzień - {$week_number}</b></span></td>
+            <td class="header_company"><span style='font-size:18px;'>Dzień tygodnia <br>
+            <span  style='font-size:18px;'><b>Tydzień - {$week_number}</b></span></td>
             <td class="header_future">Zakład</td>
             <td class="header_future">Zamówione</td>
             <td class="header_future">Cena</td>
@@ -158,6 +158,7 @@
                             {/foreach}
                         {/if}
                     {/foreach}
+                         <tr class='separator'></tr>
                    {assign var=val value=$val+1}
                    {assign var=arr value=$trans[$val]}
                 {/foreach}      

@@ -15,7 +15,56 @@
     {$select}
     {$test}
 <br>
+ <table class="Agrohandel__sale__week">
+    <thead>
+        <td class="header_future"> SUMA Z TYGODNIA </td> 
+        <td class="header_future">Zakład</td> 
+        <td class="header_future">Suma zamówionych</td>
+        <td class="header_future">Suma kupionych</td>
+        <td class="header_future">Suma rozładowanych</td>
+    </thead>
+   {foreach from=$sumary_week item=company}
+    <tr class="changing">
+        {if ($company === reset($sumary_week))}      
+            <td class="inter_future" rowspan="{$sumary_week|@count}" style="color:black;background-color:#F0F0F0;">
+            <b><h3>Tydzień - {$week_number} </h3></b>
+            </td>
+        {/if}
+        {assign var=last value=$company.name}
+        <td class="inter_future" >{$company.name}</td>
+        <td class="inter_future" >{$company.val}</td>  
+        {if ($company === reset($sumary_week))}      
+        <td class="inter_future"  rowspan="{$sumary_week|@count}">{$all_bought}  </td>
+        {/if}
+        <td class="inter_future">
+        {if $week_transported.$last == ""}
+            0
+        </td>
+        {else}
+            {$week_transported.$last}
+        </td>
+        {/if}
+    </tr>
+    {/foreach}
+    {foreach from=$missing_all item=company}
+    <tr class="changing">  
+      {if ($company === reset($missing_all))}   
+        <td class="inter_future" rowspan="{$missing_all|@count}" style="color:red;background-color:#F0F0F0;"> Brakujące plany</td>
+      {/if}
+        <td class="inter_future" >{$company.company}</td>
+        <td class="inter_future" >---</td>
+        <td class="inter_future" >{$company.amm}</td>
+        <td class="inter_future" >{$company.iloscrozl}</td>
+    </tr>
+    {/foreach}
+<tr class="changing">
+    <td class="inter_future" colspan="2" ><b><h4>Razem:</h4></b></td>
+    <td class="inter_future"><b><h4>{$all_zam}</h4></b></td>
+    <td class="inter_future"><b><h4>{$all_bought}</h4></b></td>
+    <td class="inter_future"><b><h4>{$all_transp}</h4></b></td>
+</tr>
 
+    </table>
     <table  class="Agrohandel__sale__week" cellspacing=0 >
      <thead>
         <tr>
@@ -111,57 +160,7 @@
                    {assign var=val value=$val+1}
                    {assign var=arr value=$trans[$val]}
                 {/foreach}      
-
-</table><Br><br>
-    <table class="Agrohandel__sale__week">
-    <thead>
-        <td class="header_future"> SUMA Z TYGODNIA </td> 
-        <td class="header_future">Zakład</td> 
-        <td class="header_future">Suma zamówionych</td>
-        <td class="header_future">Suma kupionych</td>
-        <td class="header_future">Suma rozładowanych</td>
-    </thead>
-   {foreach from=$sumary_week item=company}
-    <tr class="changing">
-        {if ($company === reset($sumary_week))}      
-            <td class="header_company" rowspan="{$sumary_week|@count}" style="color:black;background-color:#F0F0F0;">
-            Tydzień - {$week_number} </td>
-        {/if}
-        {assign var=last value=$company.name}
-        <td class="inter_future" >{$company.name}</td>
-        <td class="inter_future" >{$company.val}</td>  
-        {if ($company === reset($sumary_week))}      
-        <td class="inter_future"  rowspan="{$sumary_week|@count}">{$week_bought}  </td>
-        {/if}
-        <td class="inter_future">
-        {if $week_transported.$last == ""}
-            0
-        </td>
-        {else}
-            {$week_transported.$last}
-        </td>
-        {/if}
-    </tr>
-    {/foreach}
-    {foreach from=$missing_all item=company}
-    <tr class="changing">  
-      {if ($company === reset($missing_all))}   
-        <td class="header_company" rowspan="{$missing_all|@count}" style="color:red;background-color:#F0F0F0;"> Brakujące plany</td>
-      {/if}
-        <td class="inter_future" >{$company.company}</td>
-        <td class="inter_future" >---</td>
-        <td class="inter_future" >{$company.amm}</td>
-        <td class="inter_future" >{$company.iloscrozl}</td>
-    </tr>
-    {/foreach}
-<tr class="changing">
-    <td colspan="3" >Razem:</td>
-    <td class="inter_future">{$all_bought}</td>
-    <td class="inter_future">{$all_transp}</td>
-</tr>
-
-    </table>
-    <br><br><br><br>
+                    </table>
                 </div>
             </div>
         </div>

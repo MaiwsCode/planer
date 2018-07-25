@@ -14,6 +14,7 @@ public function settings(){
 
     //see record
         //Base_ThemeCommon::install_default_theme($this->get_type());
+        Base_ThemeCommon::install_default_theme ('planer');
         $theme = $this->init_module('Base/Theme');
         $theme->assign("css", Base_ThemeCommon::get_template_dir());
         $rbo = new RBO_RecordsetAccessor("Sales_plan");
@@ -143,9 +144,11 @@ public function settings(){
                             <ul>".$select_options."
                         </ul></li></ul>";
         // zamowione 
+        $all_zam = 0;
         $pon = $rbo->get_records(array('date' => $date->monday_of_week($week_num)),array(),array('company_name' => "ASC"));
         $pon = Rbo_Futures::set_related_fields($pon, 'company_name');
         foreach($pon as $p){
+            $all_zam += $p["amount"];
             if(Base_AclCommon::check_permission("manager") == "1" || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
                 if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
                     $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].
@@ -178,6 +181,7 @@ public function settings(){
         $wt = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 1)),array(),array('company_name' => "ASC"));
         $wt = Rbo_Futures::set_related_fields($wt, 'company_name');
         foreach($wt as $p){
+            $all_zam += $p["amount"];
             if(Base_AclCommon::check_permission("manager") == "1" || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
                 if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
                     $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].
@@ -211,6 +215,7 @@ public function settings(){
         $sr = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 2)),array(),array('company_name' => "ASC"));
         $sr = Rbo_Futures::set_related_fields($sr, 'company_name');
         foreach($sr as $p){
+            $all_zam += $p["amount"];
             if(Base_AclCommon::check_permission("manager") == "1" || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
                 if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
                     $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].
@@ -243,6 +248,7 @@ public function settings(){
         $czw = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 3)),array(),array('company_name' => "ASC"));
         $czw = Rbo_Futures::set_related_fields($czw, 'company_name');
         foreach($czw as $p){
+            $all_zam += $p["amount"];
             if(Base_AclCommon::check_permission("manager") == "1" || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
                 if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
                     $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].
@@ -275,6 +281,7 @@ public function settings(){
         $pt = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 4)),array(),array('company_name' => "ASC"));
         $pt = Rbo_Futures::set_related_fields($pt, 'company_name');
         foreach($pt as $p){
+            $all_zam += $p["amount"];
             if(Base_AclCommon::check_permission("manager") == "1" || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
                 if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
                     $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].
@@ -422,6 +429,7 @@ public function settings(){
         $transports[5] = $trans_pt;
         $theme->assign('trans',$transports);
         $starter = $indexer[0];
+        $theme->assign('all_zam',$all_zam);
         $theme->assign('starter',$starter);
         $theme->assign('indexer',$indexer);
         $theme->assign('select',$select);

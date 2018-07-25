@@ -193,6 +193,11 @@
 .Agrohandel__sale__week .changing:nth-child(even){
 	background-color: #ffffff;
 }
+table{
+	margin-top: 15px;
+	margin-bottom: 15px;
+	font-size: 18px;
+}
 .Agrohandel__sale__week td.sum_current,
 .Agrohandel__sale__week td.inter_current {
 	color: #000000;

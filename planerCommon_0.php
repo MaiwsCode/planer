@@ -46,5 +46,25 @@ class planerCommon extends ModuleCommon {
 			$defaults['date'] = $week;
 			return $defaults;
 		}
+		if ($mode === 'added'){
+			$record = $defaults;
+			$sales = new RBO_RecordsetAccessor("Sales_plan");
+			$records = $sales->get_records(array("date"=> $record['date']),array(),array());
+			foreach($records as $record_){
+			Utils_RecordBrowserCommon::update_record('Sales_plan', $record_->id, array('status' => $record['status']),$full_update=false, 
+			$date=null, $dont_notify=false); 
+			}
+		}
+		if ($mode === 'edit'){
+			$record = $defaults;
+			$sales = new RBO_RecordsetAccessor("Sales_plan");
+			$records = $sales->get_records(array("date"=> $record['date']),array(),array());
+			foreach($records as $record_){
+			Utils_RecordBrowserCommon::update_record('Sales_plan', $record_->id, array('status' => $record['status']),$full_update=false, 
+			$date=null, $dont_notify=false); 
+			}
+		}
 	}
+
+
 }

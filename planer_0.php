@@ -28,7 +28,7 @@ public function settings(){
             $records = Utils_RecordBrowserCommon::get_records('Sales_plan', array("date"=> $_date),array(),array());
 			foreach($records as $record_){
 			Utils_RecordBrowserCommon::update_record('Sales_plan', $record_['id'], array('difficulty_level' => $status),$all_fields=false, 
-			$date=null, $dont_notify=false);
+			null, $dont_notify=false);
 
             }
         }

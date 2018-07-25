@@ -582,6 +582,7 @@ public function settings(){
         $theme->assign ( 'action_buttons', $buttons );
         $theme->display();
     }
+}
     public function sum_records($records,$columnName){
         $value = 0;
         foreach($records as $record){

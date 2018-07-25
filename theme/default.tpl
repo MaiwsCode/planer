@@ -65,6 +65,7 @@
 </tr>
 
     </table>
+    <br><br><br>
     <table  class="Agrohandel__sale__week" cellspacing=0 style="margin-top:15px;margin-bottom:15px;">
      <thead>
         <tr>
@@ -161,6 +162,7 @@
                    {assign var=arr value=$trans[$val]}
                 {/foreach}      
                     </table>
+                    <br><br><br>
                 </div>
             </div>
         </div>

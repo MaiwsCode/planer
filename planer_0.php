@@ -149,6 +149,7 @@ public function settings(){
         $pon = Rbo_Futures::set_related_fields($pon, 'company_name');
         foreach($pon as $p){
             $all_zam += $p["amount"];
+            $p['amount'] = $p->record_link($p['amount'],$nolink = false,$action = 'view');
             if(Base_AclCommon::check_permission("manager") == "1" || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
                 if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
                     $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].
@@ -182,6 +183,7 @@ public function settings(){
         $wt = Rbo_Futures::set_related_fields($wt, 'company_name');
         foreach($wt as $p){
             $all_zam += $p["amount"];
+            $p['amount'] = $p->record_link($p['amount'],$nolink = false,$action = 'view');
             if(Base_AclCommon::check_permission("manager") == "1" || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
                 if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
                     $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].
@@ -216,6 +218,7 @@ public function settings(){
         $sr = Rbo_Futures::set_related_fields($sr, 'company_name');
         foreach($sr as $p){
             $all_zam += $p["amount"];
+            $p['amount'] = $p->record_link($p['amount'],$nolink = false,$action = 'view');
             if(Base_AclCommon::check_permission("manager") == "1" || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
                 if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
                     $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].
@@ -249,6 +252,7 @@ public function settings(){
         $czw = Rbo_Futures::set_related_fields($czw, 'company_name');
         foreach($czw as $p){
             $all_zam += $p["amount"];
+            $p['amount'] = $p->record_link($p['amount'],$nolink = false,$action = 'view');
             if(Base_AclCommon::check_permission("manager") == "1" || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
                 if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
                     $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].
@@ -282,6 +286,7 @@ public function settings(){
         $pt = Rbo_Futures::set_related_fields($pt, 'company_name');
         foreach($pt as $p){
             $all_zam += $p["amount"];
+            $p['amount'] = $p->record_link($p['amount'],$nolink = false,$action = 'view');
             if(Base_AclCommon::check_permission("manager") == "1" || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
                 if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
                     $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].

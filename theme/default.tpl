@@ -161,9 +161,9 @@
                    {assign var=val value=$val+1}
                    {assign var=arr value=$trans[$val]}
                 {/foreach}      
-                    </table>
-                    <br><br><br>
-                </div>
+                </table>
+            <br><br><br>
             </div>
         </div>
     </div>
+</div>

@@ -51,7 +51,7 @@ class planerCommon extends ModuleCommon {
 			$sales = new RBO_RecordsetAccessor("Sales_plan");
 			$records = $sales->get_records(array("date"=> $record['date']),array(),array());
 			foreach($records as $record_){
-			Utils_RecordBrowserCommon::update_record('Sales_plan', $record_->id, array('status' => $record['status']),$full_update=false, 
+			Utils_RecordBrowserCommon::update_record('Sales_plan', $record_['id'], array('status' => $record['status']),$full_update=false, 
 			$date=null, $dont_notify=false); 
 			}
 		}
@@ -60,7 +60,7 @@ class planerCommon extends ModuleCommon {
 			$sales = new RBO_RecordsetAccessor("Sales_plan");
 			$records = $sales->get_records(array("date"=> $record['date']),array(),array());
 			foreach($records as $record_){
-			Utils_RecordBrowserCommon::update_record('Sales_plan', $record_->id, array('status' => $record['status']),$full_update=false, 
+			Utils_RecordBrowserCommon::update_record('Sales_plan', $record_['id'], array('status' => $record['status']),$full_update=false, 
 			$date=null, $dont_notify=false); 
 			}
 		}

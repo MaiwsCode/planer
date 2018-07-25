@@ -47,11 +47,11 @@ class planerCommon extends ModuleCommon {
 			return $defaults;
 		}
 		if ($mode === 'added'){
-			/*$records = Utils_RecordBrowserCommon::get_records('Sales_plan', array("date"=> $defaults['date']),array(),array());
+			$records = Utils_RecordBrowserCommon::get_records('Sales_plan', array("date"=> $defaults['date']),array(),array());
 			foreach($records as $record_){
 			Utils_RecordBrowserCommon::update_record('Sales_plan', $record_['id'], array('difficulty_level' => $record['difficulty_level']),$full_update=false, 
 			$date=null, $dont_notify=false); 
-			}*/
+			}
 		}
 		if ($mode === 'edit'){
 		/*	$records = Utils_RecordBrowserCommon::get_records('Sales_plan',array("date"=> $defaults['date']),array(),array());

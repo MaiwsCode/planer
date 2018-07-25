@@ -69,7 +69,7 @@
      <thead>
         <tr>
             <td class="header_company">Dzień tygodnia
-            <span><b>ydzień - {$week_number}</b></span></td>
+            <span><b>Tydzień - {$week_number}</b></span></td>
             <td class="header_future">Zakład</td>
             <td class="header_future">Zamówione</td>
             <td class="header_future">Cena</td>

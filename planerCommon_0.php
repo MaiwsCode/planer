@@ -47,23 +47,21 @@ class planerCommon extends ModuleCommon {
 			return $defaults;
 		}
 		if ($mode === 'added'){
-			$records = Utils_RecordBrowserCommon::get_records('Sales_plan', array("date"=> $defaults['date']),array(),array());
-			print_r($records);
-			print_r($records[0]['id']);
+			/*$records = Utils_RecordBrowserCommon::get_records('Sales_plan', array("date"=> $defaults['date']),array(),array());
 			foreach($records as $record_){
 			Utils_RecordBrowserCommon::update_record('Sales_plan', $record_['id'], array('difficulty_level' => $record['difficulty_level']),$full_update=false, 
 			$date=null, $dont_notify=false); 
-			}
+			}*/
 		}
 		if ($mode === 'edit'){
-			$records = Utils_RecordBrowserCommon::get_records('Sales_plan',array("date"=> $defaults['date']),array(),array());
-			print_r($records);
-			print_r($records[0]['id']);
+		/*	$records = Utils_RecordBrowserCommon::get_records('Sales_plan',array("date"=> $defaults['date']),array(),array());
 			foreach($records as $record_){
 			Utils_RecordBrowserCommon::update_record('Sales_plan', $record_['id'], array('difficulty_level' => $record['difficulty_level']),$full_update=false, 
 			$date=null, $dont_notify=false); 
-			}
+			}*/
+			Base_StatusBarCommon::message("edit");
 		}
+		Base_StatusBarCommon::message($mode);
 	}
 
 

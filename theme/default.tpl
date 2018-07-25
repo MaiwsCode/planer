@@ -58,10 +58,10 @@
     </tr>
     {/foreach}
 <tr class="changing">
-    <td class="inter_future" colspan="2" ><span style='font-size:18px;'><b>Razem:</b></span></td>
-    <td class="inter_future"><span style='font-size:18px;'><b>{$all_zam}</b></span></td>
-    <td class="inter_future"><span style='font-size:18px;'><b>{$all_bought}</b></span></td>
-    <td class="inter_future"><span style='font-size:18px;'><b>{$all_transp}</b></span></td>
+    <td class="inter_future" colspan="2" ><span style='font-size:18px;border-bottom: 1px solid #B3B3B3;'><b>Razem:</b></span></td>
+    <td class="inter_future"><span style='font-size:18px;border-bottom: 1px solid #B3B3B3;'><b>{$all_zam}</b></span></td>
+    <td class="inter_future"><span style='font-size:18px;border-bottom: 1px solid #B3B3B3;'><b>{$all_bought}</b></span></td>
+    <td class="inter_future"><span style='font-size:18px;border-bottom: 1px solid #B3B3B3;'><b>{$all_transp}</b></span></td>
 </tr>
 
     </table>

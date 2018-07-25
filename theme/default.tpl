@@ -115,13 +115,13 @@
                             <tr class="prop50 {$useClass}">
                         {/if}
                         {if ($record === reset($day))}      
-                            <td class="inter_company" rowspan="{$day|@count}" style='{$extra}'>{$record.date}   <br> {$days_text[$val]}</td>
+                            <td class="inter_company" rowspan="{$day|@count}" style='{$extra}'>{$record.date}   <br> {$days_text[$val]}  {$sel}</td>
                         {/if}
                         <td class="inter_company"> {$record.company_name}</td>
                         <td class="inter_future"><span style='font-size:18px;'> {$record.amount} </span></td>
                         <td class="inter_future">{$record.Price|floatval}</td>
                         {if ($record === reset($day))}      
-                            <td class="inter_future" style="{$extra}" rowspan="{$day|@count}"> {$amount_sum[$val]}  {$sel}</td>
+                            <td class="inter_future" style="{$extra}" rowspan="{$day|@count}"> {$amount_sum[$val]} </td>
                         {/if}
                         {if $iter == $row}
                             {assign var=last value=$record.company_name|strip_tags:false|substr:0}

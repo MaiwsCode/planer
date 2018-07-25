@@ -46,7 +46,7 @@ class planerCommon extends ModuleCommon {
 			$defaults['date'] = $week;
 			return $defaults;
 		}
-		if ($mode === 'added'){
+		if ($mode === 'added' || $mode === "add"){
 			$records = Utils_RecordBrowserCommon::get_records('Sales_plan', array("date"=> $defaults['date']),array(),array());
 			foreach($records as $record_){
 			Utils_RecordBrowserCommon::update_record('Sales_plan', $record_['id'], array('difficulty_level' => $defaults['difficulty_level']),$all_fields=false, 

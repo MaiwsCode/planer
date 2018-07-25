@@ -23,9 +23,9 @@ public function settings(){
         $days = array();
         //array('change_status' => '2018-07-19','status'=> '1'))
         if(isset($_REQUEST["change_status"])){
-            $date = $_REQUEST["change_status"];
+            $_date = $_REQUEST["change_status"];
             $status = $_REQUEST["status"];
-            $records = Utils_RecordBrowserCommon::get_records('Sales_plan', array("date"=> $date),array(),array());
+            $records = Utils_RecordBrowserCommon::get_records('Sales_plan', array("date"=> $_date),array(),array());
 			foreach($records as $record_){
 			Utils_RecordBrowserCommon::update_record('Sales_plan', $record_['id'], array('difficulty_level' => $status),$all_fields=false, 
 			$date=null, $dont_notify=false);

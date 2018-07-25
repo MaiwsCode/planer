@@ -30,6 +30,7 @@ public function settings(){
 			Utils_RecordBrowserCommon::update_record('Sales_plan', $record_['id'], array('difficulty_level' => $status),$all_fields=false, 
 			$date=null, $dont_notify=false);
 
+            }
         }
 
 
@@ -575,8 +576,8 @@ public function settings(){
         $theme->assign('week_number', $week_num);
         $theme->assign ( 'action_buttons', $buttons );
         $theme->display();
+    
     }
-}
     public function sum_records($records,$columnName){
         $value = 0;
         foreach($records as $record){

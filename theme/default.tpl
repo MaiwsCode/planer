@@ -68,7 +68,7 @@
     <table  class="Agrohandel__sale__week" cellspacing=0 style="margin-top:15px;margin-bottom:15px;">
      <thead>
         <tr>
-            <td class="header_company">Dzień tygodnia
+            <td class="header_company">Dzień tygodnia <br>
             <span><b>Tydzień - {$week_number}</b></span></td>
             <td class="header_future">Zakład</td>
             <td class="header_future">Zamówione</td>
@@ -117,7 +117,7 @@
                             <td class="inter_company" rowspan="{$day|@count}" style='{$extra}'>{$record.date}   <br> {$days_text[$val]}</td>
                         {/if}
                         <td class="inter_company"> {$record.company_name}</td>
-                        <td class="inter_future">{$record.amount}</td>
+                        <td class="inter_future"><span style='font-size:18px;'> {$record.amount} </span></td>
                         <td class="inter_future">{$record.Price|floatval}</td>
                         {if ($record === reset($day))}      
                             <td class="inter_future" style="{$extra}" rowspan="{$day|@count}"> {$amount_sum[$val]} </td>
@@ -144,7 +144,7 @@
                             {foreach from=$missing[$val] item=rec}
                             <tr class="changing">
                                  {if ($rec === reset($missing[$val]))}   
-                                    <td class="header_company" rowspan="{$missing[$val]|@count}" style="color:red;background-color:#F0F0F0;"> Brakujące plany</td>
+                                    <td class="inter_future" rowspan="{$missing[$val]|@count}" style="color:red;background-color:#F0F0F0;"> Brakujące plany</td>
                                  {/if}
                                  <td class="inter_future">{$rec.company}</td>
                                  <td class="inter_future">---</td>

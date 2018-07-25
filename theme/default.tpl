@@ -15,7 +15,7 @@
     {$select}
     {$test}
 <br>
- <table class="Agrohandel__sale__week">
+ <table class="Agrohandel__sale__week" style="margin-top:15px;margin-bottom:15px;"> 
     <thead>
         <td class="header_future"> SUMA Z TYGODNIA </td> 
         <td class="header_future">Zakład</td> 
@@ -58,18 +58,18 @@
     </tr>
     {/foreach}
 <tr class="changing">
-    <td class="inter_future" colspan="2" ><b><h4>Razem:</h4></b></td>
-    <td class="inter_future"><b><h4>{$all_zam}</h4></b></td>
-    <td class="inter_future"><b><h4>{$all_bought}</h4></b></td>
-    <td class="inter_future"><b><h4>{$all_transp}</h4></b></td>
+    <td class="inter_future" colspan="2" ><b><h2>Razem:</h2></b></td>
+    <td class="inter_future"><b><h2>{$all_zam}</h2></b></td>
+    <td class="inter_future"><b><h2>{$all_bought}</h2></b></td>
+    <td class="inter_future"><b><h2>{$all_transp}</h2></b></td>
 </tr>
 
     </table>
-    <table  class="Agrohandel__sale__week" cellspacing=0 >
+    <table  class="Agrohandel__sale__week" cellspacing=0 style="margin-top:15px;margin-bottom:15px;">
      <thead>
         <tr>
             <td class="header_company">Dzień tygodnia
-            <h3>Tydzień - {$week_number} </h3</td>
+            <h2>Tydzień - {$week_number} </h2</td>
             <td class="header_future">Zakład</td>
             <td class="header_future">Zamówione</td>
             <td class="header_future">Cena</td>

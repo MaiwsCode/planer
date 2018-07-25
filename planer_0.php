@@ -532,12 +532,6 @@ public function settings(){
                 }
             }
         }       
-        /*$missing_pon = Rbo_Futures::set_related_fields($missing_pon, 'company');
-        $missing_wt = Rbo_Futures::set_related_fields($missing_wt, 'company');
-        $missing_sr = Rbo_Futures::set_related_fields($missing_sr, 'company');
-        $missing_czw = Rbo_Futures::set_related_fields($missing_czw, 'company');
-        $missing_pt = Rbo_Futures::set_related_fields($missing_pt, 'company');
-        $missing_all = Rbo_Futures::set_related_fields($missing_all, 'company');*/
         $week_amount_sum = 0;   
         for($i=0;$i<=4;$i++){
             $week_bought = $transported->get_records(array('date' =>$date->add_days($date->monday_of_week($week_num), $i)),array(),array());

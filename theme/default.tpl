@@ -142,6 +142,7 @@
                             </td>
                         </tr>
                         {if ($record === end($day))} 
+                        <tr class='separator'></tr>
                             {foreach from=$missing[$val] item=rec}
                             <tr class="changing">
                                  {if ($rec === reset($missing[$val]))}   

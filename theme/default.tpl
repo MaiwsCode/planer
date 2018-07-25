@@ -114,7 +114,7 @@
                             <tr class="prop50 {$useClass}">
                         {/if}
                         {if ($record === reset($day))}      
-                            <td class="inter_future" rowspan="{$day|@count}" style='{$extra}'>{$record.date}   <br> {$days_text[$val]}</td>
+                            <td class="inter_company" rowspan="{$day|@count}" style='{$extra}'>{$record.date}   <br> {$days_text[$val]}</td>
                         {/if}
                         <td class="inter_company"> {$record.company_name}</td>
                         <td class="inter_future">{$record.amount}</td>

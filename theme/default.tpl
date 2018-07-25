@@ -121,7 +121,7 @@
                         <td class="inter_future"><span style='font-size:18px;'> {$record.amount} </span></td>
                         <td class="inter_future">{$record.Price|floatval}</td>
                         {if ($record === reset($day))}      
-                            <td class="inter_future" style="{$extra}" rowspan="{$day|@count}"> {$amount_sum[$val]}  </td>
+                            <td class="inter_future" style="{$extra}" rowspan="{$day|@count}"> {$amount_sum[$val]}  {$sel}</td>
                         {/if}
                         {if $iter == $row}
                             {assign var=last value=$record.company_name|strip_tags:false|substr:0}

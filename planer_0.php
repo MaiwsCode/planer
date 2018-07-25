@@ -22,7 +22,7 @@ public function settings(){
         $date = new PickDate();
         $days = array();
         //array('change_status' => '2018-07-19','status'=> '1'))
-        if(isset ($_REQUEST["change_status"])){
+        if(isset($_REQUEST["change_status"])){
             $date = $_REQUEST["change_status"];
             $status = $_REQUEST["status"];
             $records = Utils_RecordBrowserCommon::get_records('Sales_plan', array("date"=> $date),array(),array());

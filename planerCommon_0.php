@@ -48,6 +48,8 @@ class planerCommon extends ModuleCommon {
 		}
 		if ($mode === 'added'){
 			$records = Utils_RecordBrowserCommon::get_records('Sales_plan', array("date"=> $defaults['date']),array(),array());
+			print_r($records);
+			print_r($records[0]['id']);
 			foreach($records as $record_){
 			Utils_RecordBrowserCommon::update_record('Sales_plan', $record_['id'], array('difficulty_level' => $record['difficulty_level']),$full_update=false, 
 			$date=null, $dont_notify=false); 
@@ -55,6 +57,8 @@ class planerCommon extends ModuleCommon {
 		}
 		if ($mode === 'edit'){
 			$records = Utils_RecordBrowserCommon::get_records('Sales_plan',array("date"=> $defaults['date']),array(),array());
+			print_r($records);
+			print_r($records[0]['id']);
 			foreach($records as $record_){
 			Utils_RecordBrowserCommon::update_record('Sales_plan', $record_['id'], array('difficulty_level' => $record['difficulty_level']),$full_update=false, 
 			$date=null, $dont_notify=false); 

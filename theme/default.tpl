@@ -27,7 +27,7 @@
     <tr class="changing">
         {if ($company === reset($sumary_week))}      
             <td class="inter_future" rowspan="{$sumary_week|@count}" style="color:black;background-color:#F0F0F0;">
-            <b><h3>Tydzień - {$week_number} </h3></b>
+            <span style='font-size:18px;'><b>Tydzień - {$week_number} </b></span>
             </td>
         {/if}
         {assign var=last value=$company.name}
@@ -58,10 +58,10 @@
     </tr>
     {/foreach}
 <tr class="changing">
-    <td class="inter_future" colspan="2" ><h5>Razem:</h5></b></td>
-    <td class="inter_future"><b><h5>{$all_zam}</h5></td>
-    <td class="inter_future"><b><h5>{$all_bought}</h5></td>
-    <td class="inter_future"><b><h5>{$all_transp}</h5></td>
+    <td class="inter_future" colspan="2" ><span style='font-size:18px;'><b>Razem:</b></span></td>
+    <td class="inter_future"><span style='font-size:18px;'><b>{$all_zam}</b></span></td>
+    <td class="inter_future"><span style='font-size:18px;'><b>{$all_bought}</b></span></td>
+    <td class="inter_future"><span style='font-size:18px;'><b>{$all_transp}</b></span></td>
 </tr>
 
     </table>
@@ -69,7 +69,7 @@
      <thead>
         <tr>
             <td class="header_company">Dzień tygodnia
-            <h5>Tydzień - {$week_number} </h5</td>
+            <span><b>ydzień - {$week_number}</b></span></td>
             <td class="header_future">Zakład</td>
             <td class="header_future">Zamówione</td>
             <td class="header_future">Cena</td>

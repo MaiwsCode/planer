@@ -58,10 +58,10 @@
     </tr>
     {/foreach}
 <tr class="changing">
-    <td class="inter_future" colspan="2" ><b><h2>Razem:</h2></b></td>
-    <td class="inter_future"><b><h2>{$all_zam}</h2></b></td>
-    <td class="inter_future"><b><h2>{$all_bought}</h2></b></td>
-    <td class="inter_future"><b><h2>{$all_transp}</h2></b></td>
+    <td class="inter_future" colspan="2" ><h5>Razem:</h5></b></td>
+    <td class="inter_future"><b><h5>{$all_zam}</h5></td>
+    <td class="inter_future"><b><h5>{$all_bought}</h5></td>
+    <td class="inter_future"><b><h5>{$all_transp}</h5></td>
 </tr>
 
     </table>
@@ -69,7 +69,7 @@
      <thead>
         <tr>
             <td class="header_company">Dzień tygodnia
-            <h2>Tydzień - {$week_number} </h2</td>
+            <h5>Tydzień - {$week_number} </h5</td>
             <td class="header_future">Zakład</td>
             <td class="header_future">Zamówione</td>
             <td class="header_future">Cena</td>

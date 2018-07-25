@@ -20,8 +20,12 @@ class planerInstall extends ModuleInstall {
         $fields1->set_caption(_M('Poziomy trudności'));
         $fields = new planer_Recordset();
         $success = $fields->install();
+        $fields->add_access('view', 'ACCESS:employee');
         $fields->add_access('edit', 'ACCESS:manager');
-		$fields->add_access('delete', 'ACCESS:manager');
+        $fields->add_access('delete', 'ACCESS:manager');
+        $salePlans->add_access('add', 'ACCESS:u_trader');
+        $salePlans->add_access('add', 'ACCESS:manager');
+        
         $fields->add_default_access();
         $fields->set_caption(_M('Plany sprzedaży tucznika'));
         $fields->set_icon (Base_ThemeCommon::get_template_filename ( 'planer', 'pig.png' ));

@@ -61,7 +61,7 @@ class planerCommon extends ModuleCommon {
 			}*/
 			Base_StatusBarCommon::message("edit");
 		}
-		if($mode != "display" && $mode != "view"){
+		if($mode != "display"|| $mode != "view"){
 		Base_StatusBarCommon::message($mode);}
 	}
 

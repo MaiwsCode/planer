@@ -32,8 +32,6 @@ public function settings(){
 
            }
         }
-
-
         if(!isset($_REQUEST['week_number']) && !isset($_SESSION['week'])){
             $today = date("Y-m-d");
             $week_num = $date->get_week_number($today);  
@@ -460,6 +458,12 @@ public function settings(){
         foreach($amount_sum as $sum){
             $all_bought_week += $sum;
         }
+        for($i = 1;$i<6;$i++){
+            $amount_sum[$i] = "<a ". Base_BoxCommon::create_href('Custom_A
+            grohandel_Transporty','Custom_Agrohandel_Tr
+            ansporty', null, array(), array(), array('day'=> $date->add_days($date->monday_of_week($week_num),($i-1)))).">".$amount_sum[$i]."</a>";
+        }
+
         array_push($days,$pon);
         array_push($days,$wt);
         array_push($days,$sr);
@@ -475,9 +479,9 @@ public function settings(){
         );
         for($i = 0; $i<5;$i++){
             $sel_opt = "";
-            $sel_opt .= "<a ".$this->create_href(array('change_status' => $date->add_days($date->monday_of_week($week_num), $i),'status'=> '1'))."> Normalny </a>";
-            $sel_opt .= "<a ".$this->create_href(array('change_status' => $date->add_days($date->monday_of_week($week_num), $i),'status'=> '2'))."> Łatwy </a>";
-            $sel_opt .= "<a ".$this->create_href(array('change_status' => $date->add_days($date->monday_of_week($week_num), $i),'status'=> '3'))."> Trudny </a>";
+            $sel_opt .= "<a ".$this->create_href(array('change_status' => $date->add_days($date->monday_of_week($week_num), $i),'status'=> '2'))."><img src='http://192.168.1.118/data/Base_Theme/templates/default/planer/good.png'  width=40 height=40 /></a>";
+            $sel_opt .= "<a ".$this->create_href(array('change_status' => $date->add_days($date->monday_of_week($week_num), $i),'status'=> '1'))."><img src='http://192.168.1.118/data/Base_Theme/templates/default/planer/normal.png'  width=40 height=40 /></a>";
+            $sel_opt .= "<a ".$this->create_href(array('change_status' => $date->add_days($date->monday_of_week($week_num), $i),'status'=> '3'))."><img src='http://192.168.1.118/data/Base_Theme/templates/default/planer/bad.png'  width=40 height=40 /></a>";
             $sel = "<div style='position:relative;text-align:center;'><br>Zmień status:<br>".$sel_opt."</div>";
             $x = $i;
             $x++;

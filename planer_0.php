@@ -395,15 +395,15 @@ public function settings(){
         
         //dostarczone
         //potrzena tabela z Raport z rozladunku
-        $transported = new RBO_RecordsetAccessor("Transport"); //custom_agrohandel_transporty Transport
+        $transported = new RBO_RecordsetAccessor("custom_agrohandel_transporty"); //custom_agrohandel_transporty Transport
         $trans_pon = array();
         $trans_wt = array();
         $trans_sr = array();
         $trans_czw = array();
         $trans_pt = array();
         $transports = [];
-        $company_field = "company_name"; ///company company_name
-        $amount = "amount"; //iloscrozl amount
+        $company_field = "company"; ///company company_name
+        $amount = "iloscrozl"; //iloscrozl amount
         $t_pon = $transported->get_records(array('date' => $date->monday_of_week($week_num)),array(),array($company_field => "ASC"));
         foreach($t_pon as $t){
             $x = $t->get_val($company_field,$nolink = TRUE);

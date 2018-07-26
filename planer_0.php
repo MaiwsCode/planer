@@ -459,9 +459,7 @@ public function settings(){
             $all_bought_week += $sum;
         }
         for($i = 1;$i<6;$i++){
-            $amount_sum[$i] = "<a ". Base_BoxCommon::create_href('Custom_A
-            grohandel_Transporty','Custom_Agrohandel_Tr
-            ansporty', null, array(), array(), array('day'=> $date->add_days($date->monday_of_week($week_num),($i-1)))).">".$amount_sum[$i]."</a>";
+            $amount_sum[$i] = "<a ". Base_BoxCommon::create_href('Transporty','Transporty', null, array(), array(), array('day'=> $date->add_days($date->monday_of_week($week_num),($i-1)))).">".$amount_sum[$i]."</a>";
         }
 
         array_push($days,$pon);

@@ -69,8 +69,8 @@
     <table  class="Agrohandel__sale__week" cellspacing=0 style="margin-top:15px;margin-bottom:15px;">
      <thead>
         <tr>
-            <td class="header_company"><span style='font-size:18px;'>Dzień tygodnia <br>
-            <span  style='font-size:18px;'><b>Tydzień - {$week_number}</b></span></td>
+            <td class="header_company"><span style='font-size:15px;'>Dzień tygodnia</span> <br>
+            <span  style='font-size:15px;'><b>Tydzień - {$week_number}</b></span></td>
             <td class="header_future">Zakład</td>
             <td class="header_future">Zamówione</td>
             <td class="header_future">Cena</td>
@@ -112,31 +112,65 @@
                         {elseif  $record.difficulty_level == 3}
                             <tr class="prop30 {$useClass}">
                         {else}
-                            <tr class="prop50 {$useClass}">
+                            <tr class="prop50 {$useClass}" >
                         {/if}
                         {if ($record === reset($day))}      
-                            <td class="inter_company" rowspan="{$day|@count}" style='{$extra}'>{$record.date}   <br> {$days_text[$val]}  {$sel}</td>
+                            {assign var="selector" value="`$val``$val`"}
+                            <td class="inter_company" rowspan="{$day|@count}" style='{$extra} text-align:center;font-size:15px;'>
+                                <span>{$record.date}</span><br>
+                                <span>{$days_text[$val]}</span> <br>
+                                {$days_text[$selector]} </td>
+
                         {/if}
-                        <td class="inter_company"> {$record.company_name}</td>
-                        <td class="inter_future"><span style='font-size:18px;'> {$record.amount} </span></td>
-                        <td class="inter_future">{$record.Price|floatval}</td>
+                        {if ($record === end($day)) && $extra ==''}  
+                            <td class="inter_company" style='font-size:15px;border-bottom: 1px solid #B3B3B3;'> {$record.company_name}</td>
+                        {else}
+                            <td class="inter_company" style='font-size:15px;'> {$record.company_name}</td> 
+                        {/if}
+                        {if ($record === end($day)) && $extra ==''}  
+                            <td class="inter_future" style="border-bottom: 1px solid #B3B3B3;"><span style='font-size:18px;'> {$record.amount} </span></td>
+                        {else}
+                            <td class="inter_future"><span style='font-size:18px;'> {$record.amount} </span></td>
+                        {/if}
+                        {if ($record === end($day)) && $extra ==''}  
+                            <td class="inter_future" style="border-bottom: 1px solid #B3B3B3;">{$record.Price|floatval|replace:'.':','}</td>
+                        {else}
+                            <td class="inter_future">{$record.Price|floatval|replace:'.':','}</td>
+                        {/if}
+
                         {if ($record === reset($day))}      
                             <td class="inter_future" style="{$extra}" rowspan="{$day|@count}"> {$amount_sum[$val]} </td>
                         {/if}
                         {if $iter == $row}
                             {assign var=last value=$record.company_name|strip_tags:false|substr:0}
                             {if $arr.$last}
-                                <td class="inter_future"  rowspan="{$indexer[$iter]}">{$arr.$last}</td>
+                                     {if ($record === end($day)) && $extra ==''} 
+                                        <td class="inter_future" style='border-bottom: 1px solid #B3B3B3;'  rowspan="{$indexer[$iter]}">{$arr.$last}</td>
+                                    {else}
+                                        <td class="inter_future" style='{$extra}'  rowspan="{$indexer[$iter]}">{$arr.$last}</td>
+                                    {/if}
                             {else}
-                                <td class="inter_future"  rowspan="{$indexer[$iter]}">0</td>
+                                {if ($record === end($day)) && $extra ==''} 
+                                    <td class="inter_future" style='border-bottom: 1px solid #B3B3B3;'  rowspan="{$indexer[$iter]}">0</td>
+                                {else}
+                                    <td class="inter_future"   rowspan="{$indexer[$iter]}">0</td>
+                                {/if}
                             {/if}
                                 {assign var=row value=$row+$indexer[$iter]}
                                 {assign var=iter value=$iter+1}
                             {else}
                                 {assign var=row value=$row-1}
                             {/if}
-                            <td class="inter_future">{$record.notka}</td>
-                            <td class="inter_future">
+                            {if ($record === end($day)) && $extra ==''} 
+                                <td class="inter_future" style="border-bottom: 1px solid #B3B3B3;">{$record.notka}</td>
+                            {else}
+                                <td class="inter_future" >{$record.notka}</td>
+                            {/if}
+                            {if ($record === end($day)) && $extra ==''} 
+                                <td class="inter_future" style="border-bottom: 1px solid #B3B3B3;">
+                            {else}
+                                <td class="inter_future" >
+                            {/if}
                                 {$record.edit}
                                 {$record.delete}
                             </td>

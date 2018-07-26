@@ -34,7 +34,7 @@ class planer_Recordset  extends RBO_Recordset {
         
         $type = new RBO_Field_Select(_M('Difficulty level'));
      //   $type->from('difficulty_level')->fields('difficulty_level')->set_visible()->set_required();
-        $type->from('Difficulty')->fields('Dificulty_level')->set_visible()->set_required();
+        $type->from('Difficulty')->fields('Dificulty_level');
         return array($ammount, $company, $price,$date,$description_trader,$description_manager,$type); // - remember to return all defined fields
  
  

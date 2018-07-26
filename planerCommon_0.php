@@ -36,7 +36,7 @@ class planerCommon extends ModuleCommon {
 	}
 	public static function on_create_new($defaults, $mode){
 		if ($mode === 'adding'){
-			$defaults['difficulty_level'] = '1';
+
 			$week = $_SESSION['week'];
 			if($week< 10){
 				$week = "0".$week;
@@ -44,16 +44,29 @@ class planerCommon extends ModuleCommon {
 			$Y = date('Y');
 			$week = date("Y-m-d", strtotime($Y.'W'.$week));
 			$defaults['date'] = $week;
+			$records = Utils_RecordBrowserCommon::get_records('Sales_plan', $crits = array("date" =>$week ), $cols = array(), $order = array(), 
+			$limit = array(), $admin = false);
+			if($records != null){
+				$defaults['difficulty_level'] = $records[0]['difficulty_level'];
+			}
+			else{
+				$defaults['difficulty_level'] = '1';
+			}
 			return $defaults;
 		}
-		if ($mode === 'added' || $mode === "add"){
-			$records = Utils_RecordBrowserCommon::get_records('Sales_plan', array("date"=> $defaults['date']),array(),array());
-			foreach($records as $record_){
-			Utils_RecordBrowserCommon::update_record('Sales_plan', $record_['id'], array('difficulty_level' => $defaults['difficulty_level']),$all_fields=false, 
-			$date=null, $dont_notify=false); 
-			}
+		if ($mode === 'added'){
+			planerCommon::update_records($defaults['difficulty_level'],$defaults['date']);
+		}
+		if ($mode === 'edited'){
+			planerCommon::update_records($defaults['difficulty_level'],$defaults['date']);
 		}
 	}
-
-
+	public static function update_records($status,$date){
+		$rbo_sales_plan = new RBO_RecordsetAccessor("Sales_plan");
+		$records = $rbo_sales_plan->get_records(array("date"=>$date),array(),array());
+		foreach($records as $record){
+			$record->difficulty_level = $status;
+			$record->save();
+		}
+	}
 }

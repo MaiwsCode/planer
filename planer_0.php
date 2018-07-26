@@ -30,7 +30,7 @@ public function settings(){
 			Utils_RecordBrowserCommon::update_record('Sales_plan', $record_['id'], array('difficulty_level' => $status),$all_fields=false, 
 			null, $dont_notify=false);
 
-            }
+           }
         }
 
 
@@ -191,7 +191,7 @@ public function settings(){
             }
             
         }
-        $pon = sortByCompanyName($pon);
+       // $pon = sortByCompanyName($pon);
         $wt = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 1)),array(),array('company_name' => "ASC"));
         $wt = Rbo_Futures::set_related_fields($wt, 'company_name');
         foreach($wt as $p){
@@ -226,7 +226,8 @@ public function settings(){
                 $p["edit"] = '';
             }
         }
-        $wt = sortByCompanyName($wt);
+       // print(count($pon));
+       // $wt = sortByCompanyName($wt);
         $sr = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 2)),array(),array('company_name' => "ASC"));
         $sr = Rbo_Futures::set_related_fields($sr, 'company_name');
         foreach($sr as $p){
@@ -260,7 +261,7 @@ public function settings(){
                 $p["edit"] = '';
             }
         }
-        $sr = sortByCompanyName($sr);
+      //  $sr = sortByCompanyName($sr);
         $czw = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 3)),array(),array('company_name' => "ASC"));
         $czw = Rbo_Futures::set_related_fields($czw, 'company_name');
         foreach($czw as $p){
@@ -294,7 +295,7 @@ public function settings(){
                 $p["edit"] = '';
             }
         }
-        $czw = sortByCompanyName($czw);
+     //   $czw = sortByCompanyName($czw);
         $pt = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 4)),array(),array('company_name' => "ASC"));
         $pt = Rbo_Futures::set_related_fields($pt, 'company_name');
         foreach($pt as $p){
@@ -330,7 +331,7 @@ public function settings(){
         }
         $all_bought_week =0;
         $all_transported_week = 0;
-        $pt = sortByCompanyName($pt);
+      //  $pt = sortByCompanyName($pt);
         //potrzeba wstawić prawidłową nazwe tabeli
         $bought = new RBO_RecordsetAccessor('custom_agrohandel_purchase_plans');
         $pon_bought = $bought->get_records(array('planed_purchase_date' => $date->monday_of_week($week_num),'~status' => "%purchased%"),
@@ -394,15 +395,15 @@ public function settings(){
         
         //dostarczone
         //potrzena tabela z Raport z rozladunku
-        $transported = new RBO_RecordsetAccessor("custom_agrohandel_transporty"); //custom_agrohandel_transporty Transport
+        $transported = new RBO_RecordsetAccessor("Transport"); //custom_agrohandel_transporty Transport
         $trans_pon = array();
         $trans_wt = array();
         $trans_sr = array();
         $trans_czw = array();
         $trans_pt = array();
         $transports = [];
-        $company_field = "company"; ///company company_name
-        $amount = "iloscrozl"; //iloscrozl amount
+        $company_field = "company_name"; ///company company_name
+        $amount = "amount"; //iloscrozl amount
         $t_pon = $transported->get_records(array('date' => $date->monday_of_week($week_num)),array(),array($company_field => "ASC"));
         foreach($t_pon as $t){
             $x = $t->get_val($company_field,$nolink = TRUE);
@@ -472,16 +473,16 @@ public function settings(){
             4=>"CZWARTEK",
             5=>"PIĄTEK",
         );
-        $sel_opt = "";
-        $sel_opt .= "<li><a ".$this->create_href(array('change_status' => '2018-07-19','status'=> '1'))."> Normalny </a></li>";
-        $sel_opt .= "<li><a ".$this->create_href(array('change_status' => '2018-07-19','status'=> '2'))."> Łatwy </a></li>";
-        $sel_opt .= "<li><a ".$this->create_href(array('change_status' => '2018-07-19','status'=> '3'))."> Trudny </a></li>";
-        $sel = "<ul class='drops'>
-        <li>
-            <a href='#'>Wybierz status  </a> <img src='data/Base_Theme/templates/default/planer/drop.png' width=25 height=25 />
-                <ul>".$sel_opt."
-            </ul></li></ul>";
-        $theme->assign('sel',$sel);
+        for($i = 0; $i<5;$i++){
+            $sel_opt = "";
+            $sel_opt .= "<a ".$this->create_href(array('change_status' => $date->add_days($date->monday_of_week($week_num), $i),'status'=> '1'))."> Normalny </a>";
+            $sel_opt .= "<a ".$this->create_href(array('change_status' => $date->add_days($date->monday_of_week($week_num), $i),'status'=> '2'))."> Łatwy </a>";
+            $sel_opt .= "<a ".$this->create_href(array('change_status' => $date->add_days($date->monday_of_week($week_num), $i),'status'=> '3'))."> Trudny </a>";
+            $sel = "<div style='position:relative;text-align:center;'><br>Zmień status:<br>".$sel_opt."</div>";
+            $x = $i;
+            $x++;
+            $days_text[$x.$x] = $sel;
+        }
         $sumary_week = $rbo->get_records(array('>=date' => $date->monday_of_week($week_num), 
         '<=date' => $date->add_days($date->monday_of_week($week_num), 4)), 
         array(),array());

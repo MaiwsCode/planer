@@ -122,9 +122,9 @@
 
                         {/if}
                         {if ($record === end($day)) && $extra ==''}  
-                            <td class="inter_company" style='font-size:15px;border-bottom: 1px solid #B3B3B3;'> {$record.company_name}</td>
+                            <td class="inter_future" style='font-size:15px;border-bottom: 1px solid #B3B3B3;'> {$record.company_name}</td>
                         {else}
-                            <td class="inter_company" style='font-size:15px;'> {$record.company_name}</td> 
+                            <td class="inter_future" style='font-size:15px;'> {$record.company_name}</td> 
                         {/if}
                         {if ($record === end($day)) && $extra ==''}  
                             <td class="inter_future" style="border-bottom: 1px solid #B3B3B3;"><span style='font-size:18px;'> {$record.amount} </span><br>

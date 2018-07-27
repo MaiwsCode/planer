@@ -458,6 +458,7 @@ public function settings(){
         foreach($amount_sum as $sum){
             $all_bought_week += $sum;
         }
+
         for($i = 1;$i<6;$i++){
             $amount_sum[$i] = "<a ". Base_BoxCommon::create_href('Custom/Agrohandel/Transporty','Custom/Agrohandel/Transporty', null, array(), array(), array('day'=> $date->add_days($date->monday_of_week($week_num),($i-1)))).">".$amount_sum[$i]."</a>";
         }
@@ -475,15 +476,17 @@ public function settings(){
             4=>"CZWARTEK",
             5=>"PIĄTEK",
         );
-        for($i = 0; $i<5;$i++){
-            $sel_opt = "";
-            $sel_opt .= "<a ".$this->create_href(array('change_status' => $date->add_days($date->monday_of_week($week_num), $i),'status'=> '2'))."><img src='http://192.168.1.118/data/Base_Theme/templates/default/planer/good.png'  width=40 height=40 /></a>";
-            $sel_opt .= "<a ".$this->create_href(array('change_status' => $date->add_days($date->monday_of_week($week_num), $i),'status'=> '1'))."><img src='http://192.168.1.118/data/Base_Theme/templates/default/planer/normal.png'  width=40 height=40 /></a>";
-            $sel_opt .= "<a ".$this->create_href(array('change_status' => $date->add_days($date->monday_of_week($week_num), $i),'status'=> '3'))."><img src='http://192.168.1.118/data/Base_Theme/templates/default/planer/bad.png'  width=40 height=40 /></a>";
-            $sel = "<div style='position:relative;text-align:center;'><br>Zmień status:<br>".$sel_opt."</div>";
-            $x = $i;
-            $x++;
-            $days_text[$x.$x] = $sel;
+        if(Base_AclCommon::check_permission("manager") == "1" || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
+            for($i = 0; $i<5;$i++){
+                $sel_opt = "";
+                $sel_opt .= "<a ".$this->create_href(array('change_status' => $date->add_days($date->monday_of_week($week_num), $i),'status'=> '2'))."><img src='data/Base_Theme/templates/default/planer/good.png'  width=40 height=40 /></a>";
+                $sel_opt .= "<a ".$this->create_href(array('change_status' => $date->add_days($date->monday_of_week($week_num), $i),'status'=> '1'))."><img src='data/Base_Theme/templates/default/planer/normal.png'  width=40 height=40 /></a>";
+                $sel_opt .= "<a ".$this->create_href(array('change_status' => $date->add_days($date->monday_of_week($week_num), $i),'status'=> '3'))."><img src='data/Base_Theme/templates/default/planer/bad.png'  width=40 height=40 /></a>";
+                $sel = "<div style='position:relative;text-align:center;'><br>Zmień status:<br>".$sel_opt."</div>";
+                $x = $i;
+                $x++;
+                $days_text[$x.$x] = $sel;
+            }
         }
         $sumary_week = $rbo->get_records(array('>=date' => $date->monday_of_week($week_num), 
         '<=date' => $date->add_days($date->monday_of_week($week_num), 4)), 

@@ -20,8 +20,8 @@
         <td class="header_future"> SUMA Z TYGODNIA </td> 
         <td class="header_future">Zakład</td> 
         <td class="header_future">Suma zamówionych</td>
+        <td class="header_future">Suma dostarczonych</td>
         <td class="header_future">Suma kupionych</td>
-        <td class="header_future">Suma rozładowanych</td>
     </thead>
    {foreach from=$sumary_week item=company}
     <tr class="changing" style="font-size:15px;">
@@ -33,16 +33,16 @@
         {assign var=last value=$company.name}
         <td class="inter_future" >{$company.name}</td>
         <td class="inter_future" >{$company.val}</td>  
-        {if ($company === reset($sumary_week))}      
-        <td class="inter_future"  rowspan="{$sumary_week|@count}">{$all_bought}  </td>
-        {/if}
-        <td class="inter_future">
+        <td class="inter_future transported">
         {if $week_transported.$last == ""}
             0
         </td>
         {else}
             {$week_transported.$last}
         </td>
+        {/if}
+        {if ($company === reset($sumary_week))}      
+        <td class="inter_future bought"  rowspan="{$sumary_week|@count}">{$all_bought}  </td>
         {/if}
     </tr>
     {/foreach}
@@ -54,14 +54,14 @@
         <td class="inter_future" >{$company.company}</td>
         <td class="inter_future" >---</td>
         <td class="inter_future" >{$company.amm}</td>
-        <td class="inter_future" >{$company.iloscrozl}</td>
+        <td class="inter_future " >{$company.iloscrozl}</td>
     </tr>
     {/foreach}
 <tr class="changing">
     <td class="inter_future" colspan="2"><span style='font-size:18px;'><b>Razem:</b></span></td>
     <td class="inter_future"><span style='font-size:18px;'><b>{$all_zam}</b></span></td>
-    <td class="inter_future"><span style='font-size:18px;'><b>{$all_bought}</b></span></td>
-    <td class="inter_future"><span style='font-size:18px;'><b>{$all_transp}</b></span></td>
+    <td class="inter_future transported"><span style='font-size:18px;'><b>{$all_transp}</b></span></td>
+    <td class="inter_future bought"><span style='font-size:18px;'><b>{$all_bought}</b></span></td>
 </tr>
 
     </table>
@@ -136,15 +136,15 @@
                             {assign var=last value=$record.company_name|strip_tags:false|substr:0}
                             {if $arr.$last}
                                 {if ($record === end($day)) && $extra ==''} 
-                                    <td class="inter_future" style='border-bottom: 1px solid #B3B3B3;font-size:15px;'  rowspan="{$indexer[$iter]}">{$arr.$last}</td>
+                                    <td class="inter_future transported" style='border-bottom: 1px solid #B3B3B3;font-size:15px;'  rowspan="{$indexer[$iter]}">{$arr.$last}</td>
                                 {else}
-                                    <td class="inter_future" style='{$extra} font-size:15px;'  rowspan="{$indexer[$iter]}">{$arr.$last}</td>
+                                    <td class="inter_future transported" style='{$extra} font-size:15px;'  rowspan="{$indexer[$iter]}">{$arr.$last}</td>
                                 {/if}
                             {else}
                                 {if ($record === end($day)) && $extra ==''} 
-                                    <td class="inter_future" style='border-bottom: 1px solid #B3B3B3; font-size:15px;'  rowspan="{$indexer[$iter]}">0</td>
+                                    <td class="inter_future transported" style='border-bottom: 1px solid #B3B3B3; font-size:15px;'  rowspan="{$indexer[$iter]}">0</td>
                                 {else}
-                                    <td class="inter_future" style="font-size:15px;"   rowspan="{$indexer[$iter]}">0</td>
+                                    <td class="inter_future transported" style="font-size:15px;"   rowspan="{$indexer[$iter]}">0</td>
                                 {/if}
                             {/if}
                             {assign var=row value=$row+$indexer[$iter]}
@@ -153,7 +153,7 @@
                                 {assign var=row value=$row-1}
                         {/if}
                         {if ($record === reset($day))}      
-                            <td class="inter_future" style="{$extra} font-size:15px;" rowspan="{$day|@count}"> {$amount_sum[$val]} </td>
+                            <td class="inter_future bought" style="{$extra} font-size:15px;" rowspan="{$day|@count}"> {$amount_sum[$val]} </td>
                         {/if}
                           {if ($record === end($day)) && $extra ==''}  
                             <td class="inter_future" style="border-bottom: 1px solid #B3B3B3;font-size:15px;">{$record.Price|floatval|replace:'.':','}</td>

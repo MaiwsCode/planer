@@ -545,7 +545,9 @@ ul > li ul li:hover > a {
 	padding-bottom: 3px;
 
 }
-
+.Agrohandel__sale__week td.bought{
+	color:rgb(31, 163, 31);
+}
 .Agrohandel__sale__week td.bought a{
 	color:rgb(31, 163, 31);
 }

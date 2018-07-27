@@ -69,8 +69,7 @@
     <table  class="Agrohandel__sale__week" cellspacing=0 style="margin-top:15px;margin-bottom:15px;">
      <thead>
         <tr>
-            <td class="header_company"><span style='font-size:15px;'>Dzień tygodnia</span> <br>
-            <span  style='font-size:15px;'><b>Tydzień - {$week_number}</b></span></td>
+            <td class="header_company"><span style='font-size:15px;'>Dzień tygodnia</span> <br></td>
             <td class="header_future">Zakład</td>
             <td class="header_future">Zamówione</td>
             <td class="header_future">Dostarczone</td>
@@ -127,13 +126,12 @@
                             <td class="inter_future" style='font-size:15px;'> {$record.company_name}</td> 
                         {/if}
                         {if ($record === end($day)) && $extra ==''}  
-                            <td class="inter_future" style="border-bottom: 1px solid #B3B3B3;"><span style='font-size:18px;'> {$record.amount} </span><br>
+                            <td class="inter_future" style="border-bottom: 1px solid #B3B3B3;"><span style='font-size:18px;'> {$record.amount} </span> &nbsp;
                                 {$record.edit}
                                 {$record.delete}
                             </td>
                         {else}
-                            <td class="inter_future"><span style='font-size:18px;'> {$record.amount} </span>
-                            <br>
+                            <td class="inter_future"><span style='font-size:18px;'> {$record.amount} </span> &nbsp;
                             {$record.edit}
                             {$record.delete}
                             </td>
@@ -173,7 +171,7 @@
                             {/if}
                         </tr>
                         {if ($record === end($day))} 
-                        <tr class='separator'></tr>
+                        <tr class='separator' style='font-size:14px;'></tr>
                             {foreach from=$missing[$val] item=rec}
                             <tr class="changing">
                                  {if ($rec === reset($missing[$val]))}   

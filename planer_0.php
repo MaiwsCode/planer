@@ -76,13 +76,18 @@ public function settings(){
             foreach($array as $record){
                     $list_of_company[] = strip_tags($record['company_name']);
             }
+            $records = $array;
             sort($list_of_company);
             foreach($list_of_company as $alfabetic){
-                foreach($array as $record){
+                foreach($records as $record){
+                    print(strip_tags($record['company_name']).":".$alfabetic."<BR>");
                     if(strip_tags($record['company_name']) == $alfabetic){
                             $new_list[] = $record;
+                            unset($records[$record]);
+                            break;
                     }
                 }
+                print(count($list_of_company));
             }
             return $new_list;
         }
@@ -189,7 +194,8 @@ public function settings(){
             }
             
         }
-       // $pon = sortByCompanyName($pon);
+        //$pon = sortByCompanyName($pon);
+
         $wt = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 1)),array(),array('company_name' => "ASC"));
         $wt = Rbo_Futures::set_related_fields($wt, 'company_name');
         foreach($wt as $p){
@@ -479,9 +485,9 @@ public function settings(){
         if(Base_AclCommon::check_permission("manager") == "1" || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
             for($i = 0; $i<5;$i++){
                 $sel_opt = "";
-                $sel_opt .= "<a ".$this->create_href(array('change_status' => $date->add_days($date->monday_of_week($week_num), $i),'status'=> '2'))."><img src='data/Base_Theme/templates/default/planer/good.png'  width=40 height=40 /></a>";
-                $sel_opt .= "<a ".$this->create_href(array('change_status' => $date->add_days($date->monday_of_week($week_num), $i),'status'=> '1'))."><img src='data/Base_Theme/templates/default/planer/normal.png'  width=40 height=40 /></a>";
-                $sel_opt .= "<a ".$this->create_href(array('change_status' => $date->add_days($date->monday_of_week($week_num), $i),'status'=> '3'))."><img src='data/Base_Theme/templates/default/planer/bad.png'  width=40 height=40 /></a>";
+                $sel_opt .= "<a ".$this->create_href(array('change_status' => $date->add_days($date->monday_of_week($week_num), $i),'status'=> '2'))."><img src='data/Base_Theme/templates/default/planer/good.png'  width=15 height=15 /></a>";
+                $sel_opt .= "<a ".$this->create_href(array('change_status' => $date->add_days($date->monday_of_week($week_num), $i),'status'=> '1'))."><img src='data/Base_Theme/templates/default/planer/normal.png'  width=15 height=15 /></a>";
+                $sel_opt .= "<a ".$this->create_href(array('change_status' => $date->add_days($date->monday_of_week($week_num), $i),'status'=> '3'))."><img src='data/Base_Theme/templates/default/planer/bad.png'  width=15 height=15 /></a>";
                 $sel = "<div style='position:relative;text-align:center;'><br>Zmień status:<br>".$sel_opt."</div>";
                 $x = $i;
                 $x++;

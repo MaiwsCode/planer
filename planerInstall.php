@@ -25,8 +25,6 @@ class planerInstall extends ModuleInstall {
         $fields->add_access('delete', 'ACCESS:manager');
         $fields->add_access('add', 'ACCESS:u_trader');
         $fields->add_access('add', 'ACCESS:manager');
-
-        $fields->add_default_access();
         $fields->set_caption(_M('Plany sprzedaży tucznika'));
         $fields->set_icon (Base_ThemeCommon::get_template_filename ( 'planer', 'pig.png' ));
         $rbo = new RBO_RecordsetAccessor("Difficulty");

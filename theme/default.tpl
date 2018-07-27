@@ -77,7 +77,6 @@
             <td class="header_future">Kupione</td>
             <td class="header_future">Cena</td>
             <td class="header_future">Informacje</td>
-            <td class="header_future">Akcje</td>
         </tr>
      </thead>
      <tr class='separator'></tr>
@@ -128,9 +127,16 @@
                             <td class="inter_company" style='font-size:15px;'> {$record.company_name}</td> 
                         {/if}
                         {if ($record === end($day)) && $extra ==''}  
-                            <td class="inter_future" style="border-bottom: 1px solid #B3B3B3;"><span style='font-size:18px;'> {$record.amount} </span></td>
+                            <td class="inter_future" style="border-bottom: 1px solid #B3B3B3;"><span style='font-size:18px;'> {$record.amount} </span><br>
+                                {$record.edit}
+                                {$record.delete}
+                            </td>
                         {else}
-                            <td class="inter_future"><span style='font-size:18px;'> {$record.amount} </span></td>
+                            <td class="inter_future"><span style='font-size:18px;'> {$record.amount} </span>
+                            <br>
+                            {$record.edit}
+                            {$record.delete}
+                            </td>
                         {/if}
                         {if $iter == $row}
                             {assign var=last value=$record.company_name|strip_tags:false|substr:0}
@@ -165,14 +171,6 @@
                             {else}
                                 <td class="inter_future" >{$record.notka}</td>
                             {/if}
-                            {if ($record === end($day)) && $extra ==''} 
-                                <td class="inter_future" style="border-bottom: 1px solid #B3B3B3;">
-                            {else}
-                                <td class="inter_future" >
-                            {/if}
-                                {$record.edit}
-                                {$record.delete}
-                            </td>
                         </tr>
                         {if ($record === end($day))} 
                         <tr class='separator'></tr>

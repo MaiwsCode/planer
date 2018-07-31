@@ -161,9 +161,11 @@ public function settings(){
                         </ul></li></ul>";
         // zamowione 
         $all_zam = 0;
+        $days_zam = array();
         $pon = $rbo->get_records(array('date' => $date->monday_of_week($week_num)),array(),array('company_name' => "ASC"));
         $pon = Rbo_Futures::set_related_fields($pon, 'company_name');
         foreach($pon as $p){
+            $days_zam[1] += $p["amount"];
             $all_zam += $p["amount"];
             $p['amount'] = $p->record_link($p['amount'],$nolink = false,$action = 'view');
             if(Base_AclCommon::check_permission("manager") == "1" || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
@@ -200,6 +202,7 @@ public function settings(){
         $wt = Rbo_Futures::set_related_fields($wt, 'company_name');
         foreach($wt as $p){
             $all_zam += $p["amount"];
+            $days_zam[2] += $p["amount"];
             $p['amount'] = $p->record_link($p['amount'],$nolink = false,$action = 'view');
             if(Base_AclCommon::check_permission("manager") == "1" || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
                 if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
@@ -235,6 +238,7 @@ public function settings(){
         $sr = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 2)),array(),array('company_name' => "ASC"));
         $sr = Rbo_Futures::set_related_fields($sr, 'company_name');
         foreach($sr as $p){
+            $days_zam[3] += $p["amount"];
             $all_zam += $p["amount"];
             $p['amount'] = $p->record_link($p['amount'],$nolink = false,$action = 'view');
             if(Base_AclCommon::check_permission("manager") == "1" || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
@@ -269,6 +273,7 @@ public function settings(){
         $czw = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 3)),array(),array('company_name' => "ASC"));
         $czw = Rbo_Futures::set_related_fields($czw, 'company_name');
         foreach($czw as $p){
+            $days_zam[4] += $p["amount"];
             $all_zam += $p["amount"];
             $p['amount'] = $p->record_link($p['amount'],$nolink = false,$action = 'view');
             if(Base_AclCommon::check_permission("manager") == "1" || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
@@ -304,6 +309,7 @@ public function settings(){
         $pt = Rbo_Futures::set_related_fields($pt, 'company_name');
         foreach($pt as $p){
             $all_zam += $p["amount"];
+            $days_zam[5] += $p["amount"];
             $p['amount'] = $p->record_link($p['amount'],$nolink = false,$action = 'view');
             if(Base_AclCommon::check_permission("manager") == "1" || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
                 if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
@@ -399,44 +405,50 @@ public function settings(){
         
         //dostarczone
         //potrzena tabela z Raport z rozladunku
-        $transported = new RBO_RecordsetAccessor("custom_agrohandel_transporty"); //custom_agrohandel_transporty Transport
+        $transported = new RBO_RecordsetAccessor("Transport"); //custom_agrohandel_transporty Transport
         $trans_pon = array();
         $trans_wt = array();
         $trans_sr = array();
         $trans_czw = array();
         $trans_pt = array();
+        $transports_sum_of_day = array();
         $transports = [];
-        $company_field = "company"; ///company company_name
-        $amount = "iloscrozl"; //iloscrozl amount
+        $company_field = "company_name"; ///company company_name
+        $amount = "amount"; //iloscrozl amount
         $t_pon = $transported->get_records(array('date' => $date->monday_of_week($week_num)),array(),array($company_field => "ASC"));
         foreach($t_pon as $t){
             $x = $t->get_val($company_field,$nolink = TRUE);
             $trans_pon[$x] += $t[$amount];
             $all_transported_week +=  $t[$amount];
+            $transports_sum_of_day[1] += $t[$amount];
         }
         $t_wt = $transported->get_records(array('date' =>$date->add_days($date->monday_of_week($week_num), 1)),array(),array($company_field => "ASC"));
         foreach($t_wt as $t){
             $x = $t->get_val($company_field,$nolink = TRUE);
             $trans_wt[$x] += $t[$amount];
             $all_transported_week +=  $t[$amount];
+            $transports_sum_of_day[2] += $t[$amount];
         }
         $t_sr = $transported->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 2)),array(),array($company_field => "ASC"));
         foreach($t_sr as $t){
             $x = $t->get_val($company_field,$nolink = TRUE);
             $trans_sr[$x] += $t[$amount];
             $all_transported_week +=  $t[$amount];
+            $transports_sum_of_day[3] += $t[$amount];
         }
         $t_czw = $transported->get_records(array('date' =>$date->add_days($date->monday_of_week($week_num), 3)),array(),array($company_field => "ASC"));
         foreach($t_czw as $t){
             $x = $t->get_val($company_field,$nolink = TRUE);
             $trans_czw[$x] += $t[$amount];
             $all_transported_week +=  $t[$amount];
+            $transports_sum_of_day[4] += $t[$amount];
         }
         $t_pt = $transported->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 4)),array(),array($company_field => "ASC"));
         foreach($t_pt as $t){
             $x = $t->get_val($company_field,$nolink = TRUE);
             $trans_pt[$x] += $t[$amount];
             $all_transported_week +=  $t[$amount];
+            $transports_sum_of_day[5] += $t[$amount];
         }
         $week_trans = array();
         $week_transported = $transported->get_records(array('>=date' => $date->add_days($date->monday_of_week($week_num),0),
@@ -468,12 +480,13 @@ public function settings(){
         for($i = 1;$i<6;$i++){
             $amount_sum[$i] = "<a ". Base_BoxCommon::create_href('Custom/Agrohandel/Transporty','Custom/Agrohandel/Transporty', null, array(), array(), array('day'=> $date->add_days($date->monday_of_week($week_num),($i-1)))).">".$amount_sum[$i]."</a>";
         }
-
         array_push($days,$pon);
         array_push($days,$wt);
         array_push($days,$sr);
         array_push($days,$czw);
         array_push($days,$pt);
+
+
         //dni tygodnia
         $days_text = array(
             1=>"PONIEDZIAŁEK",
@@ -573,6 +586,9 @@ public function settings(){
             $sum_week[$sum->get_val("company_name",$nolink=true)] = array("val" => $value,
                                                                         "name" =>$sum->get_val("company_name",$nolink=true));
         }
+
+        $theme->assign("transports_sum_of_day",$transports_sum_of_day);
+        $theme->assign('days_zam',$days_zam);
         $week_transported = $this->sum_records($week_transported,$amount);
         $theme->assign("sumary_week",$sum_week);
         $theme->assign("week_bought",$week_amount_sum);

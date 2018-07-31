@@ -188,7 +188,16 @@
                             {/foreach}
                         {/if}
                     {/foreach}
-                         <tr class='separator'></tr>
+                    {if $days_zam[$val] != null }
+                      <tr>
+                            <td colspan='2' class="inter_future"> <b>Razem: </b></td>
+                            <td class="inter_future"> <b>{$days_zam[$val]}</b> </td>
+                            <td class="inter_future transported"> <b>{$transports_sum_of_day[$val]} </b> </td>
+                            <td class="inter_future" colspan='3'>  </td>
+                        </tr>
+                        <tr class='separator'></tr>
+                        <tr class='separator'></tr>
+                        {/if}
                    {assign var=val value=$val+1}
                    {assign var=arr value=$trans[$val]}
                 {/foreach}      

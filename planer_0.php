@@ -36,7 +36,7 @@ public function settings(){
             iCalSyncCommon::update();
             iCalSyncCommon::update_changes();
         }
-
+        print(iCalSyncCommon::version());
         if(!isset($_REQUEST['week_number']) && !isset($_SESSION['week'])){
             $today = date("Y-m-d");
             $week_num = $date->get_week_number($today);  

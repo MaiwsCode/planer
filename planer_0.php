@@ -32,11 +32,6 @@ public function settings(){
 
            }
         }
-        if(isset($_REQUEST["sync"])){
-            iCalSyncCommon::update();
-            iCalSyncCommon::update_changes();
-        }
-        print(iCalSyncCommon::version());
         if(!isset($_REQUEST['week_number']) && !isset($_SESSION['week'])){
             $today = date("Y-m-d");
             $week_num = $date->get_week_number($today);  
@@ -96,20 +91,6 @@ public function settings(){
             }
             return $new_list;
         }
-        //testy//
-        Base_ActionBarCommon::add(
-            'add',
-            "Sync",
-            $this->create_href ( array ('sync' => 'sync')),
-            null,
-            0
-        );
-
-
-        ///testy//
-
-
-
         //nowy record
         $x = 0;
         Base_ActionBarCommon::add(

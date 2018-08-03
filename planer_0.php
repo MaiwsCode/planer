@@ -163,14 +163,14 @@ public function settings(){
         $user = new RBO_RecordsetAccessor('contact');
         $days_zam = array();
         $loginContact = CRM_ContactsCommon::get_contact_by_user_id(Base_AclCommon::get_user ());
-        $is_manager = $loginContact["group"]['manager'];
+        $is_manager = $loginContact['access']['manager'];
         $pon = $rbo->get_records(array('date' => $date->monday_of_week($week_num)),array(),array('company_name' => "ASC"));
         $pon = Rbo_Futures::set_related_fields($pon, 'company_name');
         foreach($pon as $p){
             $days_zam[1] += $p["amount"];
             $all_zam += $p["amount"];
             $p['amount'] = $p->record_link($p['amount'],$nolink = false,$action = 'view');
-            if($is_manager || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
+            if($is_manager  || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
                 if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
                     $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].
                     "</div>", "Manager: " => "<div class='custom_info'>".$p['Description Manager']."</div>");
@@ -413,7 +413,7 @@ public function settings(){
         $trans_sr = array();
         $trans_czw = array();
         $trans_pt = array();
-        $transports_sum_of_day = array();
+        $transports_sum_of_day = array(1=>0,2=>0,3=>0,4=>0,5=> 0);
         $transports = [];
         $company_field = "company"; ///company company_name
         $amount = "iloscrozl"; //iloscrozl amount
@@ -497,7 +497,7 @@ public function settings(){
             4=>"CZWARTEK",
             5=>"PIĄTEK",
         );
-        if(Base_AclCommon::check_permission("manager") ==true || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
+        if($is_manager || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
             for($i = 0; $i<5;$i++){
                 $sel_opt = "";
                 $sel_opt .= "<a ".$this->create_href(array('change_status' => $date->add_days($date->monday_of_week($week_num), $i),'status'=> '2'))."><img src='data/Base_Theme/templates/default/planer/good.png'  width=15 height=15 /></a>";

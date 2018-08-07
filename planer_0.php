@@ -427,11 +427,13 @@ public function settings(){
             $transports = [];
             $company_field = "company"; ///company company_name
             $amount = "iloscrozl"; //iloscrozl amount
+            
             $t_pon = $transported->get_records(array('date' => $date->monday_of_week($week_num)),array(),array($company_field => "ASC"));
             foreach($t_pon as $t){
                 $x = $t->get_val($company_field,$nolink = TRUE);
                 $trans_pon[$x] += $t[$amount];
-                if(!$t['group']['baza_tr']){
+                $is_ubojnia = $companes->get_record($t['company']);
+                if($is_ubojnia['group']['baza_tr']){}else{
                     $all_transported_week +=  $t[$amount];
                     $transports_sum_of_day[1] += $t[$amount];
                 }
@@ -440,7 +442,8 @@ public function settings(){
             foreach($t_wt as $t){
                 $x = $t->get_val($company_field,$nolink = TRUE);
                 $trans_wt[$x] += $t[$amount];
-                if(!$t['group']['baza_tr']){
+                $is_ubojnia = $companes->get_record($t['company']);
+                if($is_ubojnia['group']['baza_tr']){}else{
                     $all_transported_week +=  $t[$amount];
                     $transports_sum_of_day[2] += $t[$amount];
                 }
@@ -449,7 +452,8 @@ public function settings(){
             foreach($t_sr as $t){
                 $x = $t->get_val($company_field,$nolink = TRUE);
                 $trans_sr[$x] += $t[$amount];
-                if(!$t['group']['baza_tr']){
+                $is_ubojnia = $companes->get_record($t['company']);
+                if($is_ubojnia['group']['baza_tr']){}else{
                     $all_transported_week +=  $t[$amount];
                     $transports_sum_of_day[3] += $t[$amount];
                 }
@@ -458,7 +462,8 @@ public function settings(){
             foreach($t_czw as $t){
                 $x = $t->get_val($company_field,$nolink = TRUE);
                 $trans_czw[$x] += $t[$amount];
-                if(!$t['group']['baza_tr']){
+                $is_ubojnia = $companes->get_record($t['company']);
+                if($is_ubojnia['group']['baza_tr']){}else{
                     $all_transported_week +=  $t[$amount];
                     $transports_sum_of_day[4] += $t[$amount];
                 }
@@ -467,7 +472,8 @@ public function settings(){
             foreach($t_pt as $t){
                 $x = $t->get_val($company_field,$nolink = TRUE);
                 $trans_pt[$x] += $t[$amount];
-                if(!$t['group']['baza_tr']){
+                $is_ubojnia = $companes->get_record($t['company']);
+                if($is_ubojnia['group']['baza_tr']){}else{
                     $all_transported_week +=  $t[$amount];
                     $transports_sum_of_day[5] += $t[$amount];
                 }

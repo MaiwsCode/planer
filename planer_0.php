@@ -427,40 +427,50 @@ public function settings(){
             $transports = [];
             $company_field = "company"; ///company company_name
             $amount = "iloscrozl"; //iloscrozl amount
-            $t_pon = $transported->get_records(array('date' => $date->monday_of_week($week_num), '!group' => 'baza_tr'),array(),array($company_field => "ASC"));
+            $t_pon = $transported->get_records(array('date' => $date->monday_of_week($week_num)),array(),array($company_field => "ASC"));
             foreach($t_pon as $t){
                 $x = $t->get_val($company_field,$nolink = TRUE);
                 $trans_pon[$x] += $t[$amount];
-                $all_transported_week +=  $t[$amount];
-                $transports_sum_of_day[1] += $t[$amount];
+                if(!$t['group']['baza_tr']){
+                    $all_transported_week +=  $t[$amount];
+                    $transports_sum_of_day[1] += $t[$amount];
+                }
             }
-            $t_wt = $transported->get_records(array('date' =>$date->add_days($date->monday_of_week($week_num), 1),'!group' => 'baza_tr'),array(),array($company_field => "ASC"));
+            $t_wt = $transported->get_records(array('date' =>$date->add_days($date->monday_of_week($week_num), 1)),array(),array($company_field => "ASC"));
             foreach($t_wt as $t){
                 $x = $t->get_val($company_field,$nolink = TRUE);
                 $trans_wt[$x] += $t[$amount];
-                $all_transported_week +=  $t[$amount];
-                $transports_sum_of_day[2] += $t[$amount];
+                if(!$t['group']['baza_tr']){
+                    $all_transported_week +=  $t[$amount];
+                    $transports_sum_of_day[2] += $t[$amount];
+                }
             }
-            $t_sr = $transported->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 2),'!group' => 'baza_tr'),array(),array($company_field => "ASC"));
+            $t_sr = $transported->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 2)),array(),array($company_field => "ASC"));
             foreach($t_sr as $t){
                 $x = $t->get_val($company_field,$nolink = TRUE);
                 $trans_sr[$x] += $t[$amount];
-                $all_transported_week +=  $t[$amount];
-                $transports_sum_of_day[3] += $t[$amount];
+                if(!$t['group']['baza_tr']){
+                    $all_transported_week +=  $t[$amount];
+                    $transports_sum_of_day[3] += $t[$amount];
+                }
             }
-            $t_czw = $transported->get_records(array('date' =>$date->add_days($date->monday_of_week($week_num), 3),'!group' => 'baza_tr'),array(),array($company_field => "ASC"));
+            $t_czw = $transported->get_records(array('date' =>$date->add_days($date->monday_of_week($week_num), 3)),array(),array($company_field => "ASC"));
             foreach($t_czw as $t){
                 $x = $t->get_val($company_field,$nolink = TRUE);
                 $trans_czw[$x] += $t[$amount];
-                $all_transported_week +=  $t[$amount];
-                $transports_sum_of_day[4] += $t[$amount];
+                if(!$t['group']['baza_tr']){
+                    $all_transported_week +=  $t[$amount];
+                    $transports_sum_of_day[4] += $t[$amount];
+                }
             }
-            $t_pt = $transported->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 4),'!group' => 'baza_tr'),array(),array($company_field => "ASC"));
+            $t_pt = $transported->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 4)),array(),array($company_field => "ASC"));
             foreach($t_pt as $t){
                 $x = $t->get_val($company_field,$nolink = TRUE);
                 $trans_pt[$x] += $t[$amount];
-                $all_transported_week +=  $t[$amount];
-                $transports_sum_of_day[5] += $t[$amount];
+                if(!$t['group']['baza_tr']){
+                    $all_transported_week +=  $t[$amount];
+                    $transports_sum_of_day[5] += $t[$amount];
+                }
             }
             $week_trans = array();
             $week_transported = $transported->get_records(array('>=date' => $date->add_days($date->monday_of_week($week_num),0),

@@ -425,7 +425,7 @@ public function settings(){
             $trans_pt = array();
             $transports_sum_of_day = array(1=>0,2=>0,3=>0,4=>0,5=> 0);
             $transports = [];
-            $company_field = "companycompany_name"; ///company company_name
+            $company_field = "company"; ///company company_name
             $amount = "iloscrozl"; //iloscrozl amount
             $t_pon = $transported->get_records(array('date' => $date->monday_of_week($week_num), '!group' => 'baza_tr'),array(),array($company_field => "ASC"));
             foreach($t_pon as $t){

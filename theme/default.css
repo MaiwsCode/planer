@@ -554,3 +554,34 @@ ul > li ul li:hover > a {
 .Agrohandel__sale__week td.transported{
 	color: #0a07bd;
 }
+
+.record{
+	border-bottom:black 1px solid;
+	text-align:left;
+	padding-left: 6%;
+}
+
+.record:first-of-type{
+	border-top:black 1px solid;
+}
+.right-info > .record{
+	border-right:black 1px solid;
+}
+.left-info > .record{
+	border-left:black 1px solid;
+}
+.firma{
+	font-size: 16px;
+}
+.single{
+	padding-left: 3%;
+	border-right: 1px solid black;
+	border-left: 1px solid black;
+}
+.record:hover{
+
+	background-color: #e6cfcf !important;
+}
+.info{
+	font-size: 18px;
+}

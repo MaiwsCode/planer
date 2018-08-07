@@ -14,599 +14,662 @@ public function settings(){
 
     //see record
         //Base_ThemeCommon::install_default_theme($this->get_type());
-      //  Base_ThemeCommon::install_default_theme('planer');
+        Base_ThemeCommon::install_default_theme('planer');
         $theme = $this->init_module('Base/Theme');
-        $theme->assign("css", Base_ThemeCommon::get_template_dir());
-        $rbo = new RBO_RecordsetAccessor("Sales_plan");
-        $companes = new RBO_RecordsetAccessor("company");
-        $date = new PickDate();
-        $days = array();
-        //array('change_status' => '2018-07-19','status'=> '1'))
-        if(isset($_REQUEST["change_status"])){
-            $_date = $_REQUEST["change_status"];
-            $status = $_REQUEST["status"];
-            $records = Utils_RecordBrowserCommon::get_records('Sales_plan', array("date"=> $_date),array(),array());
-			foreach($records as $record_){
-			Utils_RecordBrowserCommon::update_record('Sales_plan', $record_['id'], array('difficulty_level' => $status),$all_fields=false, 
-			null, $dont_notify=false);
+        // --------------------------DEFAULT .TPL -------------------------
+        if(!isset($_REQUEST['mode'])){
 
-           }
-        }
-        if(!isset($_REQUEST['week_number']) && !isset($_SESSION['week'])){
-            $today = date("Y-m-d");
-            $week_num = $date->get_week_number($today);  
-            $_SESSION['week'] = $week_num;     
-        }
-        elseif(isset($_REQUEST['week_number'])){
-            $week_num= $_REQUEST['week_number'];   
-            $_SESSION['week'] = $week_num;  
-        }
-        elseif(isset($_SESSION['week']) && !isset($_REQUEST['week_number'])){
-            $week_num= $_SESSION['week'];  
-        }
-        if(isset ($_REQUEST["delete_record"])){
-            $delete_record = $_REQUEST['delete_record'];
-            $rbo->delete_record($delete_record);
-        }
-        if(isset($_REQUEST['copy'])){
-            if(Addons::can_copy($week_num)){
-                $sales = new RBO_RecordsetAccessor("Sales_plan");
-                $from = $week_num - 1;
-                $start_date = $date->monday_of_week($from); ;
-                $end_date = $date->add_days($date->monday_of_week($from),4);
-                $records = $sales->get_records(array('>=date' => $start_date, '<=date' => $end_date));
-                foreach($records as $record){
-                    $new_record = array("company_name" => $record['company_name'] , "amount" => $record['amount'] ,
-                     "date" => $date->add_days($record["date"],7) ,"description_trader" => $record["description_trader"] ,
-                      "description_manager" => $record["description_manager"], "difficulty_level" => $record["difficulty_level"]);
-                    $now = date("Y-m-d H:i:s");
-                    $new = $sales->new_record($new_record);
-                    $new->created_by = Acl::get_user();
-                    $new->created_on = $now;  
-                    $id = $user->id;
-                    $new->save();    
-                }
-                Addons::copied($week_num);
+         /*   Base_ActionBarCommon::add(
+                'back',
+                "Day",
+                $this->create_href ( array ('mode' => 'day','date'=> date('Y-m-d'))),
+                null,
+                0
+            );*/
+            $theme->assign("css", Base_ThemeCommon::get_template_dir());
+            $rbo = new RBO_RecordsetAccessor("Sales_plan");
+            $companes = new RBO_RecordsetAccessor("company");
+            $date = new PickDate();
+            $days = array();
+            //array('change_status' => '2018-07-19','status'=> '1'))
+            if(isset($_REQUEST["change_status"])){
+                $_date = $_REQUEST["change_status"];
+                $status = $_REQUEST["status"];
+                $records = Utils_RecordBrowserCommon::get_records('Sales_plan', array("date"=> $_date),array(),array());
+                foreach($records as $record_){
+                Utils_RecordBrowserCommon::update_record('Sales_plan', $record_['id'], array('difficulty_level' => $status),$all_fields=false, 
+                null, $dont_notify=false);
+
             }
-        }
-        //sortowanie wg nazw firm
-        function sortByCompanyName($array){
-            $list_of_company = [];
-            $new_list = [];
-            foreach($array as $record){
-                    $list_of_company[] = strip_tags($record['company_name']);
             }
-            $records = $array;
-            sort($list_of_company);
-            foreach($list_of_company as $alfabetic){
-                foreach($records as $record){
-                    print(strip_tags($record['company_name']).":".$alfabetic."<BR>");
-                    if(strip_tags($record['company_name']) == $alfabetic){
-                            $new_list[] = $record;
-                            unset($records[$record]);
-                            break;
+            if(!isset($_REQUEST['week_number']) && !isset($_SESSION['week'])){
+                $today = date("Y-m-d");
+                $week_num = $date->get_week_number($today);  
+                $_SESSION['week'] = $week_num;     
+            }
+            elseif(isset($_REQUEST['week_number'])){
+                $week_num= $_REQUEST['week_number'];   
+                $_SESSION['week'] = $week_num;  
+            }
+            elseif(isset($_SESSION['week']) && !isset($_REQUEST['week_number'])){
+                $week_num= $_SESSION['week'];  
+            }
+            if(isset ($_REQUEST["delete_record"])){
+                $delete_record = $_REQUEST['delete_record'];
+                $rbo->delete_record($delete_record);
+            }
+            if(isset($_REQUEST['copy'])){
+                if(Addons::can_copy($week_num)){
+                    $sales = new RBO_RecordsetAccessor("Sales_plan");
+                    $from = $week_num - 1;
+                    $start_date = $date->monday_of_week($from); ;
+                    $end_date = $date->add_days($date->monday_of_week($from),4);
+                    $records = $sales->get_records(array('>=date' => $start_date, '<=date' => $end_date));
+                    foreach($records as $record){
+                        $new_record = array("company_name" => $record['company_name'] , "amount" => $record['amount'] ,
+                        "date" => $date->add_days($record["date"],7) ,"description_trader" => $record["description_trader"] ,
+                        "description_manager" => $record["description_manager"], "difficulty_level" => $record["difficulty_level"]);
+                        $now = date("Y-m-d H:i:s");
+                        $new = $sales->new_record($new_record);
+                        $new->created_by = Acl::get_user();
+                        $new->created_on = $now;  
+                        $id = $user->id;
+                        $new->save();    
                     }
+                    Addons::copied($week_num);
                 }
-                print(count($list_of_company));
             }
-            return $new_list;
-        }
-        //nowy record
-        $x = 0;
-        Base_ActionBarCommon::add(
-            'add',
-            __('New'), 
-            Utils_RecordBrowserCommon::create_new_record_href('Sales_plan', $this->custom_defaults),
-            null,
-            $x
-        );
-        $x++;
-        //poprzedni tydzien
-        if($week_num != 1){
+            //sortowanie wg nazw firm
+            function sortByCompanyName($array){
+                $list_of_company = [];
+                $new_list = [];
+                foreach($array as $record){
+                        $list_of_company[] = strip_tags($record['company_name']);
+                }
+                $records = $array;
+                sort($list_of_company);
+                foreach($list_of_company as $alfabetic){
+                    foreach($records as $record){
+                        print(strip_tags($record['company_name']).":".$alfabetic."<BR>");
+                        if(strip_tags($record['company_name']) == $alfabetic){
+                                $new_list[] = $record;
+                                unset($records[$record]);
+                                break;
+                        }
+                    }
+                    print(count($list_of_company));
+                }
+                return $new_list;
+            }
+            //nowy record
+            $x = 0;
             Base_ActionBarCommon::add(
-                Base_ThemeCommon::get_template_file($this->get_type(), 'prev.png'),
-                "Poprzedni tydzień",
-                $this->create_href ( array ('week_number' => $week_num-1)),
+                'add',
+                __('New'), 
+                Utils_RecordBrowserCommon::create_new_record_href('Sales_plan', $this->custom_defaults),
                 null,
                 $x
             );
             $x++;
-        }
-        // 7 tygodni do wyboru
-        for($i = $week_num - 3 ; $i < $week_num + 4;$i++){
-            if($i > 52 || $i <  1) {}
-            else{
-                if($week_num == $i){ $icon = 'cal2.png'; }else{ $icon = 'cal.png'; }
-                    Base_ActionBarCommon::add(
-                        Base_ThemeCommon::get_template_file($this->get_type(), $icon),
-                        "Tydzień - ".$i,
-                        $this->create_href ( array ('week_number' => $i)),
+            //poprzedni tydzien
+            if($week_num != 1){
+                Base_ActionBarCommon::add(
+                    Base_ThemeCommon::get_template_file($this->get_type(), 'prev.png'),
+                    "Poprzedni tydzień",
+                    $this->create_href ( array ('week_number' => $week_num-1)),
+                    null,
+                    $x
+                );
+                $x++;
+            }
+            // 7 tygodni do wyboru
+            for($i = $week_num - 3 ; $i < $week_num + 4;$i++){
+                if($i > 52 || $i <  1) {}
+                else{
+                    if($week_num == $i){ $icon = 'cal2.png'; }else{ $icon = 'cal.png'; }
+                        Base_ActionBarCommon::add(
+                            Base_ThemeCommon::get_template_file($this->get_type(), $icon),
+                            "Tydzień - ".$i,
+                            $this->create_href ( array ('week_number' => $i)),
+                            null,
+                            $x
+                        );
+                    }
+                $x = $x +1;
+            }
+            //nastepny tydzien
+            if($week_num != 52){
+                Base_ActionBarCommon::add(
+                    Base_ThemeCommon::get_template_file($this->get_type(), 'next.png'),
+                    "Następny tydzień",
+                    $this->create_href ( array ('week_number' => $week_num+1)),
+                    null,
+                    $x
+                );
+                $x++;
+            }
+            //Kopiuj z poprzedni tydzien
+            if(Addons::can_copy($week_num)){
+                Base_ActionBarCommon::add('add', 
+                        __('Copy from last week'), 
+                        $this->create_href ( array ('copy' => TRUE,'week_number' => $week_num )),
                         null,
                         $x
                     );
-                }
-            $x = $x +1;
-        }
-        //nastepny tydzien
-        if($week_num != 52){
-            Base_ActionBarCommon::add(
-                Base_ThemeCommon::get_template_file($this->get_type(), 'next.png'),
-                "Następny tydzień",
-                $this->create_href ( array ('week_number' => $week_num+1)),
-                null,
-                $x
-            );
-            $x++;
-        }
-        //Kopiuj z poprzedni tydzien
-        if(Addons::can_copy($week_num)){
-            Base_ActionBarCommon::add('add', 
-                     __('Copy from last week'), 
-                     $this->create_href ( array ('copy' => TRUE,'week_number' => $week_num )),
-                     null,
-                     $x
-                 );
-             $x++;
-         }
-        $select_options = "<li><a ".$this->create_href(array('week_number' => $date->get_week_number(date('Y-m-d'))))."> Wróć do bieżącego tygodnia </a></li>";
-        for($i = 1; $i<=52;$i++){
-            $select_options .= "<li><a ".$this->create_href(array('week_number' => $i))."> Tydzień - ".$i." </a></li>";
-        }
-        
-        $select = "<ul class='drops'>
-                    <li>
-                        <a href='#'>Wybierz tydzień </a> <img src='data/Base_Theme/templates/default/planer/drop.png' width=25 height=25 />
-                            <ul>".$select_options."
-                        </ul></li></ul>";
-        // zamowione 
-        $all_zam = 0;
-        $user = new RBO_RecordsetAccessor('contact');
-        $days_zam = array();
-        $loginContact = CRM_ContactsCommon::get_contact_by_user_id(Base_AclCommon::get_user ());
-        $is_manager = $loginContact['access']['manager'];
-        $pon = $rbo->get_records(array('date' => $date->monday_of_week($week_num)),array(),array('company_name' => "ASC"));
-        $pon = Rbo_Futures::set_related_fields($pon, 'company_name');
-        foreach($pon as $p){
-            $days_zam[1] += $p["amount"];
-            $all_zam += $p["amount"];
-            $p['amount'] = $p->record_link($p['amount'],$nolink = false,$action = 'view');
-            if($is_manager  || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
-                if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
-                    $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].
-                    "</div>", "Manager: " => "<div class='custom_info'>".$p['Description Manager']."</div>");
-                    $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
-                    $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
-                }else{$infobox = "---";}
-            
-                $p['notka'] = $infobox;
-                $p["edit"] = $p->record_link('<img class="action_button" src="data/Base_Theme/templates/default/Utils/GenericBrowser/edit.png" border="0" alt="Edytuj">',$nolink=false,'edit');
-                $del = $this->create_href(array("delete_record" => $p['id']));
-                $deli = "<a $del> <img border='0' src='data/Base_Theme/templates/default/Utils/Calendar/delete.png' alt='Usuń' /></a>";
-                $p["delete"] = $deli;
+                $x++;
             }
-            else{
-                if(strlen($p['Description trader']) > 0){
-                    $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader']. "</div>");
-                    $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
-                    $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
-                }else{
-                    $infobox = "---";
-                }
-                $p['notka'] = $infobox;
-                $p["delete"] = '';
-                $p["edit"] = '';
+            $select_options = "<li><a ".$this->create_href(array('week_number' => $date->get_week_number(date('Y-m-d'))))."> Wróć do bieżącego tygodnia </a></li>";
+            for($i = 1; $i<=52;$i++){
+                $select_options .= "<li><a ".$this->create_href(array('week_number' => $i))."> Tydzień - ".$i." </a></li>";
             }
             
-        }
-        //$pon = sortByCompanyName($pon);
-
-        $wt = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 1)),array(),array('company_name' => "ASC"));
-        $wt = Rbo_Futures::set_related_fields($wt, 'company_name');
-        foreach($wt as $p){
-            $all_zam += $p["amount"];
-            $days_zam[2] += $p["amount"];
-            $p['amount'] = $p->record_link($p['amount'],$nolink = false,$action = 'view');
-            if($is_manager || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
-                if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
-                    $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].
-                    "</div>", "Manager: " => "<div class='custom_info'>".$p['Description Manager']."</div>");
-                    $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
-                    $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
+            $select = "<ul class='drops'>
+                        <li>
+                            <a href='#'>Wybierz tydzień </a> <img src='data/Base_Theme/templates/default/planer/drop.png' width=25 height=25 />
+                                <ul>".$select_options."
+                            </ul></li></ul>";
+            // zamowione 
+            $all_zam = 0;
+            $user = new RBO_RecordsetAccessor('contact');
+            $days_zam = array();
+            $loginContact = CRM_ContactsCommon::get_contact_by_user_id(Base_AclCommon::get_user ());
+            $is_manager = $loginContact['access']['manager'];
+            $pon = $rbo->get_records(array('date' => $date->monday_of_week($week_num)),array(),array('company_name' => "ASC"));
+            $pon = Rbo_Futures::set_related_fields($pon, 'company_name');
+            foreach($pon as $p){
+                $days_zam[1] += $p["amount"];
+                $all_zam += $p["amount"];
+                $p['amount'] = $p->record_link($p['amount'],$nolink = false,$action = 'view');
+                if($is_manager  || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
+                    if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
+                        $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].
+                        "</div>", "Manager: " => "<div class='custom_info'>".$p['Description Manager']."</div>");
+                        $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
+                        $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
+                    }else{$infobox = "---";}
+                
+                    $p['notka'] = $infobox;
+                    $p["edit"] = $p->record_link('<img class="action_button" src="data/Base_Theme/templates/default/Utils/GenericBrowser/edit.png" border="0" alt="Edytuj">',$nolink=false,'edit');
+                    $del = $this->create_href(array("delete_record" => $p['id']));
+                    $deli = "<a $del> <img border='0' src='data/Base_Theme/templates/default/Utils/Calendar/delete.png' alt='Usuń' /></a>";
+                    $p["delete"] = $deli;
                 }
                 else{
-                    $infobox = "---";
-                }
-                $p['notka'] = $infobox;
-                $p["edit"] = $p->record_link('<img class="action_button" src="data/Base_Theme/templates/default/Utils/GenericBrowser/edit.png" border="0" alt="Edytuj">',$nolink=false,'edit');
-                $del = $this->create_href(array("delete_record" => $p['id']));
-                $del = "<a $del> <img border='0' src='data/Base_Theme/templates/default/Utils/Calendar/delete.png' alt='Usuń' /></a>";
-                $p["delete"] = $del;
-            }
-            else{
-                if(strlen($p['Description trader']) > 0){
-                    $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader']. "</div>");
-                    $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
-                    $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
-                }else{
-                    $infobox = "---";
-                }
-                $p['notka'] = $infobox;
-                $p["delete"] = '';
-                $p["edit"] = '';
-            }
-        }
-       // print(count($pon));
-       // $wt = sortByCompanyName($wt);
-        $sr = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 2)),array(),array('company_name' => "ASC"));
-        $sr = Rbo_Futures::set_related_fields($sr, 'company_name');
-        foreach($sr as $p){
-            $days_zam[3] += $p["amount"];
-            $all_zam += $p["amount"];
-            $p['amount'] = $p->record_link($p['amount'],$nolink = false,$action = 'view');
-            if($is_manager || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
-                if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
-                    $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].
-                    "</div>", "Manager: " => "<div class='custom_info'>".$p['Description Manager']."</div>");
-                    $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
-                    $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
-                }else{
-                    $infobox = "---";
-                }
-                $p['notka'] = $infobox;
-                $p["edit"] = $p->record_link('<img class="action_button" src="data/Base_Theme/templates/default/Utils/GenericBrowser/edit.png" border="0" alt="Edytuj">',$nolink=false,'edit');
-                $del = $this->create_href(array("delete_record" => $p['id']));
-                $del = "<a $del> <img border='0' src='data/Base_Theme/templates/default/Utils/Calendar/delete.png' alt='Usuń' /></a>";
-                $p["delete"] = $del;
-            }
-            else{
-                if(strlen($p['Description trader']) > 0){
-                    $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader']. "</div>");
-                    $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
-                    $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
-                }else{
-                    $infobox = "---";
-                }
-                $p['notka'] = $infobox;
-                $p["delete"] = '';
-                $p["edit"] = '';
-            }
-        }
-      //  $sr = sortByCompanyName($sr);
-        $czw = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 3)),array(),array('company_name' => "ASC"));
-        $czw = Rbo_Futures::set_related_fields($czw, 'company_name');
-        foreach($czw as $p){
-            $days_zam[4] += $p["amount"];
-            $all_zam += $p["amount"];
-            $p['amount'] = $p->record_link($p['amount'],$nolink = false,$action = 'view');
-            if($is_manager || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
-                if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
-                    $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].
-                    "</div>", "Manager: " => "<div class='custom_info'>".$p['Description Manager']."</div>");
-                    $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
-                    $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
-                }else{
-                    $infobox = "---";
-                }
-                $p['notka'] = $infobox;
-                $p["edit"] = $p->record_link('<img class="action_button" src="data/Base_Theme/templates/default/Utils/GenericBrowser/edit.png" border="0" alt="Edytuj">',$nolink=false,'edit');
-                $del = $this->create_href(array("delete_record" => $p['id']));
-                $del = "<a $del> <img border='0' src='data/Base_Theme/templates/default/Utils/Calendar/delete.png' alt='Usuń' /></a>";
-                $p["delete"] = $del;
-            }
-            else{
-                if(strlen($p['Description trader']) > 0){
-                    $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader']. "</div>");
-                    $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
-                    $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
-                }else{
-                    $infobox = "---";
-                }
-                $p['notka'] = $infobox;
-                $p["delete"] = '';
-                $p["edit"] = '';
-            }
-        }
-     //   $czw = sortByCompanyName($czw);
-        $pt = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 4)),array(),array('company_name' => "ASC"));
-        $pt = Rbo_Futures::set_related_fields($pt, 'company_name');
-        foreach($pt as $p){
-            $all_zam += $p["amount"];
-            $days_zam[5] += $p["amount"];
-            $p['amount'] = $p->record_link($p['amount'],$nolink = false,$action = 'view');
-            if($is_manager || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
-                if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
-                    $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].
-                    "</div>", "Manager: " => "<div class='custom_info'>".$p['Description Manager']."</div>");
-                    $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
-                    $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
-                }else{
-                    $infobox = "---";
-                }
-                $p['notka'] = $infobox;
-                $p["edit"] = $p->record_link('<img class="action_button" src="data/Base_Theme/templates/default/Utils/GenericBrowser/edit.png" border="0" alt="Edytuj">',$nolink=false,'edit');
-                $del = $this->create_href(array("delete_record" => $p['id']));
-                $del = "<a $del> <img border='0' src='data/Base_Theme/templates/default/Utils/Calendar/delete.png' alt='Usuń' /></a>";
-                $p["delete"] = $del;
-            }
-            else{
-                if(strlen($p['Description trader']) > 0){
-                    $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader']. "</div>");
-                    $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
-                    $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
-                }else{
-                    $infobox = "---";
-                }
-                $p['notka'] = $infobox;
-                $p["delete"] = '';
-                $p["edit"] = '';
-                }
-        }
-        $all_bought_week =0;
-        $all_transported_week = 0;
-      //  $pt = sortByCompanyName($pt);
-        //potrzeba wstawić prawidłową nazwe tabeli
-        $bought = new RBO_RecordsetAccessor('custom_agrohandel_purchase_plans');
-        $pon_bought = $bought->get_records(array('planed_purchase_date' => $date->monday_of_week($week_num),'~status' => "%purchased%"),
-                                           array("Company" => "ASC"));
-        $wt_bought = $bought->get_records(array('planed_purchase_date' => $date->add_days($date->monday_of_week($week_num), 1),'~status' => "%purchased%"),
-                                           array("Company" => "ASC"));
-        $sr_bought = $bought->get_records(array('planed_purchase_date' => $date->add_days($date->monday_of_week($week_num), 2),'~status' => "%purchased%"),
-                                           array("Company" => "ASC"));
-        $czw_bought = $bought->get_records(array('planed_purchase_date' => $date->add_days($date->monday_of_week($week_num), 3),'~status' => "%purchased%"),
-                                           array("Company" => "ASC"));
-        $pt_bought = $bought->get_records(array('planed_purchase_date' => $date->add_days($date->monday_of_week($week_num), 4),'~status' => "%purchased%"),
-                                           array("Company" => "ASC"));
-        // kupione
-        $pon_companes = array();
-        $wt_companes = array();
-        $sr_companes = array();
-        $czw_companes = array();
-        $pt_companes = array();
-        foreach($pon as $pone){
-            array_push($pon_companes , $pone['company_name']);
-        }
-        foreach($wt as $pone){
-            array_push($wt_companes , $pone['company_name']);
-        }
-        foreach($sr as $pone){
-            array_push($sr_companes , $pone['company_name']);
-        }
-        foreach($czw as $pone){
-            array_push($czw_companes , $pone['company_name']);
-        }
-        foreach($pt as $pone){
-            array_push($pt_companes , $pone['company_name']);
-        }
-        $pon_companes = array_count_values($pon_companes);
-        $wt_companes = array_count_values($wt_companes);
-        $sr_companes = array_count_values($sr_companes);
-        $czw_companes = array_count_values($czw_companes);
-        $pt_companes = array_count_values($pt_companes);
-        $i  = 1;
-        $indexer = array();
-        foreach($pon_companes as $com){
-            $indexer[$i] = $com;
-            $i++;
-        }
-        foreach($wt_companes as $com){
-            $indexer[$i] = $com;
-            $i++;
-        }
-        foreach($sr_companes as $com){
-            $indexer[$i] = $com;
-            $i++;
-        }
-        foreach($czw_companes as $com){
-            $indexer[$i] = $com;
-            $i++;
-        }
-        foreach($pt_companes as $com){
-            $indexer[$i] = $com;
-            $i++;
-        }
-        
-        //dostarczone
-        //potrzena tabela z Raport z rozladunku
-        $transported = new RBO_RecordsetAccessor("custom_agrohandel_transporty"); //custom_agrohandel_transporty Transport
-        $trans_pon = array();
-        $trans_wt = array();
-        $trans_sr = array();
-        $trans_czw = array();
-        $trans_pt = array();
-        $transports_sum_of_day = array(1=>0,2=>0,3=>0,4=>0,5=> 0);
-        $transports = [];
-        $company_field = "company"; ///company company_name
-        $amount = "iloscrozl"; //iloscrozl amount
-        $t_pon = $transported->get_records(array('date' => $date->monday_of_week($week_num)),array(),array($company_field => "ASC"));
-        foreach($t_pon as $t){
-            $x = $t->get_val($company_field,$nolink = TRUE);
-            $trans_pon[$x] += $t[$amount];
-            $all_transported_week +=  $t[$amount];
-            $transports_sum_of_day[1] += $t[$amount];
-        }
-        $t_wt = $transported->get_records(array('date' =>$date->add_days($date->monday_of_week($week_num), 1)),array(),array($company_field => "ASC"));
-        foreach($t_wt as $t){
-            $x = $t->get_val($company_field,$nolink = TRUE);
-            $trans_wt[$x] += $t[$amount];
-            $all_transported_week +=  $t[$amount];
-            $transports_sum_of_day[2] += $t[$amount];
-        }
-        $t_sr = $transported->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 2)),array(),array($company_field => "ASC"));
-        foreach($t_sr as $t){
-            $x = $t->get_val($company_field,$nolink = TRUE);
-            $trans_sr[$x] += $t[$amount];
-            $all_transported_week +=  $t[$amount];
-            $transports_sum_of_day[3] += $t[$amount];
-        }
-        $t_czw = $transported->get_records(array('date' =>$date->add_days($date->monday_of_week($week_num), 3)),array(),array($company_field => "ASC"));
-        foreach($t_czw as $t){
-            $x = $t->get_val($company_field,$nolink = TRUE);
-            $trans_czw[$x] += $t[$amount];
-            $all_transported_week +=  $t[$amount];
-            $transports_sum_of_day[4] += $t[$amount];
-        }
-        $t_pt = $transported->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 4)),array(),array($company_field => "ASC"));
-        foreach($t_pt as $t){
-            $x = $t->get_val($company_field,$nolink = TRUE);
-            $trans_pt[$x] += $t[$amount];
-            $all_transported_week +=  $t[$amount];
-            $transports_sum_of_day[5] += $t[$amount];
-        }
-        $week_trans = array();
-        $week_transported = $transported->get_records(array('>=date' => $date->add_days($date->monday_of_week($week_num),0),
-        '<=date' => $date->add_days($date->monday_of_week($week_num), 4)),array(),array($company_field => "ASC"));
-        foreach($week_transported as $t){
-            $x = $t->get_val($company_field,$nolink = TRUE);
-            $week_trans[$x] += $t[$amount];
-        }
-        $transports[1] = $trans_pon;
-        $transports[2] = $trans_wt;
-        $transports[3] = $trans_sr;
-        $transports[4] = $trans_czw;
-        $transports[5] = $trans_pt;
-        $theme->assign('trans',$transports);
-        $starter = $indexer[0];
-        $theme->assign('all_zam',$all_zam);
-        $theme->assign('starter',$starter);
-        $theme->assign('indexer',$indexer);
-        $theme->assign('select',$select);
-        //purchased or Kupione => Status   Amount   Company  planed_purchase_date  Company
-        $amount_sum = array(1=>$this->sum_records($pon_bought,'Amount'),
-        2=>$this->sum_records($wt_bought,'Amount'),3=>$this->sum_records($sr_bought,'Amount'),
-        4=>$this->sum_records($czw_bought,'Amount'),
-        5=>$this->sum_records($pt_bought,'Amount'));
-        foreach($amount_sum as $sum){
-            $all_bought_week += $sum;
-        }
-
-        for($i = 1;$i<6;$i++){
-            $amount_sum[$i] = "<a ". Base_BoxCommon::create_href('Custom/Agrohandel/Transporty','Custom/Agrohandel/Transporty', null, array(), array(), array('day'=> $date->add_days($date->monday_of_week($week_num),($i-1)))).">".$amount_sum[$i]."</a>";
-        }
-        array_push($days,$pon);
-        array_push($days,$wt);
-        array_push($days,$sr);
-        array_push($days,$czw);
-        array_push($days,$pt);
-
-
-        //dni tygodnia
-        $days_text = array(
-            1=>"PONIEDZIAŁEK",
-            2=>"WTOREK",
-            3=>"ŚRODA",
-            4=>"CZWARTEK",
-            5=>"PIĄTEK",
-        );
-        if($is_manager || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
-            for($i = 0; $i<5;$i++){
-                $sel_opt = "";
-                $sel_opt .= "<a ".$this->create_href(array('change_status' => $date->add_days($date->monday_of_week($week_num), $i),'status'=> '2'))."><img src='data/Base_Theme/templates/default/planer/good.png'  width=15 height=15 /></a>";
-                $sel_opt .= "<a ".$this->create_href(array('change_status' => $date->add_days($date->monday_of_week($week_num), $i),'status'=> '1'))."><img src='data/Base_Theme/templates/default/planer/normal.png'  width=15 height=15 /></a>";
-                $sel_opt .= "<a ".$this->create_href(array('change_status' => $date->add_days($date->monday_of_week($week_num), $i),'status'=> '3'))."><img src='data/Base_Theme/templates/default/planer/bad.png'  width=15 height=15 /></a>";
-                $sel = "<div style='position:relative;text-align:center;'><br>Zmień status:<br>".$sel_opt."</div>";
-                $x = $i;
-                $x++;
-                $days_text[$x.$x] = $sel;
-            }
-        }
-        $sumary_week = $rbo->get_records(array('>=date' => $date->monday_of_week($week_num), 
-        '<=date' => $date->add_days($date->monday_of_week($week_num), 4)), 
-        array(),array());
-        $mach_week_with_tr = $rbo->get_records(array('>=date' => $date->monday_of_week($week_num), 
-        '<=date' => $date->add_days($date->monday_of_week($week_num), 4)), 
-        array(),array());
-        $mach_tr_with_week = $transported->get_records(array('>=date' => $date->monday_of_week($week_num), 
-        '<=date' => $date->add_days($date->monday_of_week($week_num), 4)),array(),array());  
-        $missing_pon = array();
-        $missing_wt = array();
-        $missing_sr = array();
-        $missing_czw = array();
-        $missing_pt = array();
-        $missing_all = array();
-        if(count($mach_week_with_tr) != count($mach_tr_with_week)){
-            foreach($mach_tr_with_week as $trans){
-                $exist = false;
-                foreach($mach_week_with_tr as $plan){
-                    if($trans['company'] == $plan['company_name']){
-                        $exist = true;
-                        break;
+                    if(strlen($p['Description trader']) > 0){
+                        $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader']. "</div>");
+                        $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
+                        $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
+                    }else{
+                        $infobox = "---";
                     }
+                    $p['notka'] = $infobox;
+                    $p["delete"] = '';
+                    $p["edit"] = '';
                 }
-                if($exist == false){
-                    $ubojnia = true;
-                    $_transport = $companes->get_records(array('id' => $trans['company'], 'group' => 'baza_tr'),array(),array());
-                    if($_transport != null){
-                        $ubojnia = false;
+                
+            }
+            //$pon = sortByCompanyName($pon);
+
+            $wt = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 1)),array(),array('company_name' => "ASC"));
+            $wt = Rbo_Futures::set_related_fields($wt, 'company_name');
+            foreach($wt as $p){
+                $all_zam += $p["amount"];
+                $days_zam[2] += $p["amount"];
+                $p['amount'] = $p->record_link($p['amount'],$nolink = false,$action = 'view');
+                if($is_manager || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
+                    if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
+                        $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].
+                        "</div>", "Manager: " => "<div class='custom_info'>".$p['Description Manager']."</div>");
+                        $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
+                        $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
                     }
-                    if($ubojnia == true){
-                        $amount = 0;
-                        $once = $trans->to_array();
-                        $once = $once["zakupy"];
-                        foreach($once as $one){
-                            $value  = $bought->get_record($one);
-                            $amount += $value['amount'];
-                            $all_transported_week += $value['iloscrozl'];
+                    else{
+                        $infobox = "---";
+                    }
+                    $p['notka'] = $infobox;
+                    $p["edit"] = $p->record_link('<img class="action_button" src="data/Base_Theme/templates/default/Utils/GenericBrowser/edit.png" border="0" alt="Edytuj">',$nolink=false,'edit');
+                    $del = $this->create_href(array("delete_record" => $p['id']));
+                    $del = "<a $del> <img border='0' src='data/Base_Theme/templates/default/Utils/Calendar/delete.png' alt='Usuń' /></a>";
+                    $p["delete"] = $del;
+                }
+                else{
+                    if(strlen($p['Description trader']) > 0){
+                        $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader']. "</div>");
+                        $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
+                        $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
+                    }else{
+                        $infobox = "---";
+                    }
+                    $p['notka'] = $infobox;
+                    $p["delete"] = '';
+                    $p["edit"] = '';
+                }
+            }
+        // print(count($pon));
+        // $wt = sortByCompanyName($wt);
+            $sr = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 2)),array(),array('company_name' => "ASC"));
+            $sr = Rbo_Futures::set_related_fields($sr, 'company_name');
+            foreach($sr as $p){
+                $days_zam[3] += $p["amount"];
+                $all_zam += $p["amount"];
+                $p['amount'] = $p->record_link($p['amount'],$nolink = false,$action = 'view');
+                if($is_manager || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
+                    if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
+                        $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].
+                        "</div>", "Manager: " => "<div class='custom_info'>".$p['Description Manager']."</div>");
+                        $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
+                        $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
+                    }else{
+                        $infobox = "---";
+                    }
+                    $p['notka'] = $infobox;
+                    $p["edit"] = $p->record_link('<img class="action_button" src="data/Base_Theme/templates/default/Utils/GenericBrowser/edit.png" border="0" alt="Edytuj">',$nolink=false,'edit');
+                    $del = $this->create_href(array("delete_record" => $p['id']));
+                    $del = "<a $del> <img border='0' src='data/Base_Theme/templates/default/Utils/Calendar/delete.png' alt='Usuń' /></a>";
+                    $p["delete"] = $del;
+                }
+                else{
+                    if(strlen($p['Description trader']) > 0){
+                        $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader']. "</div>");
+                        $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
+                        $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
+                    }else{
+                        $infobox = "---";
+                    }
+                    $p['notka'] = $infobox;
+                    $p["delete"] = '';
+                    $p["edit"] = '';
+                }
+            }
+        //  $sr = sortByCompanyName($sr);
+            $czw = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 3)),array(),array('company_name' => "ASC"));
+            $czw = Rbo_Futures::set_related_fields($czw, 'company_name');
+            foreach($czw as $p){
+                $days_zam[4] += $p["amount"];
+                $all_zam += $p["amount"];
+                $p['amount'] = $p->record_link($p['amount'],$nolink = false,$action = 'view');
+                if($is_manager || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
+                    if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
+                        $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].
+                        "</div>", "Manager: " => "<div class='custom_info'>".$p['Description Manager']."</div>");
+                        $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
+                        $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
+                    }else{
+                        $infobox = "---";
+                    }
+                    $p['notka'] = $infobox;
+                    $p["edit"] = $p->record_link('<img class="action_button" src="data/Base_Theme/templates/default/Utils/GenericBrowser/edit.png" border="0" alt="Edytuj">',$nolink=false,'edit');
+                    $del = $this->create_href(array("delete_record" => $p['id']));
+                    $del = "<a $del> <img border='0' src='data/Base_Theme/templates/default/Utils/Calendar/delete.png' alt='Usuń' /></a>";
+                    $p["delete"] = $del;
+                }
+                else{
+                    if(strlen($p['Description trader']) > 0){
+                        $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader']. "</div>");
+                        $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
+                        $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
+                    }else{
+                        $infobox = "---";
+                    }
+                    $p['notka'] = $infobox;
+                    $p["delete"] = '';
+                    $p["edit"] = '';
+                }
+            }
+        //   $czw = sortByCompanyName($czw);
+            $pt = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 4)),array(),array('company_name' => "ASC"));
+            $pt = Rbo_Futures::set_related_fields($pt, 'company_name');
+            foreach($pt as $p){
+                $all_zam += $p["amount"];
+                $days_zam[5] += $p["amount"];
+                $p['amount'] = $p->record_link($p['amount'],$nolink = false,$action = 'view');
+                if($is_manager || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
+                    if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
+                        $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].
+                        "</div>", "Manager: " => "<div class='custom_info'>".$p['Description Manager']."</div>");
+                        $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
+                        $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
+                    }else{
+                        $infobox = "---";
+                    }
+                    $p['notka'] = $infobox;
+                    $p["edit"] = $p->record_link('<img class="action_button" src="data/Base_Theme/templates/default/Utils/GenericBrowser/edit.png" border="0" alt="Edytuj">',$nolink=false,'edit');
+                    $del = $this->create_href(array("delete_record" => $p['id']));
+                    $del = "<a $del> <img border='0' src='data/Base_Theme/templates/default/Utils/Calendar/delete.png' alt='Usuń' /></a>";
+                    $p["delete"] = $del;
+                }
+                else{
+                    if(strlen($p['Description trader']) > 0){
+                        $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader']. "</div>");
+                        $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
+                        $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
+                    }else{
+                        $infobox = "---";
+                    }
+                    $p['notka'] = $infobox;
+                    $p["delete"] = '';
+                    $p["edit"] = '';
+                    }
+            }
+            $all_bought_week =0;
+            $all_transported_week = 0;
+        //  $pt = sortByCompanyName($pt);
+            //potrzeba wstawić prawidłową nazwe tabeli
+            $bought = new RBO_RecordsetAccessor('custom_agrohandel_purchase_plans');
+            $pon_bought = $bought->get_records(array('planed_purchase_date' => $date->monday_of_week($week_num),'~status' => "%purchased%"),
+                                            array("Company" => "ASC"));
+            $wt_bought = $bought->get_records(array('planed_purchase_date' => $date->add_days($date->monday_of_week($week_num), 1),'~status' => "%purchased%"),
+                                            array("Company" => "ASC"));
+            $sr_bought = $bought->get_records(array('planed_purchase_date' => $date->add_days($date->monday_of_week($week_num), 2),'~status' => "%purchased%"),
+                                            array("Company" => "ASC"));
+            $czw_bought = $bought->get_records(array('planed_purchase_date' => $date->add_days($date->monday_of_week($week_num), 3),'~status' => "%purchased%"),
+                                            array("Company" => "ASC"));
+            $pt_bought = $bought->get_records(array('planed_purchase_date' => $date->add_days($date->monday_of_week($week_num), 4),'~status' => "%purchased%"),
+                                            array("Company" => "ASC"));
+            // kupione
+            $pon_companes = array();
+            $wt_companes = array();
+            $sr_companes = array();
+            $czw_companes = array();
+            $pt_companes = array();
+            foreach($pon as $pone){
+                array_push($pon_companes , $pone['company_name']);
+            }
+            foreach($wt as $pone){
+                array_push($wt_companes , $pone['company_name']);
+            }
+            foreach($sr as $pone){
+                array_push($sr_companes , $pone['company_name']);
+            }
+            foreach($czw as $pone){
+                array_push($czw_companes , $pone['company_name']);
+            }
+            foreach($pt as $pone){
+                array_push($pt_companes , $pone['company_name']);
+            }
+            $pon_companes = array_count_values($pon_companes);
+            $wt_companes = array_count_values($wt_companes);
+            $sr_companes = array_count_values($sr_companes);
+            $czw_companes = array_count_values($czw_companes);
+            $pt_companes = array_count_values($pt_companes);
+            $i  = 1;
+            $indexer = array();
+            foreach($pon_companes as $com){
+                $indexer[$i] = $com;
+                $i++;
+            }
+            foreach($wt_companes as $com){
+                $indexer[$i] = $com;
+                $i++;
+            }
+            foreach($sr_companes as $com){
+                $indexer[$i] = $com;
+                $i++;
+            }
+            foreach($czw_companes as $com){
+                $indexer[$i] = $com;
+                $i++;
+            }
+            foreach($pt_companes as $com){
+                $indexer[$i] = $com;
+                $i++;
+            }
+            
+            //dostarczone
+            //potrzena tabela z Raport z rozladunku
+            $transported = new RBO_RecordsetAccessor("custom_agrohandel_transporty"); //custom_agrohandel_transporty Transport
+            $trans_pon = array();
+            $trans_wt = array();
+            $trans_sr = array();
+            $trans_czw = array();
+            $trans_pt = array();
+            $transports_sum_of_day = array(1=>0,2=>0,3=>0,4=>0,5=> 0);
+            $transports = [];
+            $company_field = "companycompany_name"; ///company company_name
+            $amount = "iloscrozl"; //iloscrozl amount
+            $t_pon = $transported->get_records(array('date' => $date->monday_of_week($week_num), '!group' => 'baza_tr'),array(),array($company_field => "ASC"));
+            foreach($t_pon as $t){
+                $x = $t->get_val($company_field,$nolink = TRUE);
+                $trans_pon[$x] += $t[$amount];
+                $all_transported_week +=  $t[$amount];
+                $transports_sum_of_day[1] += $t[$amount];
+            }
+            $t_wt = $transported->get_records(array('date' =>$date->add_days($date->monday_of_week($week_num), 1),'!group' => 'baza_tr'),array(),array($company_field => "ASC"));
+            foreach($t_wt as $t){
+                $x = $t->get_val($company_field,$nolink = TRUE);
+                $trans_wt[$x] += $t[$amount];
+                $all_transported_week +=  $t[$amount];
+                $transports_sum_of_day[2] += $t[$amount];
+            }
+            $t_sr = $transported->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 2),'!group' => 'baza_tr'),array(),array($company_field => "ASC"));
+            foreach($t_sr as $t){
+                $x = $t->get_val($company_field,$nolink = TRUE);
+                $trans_sr[$x] += $t[$amount];
+                $all_transported_week +=  $t[$amount];
+                $transports_sum_of_day[3] += $t[$amount];
+            }
+            $t_czw = $transported->get_records(array('date' =>$date->add_days($date->monday_of_week($week_num), 3),'!group' => 'baza_tr'),array(),array($company_field => "ASC"));
+            foreach($t_czw as $t){
+                $x = $t->get_val($company_field,$nolink = TRUE);
+                $trans_czw[$x] += $t[$amount];
+                $all_transported_week +=  $t[$amount];
+                $transports_sum_of_day[4] += $t[$amount];
+            }
+            $t_pt = $transported->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 4),'!group' => 'baza_tr'),array(),array($company_field => "ASC"));
+            foreach($t_pt as $t){
+                $x = $t->get_val($company_field,$nolink = TRUE);
+                $trans_pt[$x] += $t[$amount];
+                $all_transported_week +=  $t[$amount];
+                $transports_sum_of_day[5] += $t[$amount];
+            }
+            $week_trans = array();
+            $week_transported = $transported->get_records(array('>=date' => $date->add_days($date->monday_of_week($week_num),0),
+            '<=date' => $date->add_days($date->monday_of_week($week_num), 4)),array(),array($company_field => "ASC"));
+            foreach($week_transported as $t){
+                $x = $t->get_val($company_field,$nolink = TRUE);
+                $week_trans[$x] += $t[$amount];
+            }
+            $transports[1] = $trans_pon;
+            $transports[2] = $trans_wt;
+            $transports[3] = $trans_sr;
+            $transports[4] = $trans_czw;
+            $transports[5] = $trans_pt;
+            $theme->assign('trans',$transports);
+            $starter = $indexer[0];
+            $theme->assign('all_zam',$all_zam);
+            $theme->assign('starter',$starter);
+            $theme->assign('indexer',$indexer);
+            $theme->assign('select',$select);
+            //purchased or Kupione => Status   Amount   Company  planed_purchase_date  Company
+            $amount_sum = array(1=>$this->sum_records($pon_bought,'Amount'),
+            2=>$this->sum_records($wt_bought,'Amount'),3=>$this->sum_records($sr_bought,'Amount'),
+            4=>$this->sum_records($czw_bought,'Amount'),
+            5=>$this->sum_records($pt_bought,'Amount'));
+            foreach($amount_sum as $sum){
+                $all_bought_week += $sum;
+            }
+
+            for($i = 1;$i<6;$i++){
+                $amount_sum[$i] = "<a ". Base_BoxCommon::create_href('Custom/Agrohandel/Transporty','Custom/Agrohandel/Transporty', null, array(), array(), array('day'=> $date->add_days($date->monday_of_week($week_num),($i-1)))).">".$amount_sum[$i]."</a>";
+            }
+            array_push($days,$pon);
+            array_push($days,$wt);
+            array_push($days,$sr);
+            array_push($days,$czw);
+            array_push($days,$pt);
+
+
+            //dni tygodnia
+            $days_text = array(
+                1=>"PONIEDZIAŁEK",
+                2=>"WTOREK",
+                3=>"ŚRODA",
+                4=>"CZWARTEK",
+                5=>"PIĄTEK",
+            );
+            $days_link = array(
+                1=>$this->create_href(array('mode' => 'day' ,'date' => $date->add_days($date->monday_of_week($week_num), 0))),
+                2=>$this->create_href(array('mode' => 'day' ,'date' => $date->add_days($date->monday_of_week($week_num), 1))),
+                3=>$this->create_href(array('mode' => 'day' ,'date' => $date->add_days($date->monday_of_week($week_num), 2))),
+                4=>$this->create_href(array('mode' => 'day' ,'date' => $date->add_days($date->monday_of_week($week_num), 3))),
+                5=>$this->create_href(array('mode' => 'day' ,'date' => $date->add_days($date->monday_of_week($week_num), 4)))
+            );
+            $theme->assign('days_link',$days_link);
+            if($is_manager || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
+                for($i = 0; $i<5;$i++){
+                    $sel_opt = "";
+                    $sel_opt .= "<a style='z-index:5;' ".$this->create_href(array('change_status' => $date->add_days($date->monday_of_week($week_num), $i),'status'=> '2'))."><img src='data/Base_Theme/templates/default/planer/good.png'  width=15 height=15 /></a>";
+                    $sel_opt .= "<a style='z-index:5;' ".$this->create_href(array('change_status' => $date->add_days($date->monday_of_week($week_num), $i),'status'=> '1'))."><img src='data/Base_Theme/templates/default/planer/normal.png'  width=15 height=15 /></a>";
+                    $sel_opt .= "<a style='z-index:5;' ".$this->create_href(array('change_status' => $date->add_days($date->monday_of_week($week_num), $i),'status'=> '3'))."><img src='data/Base_Theme/templates/default/planer/bad.png'  width=15 height=15 /></a>";
+                    $sel = "<div style='position:relative;text-align:center;'><br>Zmień status:<br>".$sel_opt."</div>";
+                    $x = $i;
+                    $x++;
+                    $days_text[$x.$x] = $sel;
+                }
+            }
+            $sumary_week = $rbo->get_records(array('>=date' => $date->monday_of_week($week_num), 
+            '<=date' => $date->add_days($date->monday_of_week($week_num), 4)), 
+            array(),array());
+            $mach_week_with_tr = $rbo->get_records(array('>=date' => $date->monday_of_week($week_num), 
+            '<=date' => $date->add_days($date->monday_of_week($week_num), 4)), 
+            array(),array());
+            $mach_tr_with_week = $transported->get_records(array('>=date' => $date->monday_of_week($week_num), 
+            '<=date' => $date->add_days($date->monday_of_week($week_num), 4)),array(),array());  
+            $missing_pon = array();
+            $missing_wt = array();
+            $missing_sr = array();
+            $missing_czw = array();
+            $missing_pt = array();
+            $missing_all = array();
+            if(count($mach_week_with_tr) != count($mach_tr_with_week)){
+                foreach($mach_tr_with_week as $trans){
+                    $exist = false;
+                    foreach($mach_week_with_tr as $plan){
+                        if($trans['company'] == $plan['company_name']){
+                            $exist = true;
+                            break;
                         }
-                        $trans['company'] =  $trans->get_val('company');
-                        $trans['amm'] = $amount; 
-                        $missing_all[] = $trans;
-                        $dayofweek = date('w', strtotime($trans['date']));  
-                        if($dayofweek == 1){ $missing_pon[] = $trans;}
-                        else if($dayofweek == 2){ $missing_wt[] = $trans;}
-                        else if($dayofweek == 3){ $missing_sr[] = $trans;}
-                        else if($dayofweek == 4){ $missing_czw[] = $trans;}
-                        else if($dayofweek == 5){ $missing_pt[] = $trans;} 
-                    }               
+                    }
+                    if($exist == false){
+                        $ubojnia = true;
+                        $_transport = $companes->get_records(array('id' => $trans['company'], 'group' => 'baza_tr'),array(),array());
+                        if($_transport != null){
+                            $ubojnia = false;
+                        }
+                        if($ubojnia == true){
+                            $amount = 0;
+                            $once = $trans->to_array();
+                            $once = $once["zakupy"];
+                            foreach($once as $one){
+                                $value  = $bought->get_record($one);
+                                $amount += $value['amount'];
+                                $all_transported_week += $value['iloscrozl'];
+                            }
+                            $trans['company'] =  $trans->get_val('company');
+                            $trans['amm'] = $amount; 
+                            $missing_all[] = $trans;
+                            $dayofweek = date('w', strtotime($trans['date']));  
+                            if($dayofweek == 1){ $missing_pon[] = $trans;}
+                            else if($dayofweek == 2){ $missing_wt[] = $trans;}
+                            else if($dayofweek == 3){ $missing_sr[] = $trans;}
+                            else if($dayofweek == 4){ $missing_czw[] = $trans;}
+                            else if($dayofweek == 5){ $missing_pt[] = $trans;} 
+                        }               
+                    }
                 }
+            }       
+            $week_amount_sum = 0;   
+            for($i=0;$i<=4;$i++){
+                $week_bought = $transported->get_records(array('date' =>$date->add_days($date->monday_of_week($week_num), $i)),array(),array());
+                foreach($week_bought as $day){
+                    $once = $day->to_array();
+                    $once = $once["zakupy"];
+                    foreach($once as $one){
+                        $value  = $bought->get_record($one);
+                        $week_amount_sum += $value['amount'];
+                    }
+                }                 
+            } 
+            $missing = array();
+            $missing[1] = $missing_pon;
+            $missing[2] = $missing_wt;
+            $missing[3] = $missing_sr;
+            $missing[4] = $missing_czw;
+            $missing[5] = $missing_pt;
+            // missing[0] = missing_pon -> records
+            $sum_week = array();
+            foreach($sumary_week as $sum){
+                try{
+                $value = $sum_week[$sum->get_val("company_name",$nolink=true)]["val"];
+                }catch(Exception $e){$value = 0;}
+                $value = intval($value) + intval($sum['amount']); 
+                $sum_week[$sum->get_val("company_name",$nolink=true)] = array("val" => $value,
+                                                                            "name" =>$sum->get_val("company_name",$nolink=true));
             }
-        }       
-        $week_amount_sum = 0;   
-        for($i=0;$i<=4;$i++){
-            $week_bought = $transported->get_records(array('date' =>$date->add_days($date->monday_of_week($week_num), $i)),array(),array());
-            foreach($week_bought as $day){
-                $once = $day->to_array();
-                $once = $once["zakupy"];
-                foreach($once as $one){
-                    $value  = $bought->get_record($one);
-                    $week_amount_sum += $value['amount'];
-                }
-            }                 
-        } 
-        $missing = array();
-        $missing[1] = $missing_pon;
-        $missing[2] = $missing_wt;
-        $missing[3] = $missing_sr;
-        $missing[4] = $missing_czw;
-        $missing[5] = $missing_pt;
-        // missing[0] = missing_pon -> records
-        $sum_week = array();
-        foreach($sumary_week as $sum){
-            try{
-            $value = $sum_week[$sum->get_val("company_name",$nolink=true)]["val"];
-            }catch(Exception $e){$value = 0;}
-            $value = intval($value) + intval($sum['amount']); 
-            $sum_week[$sum->get_val("company_name",$nolink=true)] = array("val" => $value,
-                                                                        "name" =>$sum->get_val("company_name",$nolink=true));
-        }
 
-        $theme->assign("transports_sum_of_day",$transports_sum_of_day);
-        $theme->assign('days_zam',$days_zam);
-        $week_transported = $this->sum_records($week_transported,$amount);
-        $theme->assign("sumary_week",$sum_week);
-        $theme->assign("week_bought",$week_amount_sum);
-        $theme->assign("week_transported",$week_trans);
-        $theme->assign('days_text',$days_text);
-        $theme->assign('missing',$missing);
-        $theme->assign('missing_all',$missing_all);
-        $theme->assign('all_bought',$all_bought_week);
-        $theme->assign('all_transp',$all_transported_week);
-        $theme->assign('amount_sum',$amount_sum);
-        $theme->assign('start',1);
-        $theme->assign('days',$days);
-        $theme->assign('week_number', $week_num);
-        $theme->assign ( 'action_buttons', $buttons );
-        $theme->display();
-    
+            $theme->assign("transports_sum_of_day",$transports_sum_of_day);
+            $theme->assign('days_zam',$days_zam);
+            $week_transported = $this->sum_records($week_transported,$amount);
+            $theme->assign("sumary_week",$sum_week);
+            $theme->assign("week_bought",$week_amount_sum);
+            $theme->assign("week_transported",$week_trans);
+            $theme->assign('days_text',$days_text);
+            $theme->assign('missing',$missing);
+            $theme->assign('missing_all',$missing_all);
+            $theme->assign('all_bought',$all_bought_week);
+            $theme->assign('all_transp',$all_transported_week);
+            $theme->assign('amount_sum',$amount_sum);
+            $theme->assign('start',1);
+            $theme->assign('days',$days);
+            $theme->assign('week_number', $week_num);
+            $theme->assign ( 'action_buttons', $buttons );
+            $theme->display();
+        }
+        else{
+            $day = $_REQUEST['date'];
+            $day = strtotime($day);
+            Base_ActionBarCommon::add(
+                'back',
+                "Wróć",
+                $this->create_href ( array ()),
+                null,
+                0
+            );
+            Base_ActionBarCommon::add(
+                Base_ThemeCommon::get_template_file($this->get_type(), 'prev.png'),
+                "Poprzedni dzień",
+                $this->create_href ( array ('date' => date('Y-m-d',($day-60*60*24)),'mode'=>'day')),
+                null,
+                1
+            );
+            Base_ActionBarCommon::add(
+                Base_ThemeCommon::get_template_file($this->get_type(), 'next.png'),
+                "Następny dzień",
+                $this->create_href ( array ('date' => date('Y-m-d',($day+60*60*24)),'mode'=>'day')),
+                null,
+                2
+            );
+            load_js('modules/planer/theme/design.js');
+            $date = $_REQUEST['date'];
+            $theme->assign("css", Base_ThemeCommon::get_template_dir());
+            $theme->assign('day',$date);
+            $transported = new RBO_RecordsetAccessor("Sales_plan");
+            $bought = new RBO_RecordsetAccessor("custom_agrohandel_purchase_plans");
+            $transports = $transported->get_records(array('date' => $date),array(),array());  
+
+           /* foreach($transports as $transport){
+                $zakupy = $transport['zakupy'];
+                foreach($zakupy as $zakup){
+                    $record = $bought->get_record($zakup);
+                    $transport['kupione'] = $record['amount'];        
+                }
+
+            }*/
+            $transports = Rbo_Futures::set_related_fields($transports, 'company_name');
+            $theme->assign("transports",$transports);
+            $theme->display('day');
+
+        }
     }
     public function sum_records($records,$columnName){
         $value = 0;

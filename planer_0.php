@@ -733,7 +733,7 @@ public function settings(){
                 $args = array();
                 foreach($zakupy as $zakup){
                     $record = $bought->get_record($zakup);
-                    $company = $companes->get_record($record['company_name']);
+                    $company = $companes->get_record($record['company']);
                     $company_name = $company->get_val('company_name',$nolink=True);
                     $args[$company_name] += $record['amount']."/".$record['sztukzal']."<br>";
                 }                

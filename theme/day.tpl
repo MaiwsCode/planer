@@ -21,14 +21,14 @@
     </thead>
       {foreach from=$transports item=transport}
     <tr class='info'>
-        <td class='inter_future'> {$transport.number} <br>
+        <td class='inter_future'>
         {$transport.link}
         
          </td>
          <td class='inter_future'>{$transport.company}</td>
         <td class='inter_future'> {$transport.bought} </td>
         <td class='inter_future'> {$transport.iloscrozl}  </td>
-        {assign var="roznica" value=$transport.bought-$transport.iloscrozl}
+        {assign var="roznica" value=$transport.bought|strip_tags:false-$transport.iloscrozl}
         {if $roznica == 0}
             <td class='inter_future'>  {$roznica} </td>
         {elseif $roznica > 0}
@@ -51,7 +51,16 @@
     </tr>
     <tr class='separator'></tr>
   {/foreach}
-  
+    <tr class='info' style='font-weight:bold;'>
+        <td class='inter_future' colspan='2'>Suma: </td>
+        <td class='inter_future'> {$sumy[1]} </td>
+        <td class='inter_future'> {$sumy[2]} </td>
+        <td class='inter_future'>  </td>
+        <td class='inter_future'> {$sumy[3]} </td>
+        <td class='inter_future'> {$sumy[4]} </td>
+        <td class='inter_future'> {$sumy[5]} </td>
+        <td class='inter_future'>  </td>
+    </tr>
     </table>
 
 

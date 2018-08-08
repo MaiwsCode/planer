@@ -713,11 +713,21 @@ public function settings(){
                 $theme->assign('day',"Dzień: ".$data. " - ".$company_name);
                 $transports = $transported->get_records(array('date' => $data,'company_name'=> $_REQUEST['firma_id']),array(),array());  
             }
+            $suma_rozl = 0;
+            $suma_bought = 0;
+            $suma_dead = 0;
+            $suma_przej = 0;
+            $suma_plan = 0;
             foreach($transports as $transport){
+                $suma_rozl += $transport['iloscrozl'];
+                $suma_dead += $transport['iloscpadle'];
+                $suma_przej += $transport['kmprzej'];
+                $suma_plan += $transport['kmplan'] ;
                 $transport['link'] = planerCommon::getVechicleInfo($transport);
                 $zakupy = $transport['zakupy'];
                 foreach($zakupy as $zakup){
                     $record = $bought->get_record($zakup);
+                    $suma_bought += $record['amount'];
                     $transport['bought'] += $record['amount'];        
                 }
                 $args = array();
@@ -725,7 +735,7 @@ public function settings(){
                     $record = $bought->get_record($zakup);
                     $company = $companes->get_record($record['company']);
                     $company_name = $company->get_val('company_name',$nolink=True);
-                    $args[$company_name] = $record['amount']."/".$record['sztukzal'];
+                    $args[$company_name] += $record['amount']."/".$record['sztukzal']."<br>";
                 }                
                 $infobox = Utils_TooltipCommon::format_info_tooltip($args);
                 $transport['bought'] = Utils_TooltipCommon::create($transport['bought'],$infobox,$help=true, $max_width=300);
@@ -742,6 +752,10 @@ public function settings(){
                     $transport['iloscpadle'] = 0;
                 }
             }
+            $sumy = array(1=>$suma_bought,2=>$suma_rozl,3=>$suma_dead,4=>$suma_plan,5=>$suma_przej);
+
+
+            $theme->assign("sumy",$sumy);
             $transports = Rbo_Futures::set_related_fields($transports, 'company');
             $theme->assign("transports",$transports);
             $theme->display('day');

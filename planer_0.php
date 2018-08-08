@@ -530,6 +530,8 @@ public function settings(){
                 4=>$this->create_href(array('mode' => 'day' ,'date' => $date->add_days($date->monday_of_week($week_num), 3))),
                 5=>$this->create_href(array('mode' => 'day' ,'date' => $date->add_days($date->monday_of_week($week_num), 4)))
             );
+            $week_number_link = $this->create_href(array('mode' => 'week' ,'date' => $week_num));
+            $theme->assign('week_link',$week_number_link);
             $theme->assign('days_link',$days_link);
             if($is_manager || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
                 for($i = 0; $i<5;$i++){
@@ -666,12 +668,22 @@ public function settings(){
                 2
             );
             load_js('modules/planer/theme/design.js');
-            $date = $_REQUEST['date'];
-            $theme->assign("css", Base_ThemeCommon::get_template_dir());
-            $theme->assign('day',$date);
             $transported = new RBO_RecordsetAccessor("custom_agrohandel_transporty");            //custom_agrohandel_transporty
             $bought = new RBO_RecordsetAccessor("custom_agrohandel_purchase_plans");
-            $transports = $transported->get_records(array('date' => $date),array(),array());  
+            $theme->assign("css", Base_ThemeCommon::get_template_dir());
+            $date = new PickDate();
+            if($_REQUEST['mode'] == 'day'){
+                $data = $_REQUEST['date'];
+                $theme->assign('day',"Dzień: ".$data);
+                $transports = $transported->get_records(array('date' => $data),array(),array());  
+            }
+            else if ($_REQUEST['mode'] == 'week'){
+                $week = $_REQUEST['date'];
+                $start_date = $date->monday_of_week($week); ;
+                $end_date = $date->add_days($date->monday_of_week($week),4);
+                $theme->assign('day',"Tydzień: ".$week. " (".$start_date." - ".$end_date." )");
+                $transports = $transported->get_records(array('>=date' => $start_date, '<=date' => $end_date),array(),array());
+            }
             foreach($transports as $transport){
                 $transport['link'] = planerCommon::getVechicleInfo($transport);
                 $zakupy = $transport['zakupy'];
@@ -687,6 +699,9 @@ public function settings(){
                 }
                 if($transport['kmprzej'] == "" or $transport['kmprzej'] == null){
                     $transport['kmprzej'] = 0;
+                }
+                if($transport['iloscpadle'] == "" or $transport['iloscpadle'] == null){
+                    $transport['iloscpadle'] = 0;
                 }
 
             }

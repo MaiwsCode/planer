@@ -60,7 +60,7 @@
 <tr class="changing">
     <td class="inter_future" colspan="2"><span style='font-size:18px;'><b>Razem:</b></span></td>
     <td class="inter_future"><span style='font-size:18px;'><b>{$all_zam}</b></span></td>
-    <td class="inter_future transported"><span style='font-size:18px;'><b>{$all_transp}</b></span></td>
+    <td class="inter_future transported"><span style='font-size:18px;'><a {$week_link} ><b>{$all_transp}</b></a></span></td>
     <td class="inter_future bought"><span style='font-size:18px;'><b>{$all_bought}</b></span></td>
 </tr>
 

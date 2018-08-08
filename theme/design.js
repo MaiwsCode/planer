@@ -1,5 +1,5 @@
    
-   function slide(y){
+   /*function slide(y){
        var x = jq(y).parent();
        x = x[0];
        var child = x.children;
@@ -43,10 +43,10 @@
         var x = (val1 - val2);
         return x;
     }
-
+*/
     jq(document).ready(function(){
 
-        var km = $(".km");
+        var km = jq(".km");
         for(var i =0;i<km.length;i++){
 
             var res = km[i].text().split("/");
@@ -63,7 +63,7 @@
             }
             km[i].text(span);
         }
-        var amount = $(".amount");
+        var amount = jq(".amount");
         for(var i =0;i<amount.length;i++){
             var res = amount[i].text().split("/");
             var amount_licz = setStatus(res[0],res[1]);

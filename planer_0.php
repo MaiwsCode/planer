@@ -417,7 +417,7 @@ public function settings(){
             
             //dostarczone
             //potrzena tabela z Raport z rozladunku
-            $transported = new RBO_RecordsetAccessor("Transport"); //custom_agrohandel_transporty Transport
+            $transported = new RBO_RecordsetAccessor("custom_agrohandel_transporty"); //custom_agrohandel_transporty Transport
             $trans_pon = array();
             $trans_wt = array();
             $trans_sr = array();
@@ -425,8 +425,8 @@ public function settings(){
             $trans_pt = array();
             $transports_sum_of_day = array(1=>0,2=>0,3=>0,4=>0,5=> 0);
             $transports = [];
-            $company_field = "company_name"; ///company company_name
-            $amount = "amount"; //iloscrozl amount
+            $company_field = "company"; ///company company_name
+            $amount = "iloscrozl"; //iloscrozl amount
             
             $t_pon = $transported->get_records(array('date' => $date->monday_of_week($week_num)),array(),array($company_field => "ASC"));
             foreach($t_pon as $t){
@@ -688,7 +688,7 @@ public function settings(){
                 2
             );
             $companes = new RBO_RecordsetAccessor("company");
-            $transported = new RBO_RecordsetAccessor("Transport");            //custom_agrohandel_transporty Transport
+            $transported = new RBO_RecordsetAccessor("custom_agrohandel_transporty");            //custom_agrohandel_transporty Transport
             $bought = new RBO_RecordsetAccessor("custom_agrohandel_purchase_plans");
             $theme->assign("css", Base_ThemeCommon::get_template_dir());
             $transports = null;
@@ -711,7 +711,7 @@ public function settings(){
                 $company = $companes->get_record($company);
                 $company_name = $company->get_val('company_name',$nolink=FALSE);
                 $theme->assign('day',"Dzień: ".$data. " - ".$company_name);
-                $transports = $transported->get_records(array('date' => $data,'company_name'=> $_REQUEST['firma_id']),array(),array());  
+                $transports = $transported->get_records(array('date' => $data,'company'=> $_REQUEST['firma_id']),array(),array());  
             }
             $suma_rozl = 0;
             $suma_bought = 0;
@@ -756,7 +756,7 @@ public function settings(){
 
 
             $theme->assign("sumy",$sumy);
-            $transports = Rbo_Futures::set_related_fields($transports, 'company_name');
+            $transports = Rbo_Futures::set_related_fields($transports, 'company');
             $theme->assign("transports",$transports);
             $theme->display('day');
 

@@ -28,7 +28,8 @@
          <td class='inter_future'>{$transport.company}</td>
         <td class='inter_future'> {$transport.bought} </td>
         <td class='inter_future'> {$transport.iloscrozl}  </td>
-        {assign var="roznica" value=$transport.bought|strip_tags:false-$transport.iloscrozl}
+        {assign var="bought" value=$transport.bought|strip_tags}
+        {assign var="roznica" value=$bought-$transport.iloscrozl}
         {if $roznica == 0}
             <td class='inter_future'>  {$roznica} </td>
         {elseif $roznica > 0}

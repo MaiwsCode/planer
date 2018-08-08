@@ -115,8 +115,8 @@
                         {if ($record === reset($day))}      
                             {assign var="selector" value="`$val``$val`"}
                             <td class="inter_company" rowspan="{$day|@count}" style='{$extra} text-align:center;font-size:15px;'>
-                                <span>{$record.date}</span><br>
-                                <span>{$days_text[$val]}</span> <br>
+                                <a {$days_link[$val]} ><span>{$record.date}</span><br>
+                                <span>{$days_text[$val]}</span> </a><br>
                                 {$days_text[$selector]} </td>
 
                         {/if}

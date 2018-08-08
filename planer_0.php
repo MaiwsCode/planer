@@ -669,18 +669,27 @@ public function settings(){
             $date = $_REQUEST['date'];
             $theme->assign("css", Base_ThemeCommon::get_template_dir());
             $theme->assign('day',$date);
-            $transported = new RBO_RecordsetAccessor("Sales_plan");
+            $transported = new RBO_RecordsetAccessor("custom_agrohandel_transporty");            //custom_agrohandel_transporty
             $bought = new RBO_RecordsetAccessor("custom_agrohandel_purchase_plans");
             $transports = $transported->get_records(array('date' => $date),array(),array());  
-
-           /* foreach($transports as $transport){
+            foreach($transports as $transport){
+                $transport['link'] = planerCommon::getVechicleInfo($transport);
                 $zakupy = $transport['zakupy'];
                 foreach($zakupy as $zakup){
                     $record = $bought->get_record($zakup);
-                    $transport['kupione'] = $record['amount'];        
+                    $transport['bought'] = $record['amount'];        
+                }
+                if($transport['iloscrozl'] == "" or $transport['iloscrozl'] == null){
+                    $transport['iloscrozl'] = 0;
+                }
+                if($transport['kmplan'] == "" or $transport['kmplan'] == null){
+                    $transport['kmplan'] = 0;
+                }
+                if($transport['kmprzej'] == "" or $transport['kmprzej'] == null){
+                    $transport['kmprzej'] = 0;
                 }
 
-            }*/
+            }
             $transports = Rbo_Futures::set_related_fields($transports, 'company_name');
             $theme->assign("transports",$transports);
             $theme->display('day');

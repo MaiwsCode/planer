@@ -69,4 +69,24 @@ class planerCommon extends ModuleCommon {
 			$record->save();
 		}
 	}
+	public static function getVechicleInfo($record){
+		$ret = "";
+		$args = array("vachicle"=>$record['vehicle'], 'driver'=> $record['driver_1'],'date'=>$record['date']);
+		$ret .= Utils_RecordBrowserCommon::record_link_open_tag ( 'custom_agrohandel_transporty', $record->id );
+		$ret .= Utils_TooltipCommon::ajax_create ( "<img src='data/Base_Theme/templates/default/planer/truck.png' width=30 height=25 /> ", array (
+				'planerCommon',
+				'vechicle_get_tooltip'
+		), array ($args));
+		return $ret;
+	}
+	public static function vechicle_get_tooltip($record){
+		$contact = new RBO_RecordsetAccessor("contact");  
+		$car = new RBO_RecordsetAccessor("custom_agrohandel_vehicle");  
+		$_contact = $contact->get_record($record["driver"]);
+		$_car = $car->get_record($record["vachicle"]);
+		return Utils_TooltipCommon::format_info_tooltip(array(
+			'Kierowca:' => $_contact['first_name']." ".$_contact['last_name'],
+			'Pojazd:' => $_car['name'],
+			'Data' => $record['date']));
+	}
 }

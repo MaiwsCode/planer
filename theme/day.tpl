@@ -5,11 +5,10 @@
 
 <div style='width:80%;margin-right:10%;margin-left:10%;position:relative;'>
 
-<h1 style='text-align:left;margin:5px;'> {$day} </h1>
+<h1 style='text-align:left;margin:5px;'>  {$day} </h1>
 
 
-
- <table class="Agrohandel__sale__week info" style="margin-top:15px;margin-bottom:15px;display:none;"> 
+ <table class="Agrohandel__sale__week" style="margin-top:15px;margin-bottom:15px;"> 
     <thead>
         <td class='header_future'> Number </td>
          <td class='header_future'> Zakład </td>
@@ -21,21 +20,38 @@
         <td class='header_future'> Kilometry przejechane </td>
         <td class='header_future'> Róznica </td>
     </thead>
-     {foreach from=$transports item=transport}
-    <tr>
+      {foreach from=$transports item=transport}
+    <tr class='info'>
         <td class='inter_future'> {$transport.number} <br>
         {$transport.link}
         
          </td>
-         <td>{$transport.company}</td>
+         <td class='inter_future'>{$transport.company_name}</td>
         <td class='inter_future'> {$transport.bought} </td>
         <td class='inter_future'> {$transport.iloscrozl}  </td>
-        <td class='inter_future amount'> {$transport.bought}/{$transport.iloscrozl}  </td>
+        {assign var="roznica" value=$transport.bought-$transport.iloscrozl}
+        {if $roznica == 0}
+            <td class='inter_future'>  {$roznica} </td>
+        {elseif $roznica > 0}
+            <td class='inter_future'>  <span style='color:red'>-{$roznica}</span> </td>
+        {else}
+            <td class='inter_future'>  <span style='color:green'>+{$roznica|abs}</span> </td>
+        {/if}
         <td class='inter_future'> {$transport.iloscpadle}  </td>
         <td class='inter_future'> {$transport.kmplan} </td>
         <td class='inter_future'> {$transport.kmprzej} </td>
-        <td class='inter_future km' >  {$transport.kmplan}/{$transport.kmprzej}  </td>
+        {assign var="km" value=$transport.kmplan-$transport.kmprzej}
+        {if $km == 0}
+            <td class='inter_future' >  {$km} </td>
+        {elseif $km > 0 }
+            <td class='inter_future' > <span style='color:green;'>-{$km}</span> </td>
+        {else}
+            <td class='inter_future' >  <span style='color:red'>+{$km|abs}</span> </td>  
+        {/if}
+
     </tr>
   {/foreach}
     </table>
+
+
 </div>

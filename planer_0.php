@@ -698,6 +698,29 @@ public function settings(){
                 $data = $_REQUEST['date'];
                 $theme->assign('day',"Dzień: ".$data);
                 $transports = $transported->get_records(array('date' => $data),array(),array());  
+                foreach($transports as $transport){
+                    $transport['link'] = planerCommon::getVechicleInfo($transport);
+                    $zakupy = $transport['zakupy'];
+                    foreach($zakupy as $zakup){
+                        $record = $bought->get_record($zakup);
+                        $transport['bought'] = $record['amount'];        
+                    }
+                    if($transport['iloscrozl'] == "" or $transport['iloscrozl'] == null){
+                        $transport['iloscrozl'] = 0;
+                    }
+                    if($transport['kmplan'] == "" or $transport['kmplan'] == null){
+                        $transport['kmplan'] = 0;
+                    }
+                    if($transport['kmprzej'] == "" or $transport['kmprzej'] == null){
+                        $transport['kmprzej'] = 0;
+                    }
+                    if($transport['iloscpadle'] == "" or $transport['iloscpadle'] == null){
+                        $transport['iloscpadle'] = 0;
+                    }
+    
+                }
+                $transports = Rbo_Futures::set_related_fields($transports, 'company');
+                $theme->assign("transports",$transports);
             }
             else if ($_REQUEST['mode'] == 'week'){
                 $week = $_REQUEST['date'];
@@ -705,6 +728,29 @@ public function settings(){
                 $end_date = $date->add_days($date->monday_of_week($week),4);
                 $theme->assign('day',"Tydzień: ".$week. " (".$start_date." - ".$end_date." )");
                 $transports = $transported->get_records(array('>=date' => $start_date, '<=date' => $end_date),array(),array());
+                foreach($transports as $transport){
+                    $transport['link'] = planerCommon::getVechicleInfo($transport);
+                    $zakupy = $transport['zakupy'];
+                    foreach($zakupy as $zakup){
+                        $record = $bought->get_record($zakup);
+                        $transport['bought'] = $record['amount'];        
+                    }
+                    if($transport['iloscrozl'] == "" or $transport['iloscrozl'] == null){
+                        $transport['iloscrozl'] = 0;
+                    }
+                    if($transport['kmplan'] == "" or $transport['kmplan'] == null){
+                        $transport['kmplan'] = 0;
+                    }
+                    if($transport['kmprzej'] == "" or $transport['kmprzej'] == null){
+                        $transport['kmprzej'] = 0;
+                    }
+                    if($transport['iloscpadle'] == "" or $transport['iloscpadle'] == null){
+                        $transport['iloscpadle'] = 0;
+                    }
+    
+                }
+                $transports = Rbo_Futures::set_related_fields($transports, 'company');
+                $theme->assign("transports",$transports);
             }
             else if ($_REQUEST['mode'] == 'firma'){
                 $data = $_REQUEST['date'];
@@ -713,30 +759,31 @@ public function settings(){
                 $company_name = $company->get_val('company_name',$nolink=FALSE);
                 $theme->assign('day',"Dzień: ".$data. " - ".$company_name);
                 $transports = $transported->get_records(array('date' => $data,'company'=> $_REQUEST['firma_id']),array(),array());  
+                foreach($transports as $transport){
+                    $transport['link'] = planerCommon::getVechicleInfo($transport);
+                    $zakupy = $transport['zakupy'];
+                    foreach($zakupy as $zakup){
+                        $record = $bought->get_record($zakup);
+                        $transport['bought'] = $record['amount'];        
+                    }
+                    if($transport['iloscrozl'] == "" or $transport['iloscrozl'] == null){
+                        $transport['iloscrozl'] = 0;
+                    }
+                    if($transport['kmplan'] == "" or $transport['kmplan'] == null){
+                        $transport['kmplan'] = 0;
+                    }
+                    if($transport['kmprzej'] == "" or $transport['kmprzej'] == null){
+                        $transport['kmprzej'] = 0;
+                    }
+                    if($transport['iloscpadle'] == "" or $transport['iloscpadle'] == null){
+                        $transport['iloscpadle'] = 0;
+                    }
+    
+                }
+                $transports = Rbo_Futures::set_related_fields($transports, 'company');
+                $theme->assign("transports",$transports);
             }
-            foreach($transports as $transport){
-                $transport['link'] = planerCommon::getVechicleInfo($transport);
-                $zakupy = $transport['zakupy'];
-                foreach($zakupy as $zakup){
-                    $record = $bought->get_record($zakup);
-                    $transport['bought'] = $record['amount'];        
-                }
-                if($transport['iloscrozl'] == "" or $transport['iloscrozl'] == null){
-                    $transport['iloscrozl'] = 0;
-                }
-                if($transport['kmplan'] == "" or $transport['kmplan'] == null){
-                    $transport['kmplan'] = 0;
-                }
-                if($transport['kmprzej'] == "" or $transport['kmprzej'] == null){
-                    $transport['kmprzej'] = 0;
-                }
-                if($transport['iloscpadle'] == "" or $transport['iloscpadle'] == null){
-                    $transport['iloscpadle'] = 0;
-                }
 
-            }
-            $transports = Rbo_Futures::set_related_fields($transports, 'company');
-            $theme->assign("transports",$transports);
             $theme->display('day');
 
         }

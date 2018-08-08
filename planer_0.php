@@ -432,11 +432,15 @@ public function settings(){
             foreach($t_pon as $t){
                 $x = $t->get_val($company_field,$nolink = TRUE);
                 $trans_pon[$x] += $t[$amount];
-                $is_ubojnia = $companes->get_record($t['company']);
+                $is_ubojnia = $companes->get_record($t[$company_field]);
                 if($is_ubojnia['group']['baza_tr']){}else{
                     $all_transported_week +=  $t[$amount];
                     $transports_sum_of_day[1] += $t[$amount];
                 }
+            }
+            foreach($t_pon as $t){
+                $x = $t->get_val($company_field,$nolink = TRUE);
+                $trans_pon[$x] = "<a ".$this->create_href(array('mode' => 'firma' ,'date' => $t['date'], 'firma_id'=> $t[$company_field])).">".$trans_pon[$x]."</a>";
             }
             $t_wt = $transported->get_records(array('date' =>$date->add_days($date->monday_of_week($week_num), 1)),array(),array($company_field => "ASC"));
             foreach($t_wt as $t){
@@ -448,6 +452,10 @@ public function settings(){
                     $transports_sum_of_day[2] += $t[$amount];
                 }
             }
+            foreach($t_wt as $t){
+                $x = $t->get_val($company_field,$nolink = TRUE);
+                $trans_wt[$x] = "<a ".$this->create_href(array('mode' => 'firma' ,'date' => $t['date'], 'firma_id'=> $t[$company_field])).">".$trans_pon[$x]."</a>";
+            }
             $t_sr = $transported->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 2)),array(),array($company_field => "ASC"));
             foreach($t_sr as $t){
                 $x = $t->get_val($company_field,$nolink = TRUE);
@@ -457,6 +465,10 @@ public function settings(){
                     $all_transported_week +=  $t[$amount];
                     $transports_sum_of_day[3] += $t[$amount];
                 }
+            }
+            foreach($t_sr as $t){
+                $x = $t->get_val($company_field,$nolink = TRUE);
+                $trans_sr[$x] = "<a ".$this->create_href(array('mode' => 'firma' ,'date' => $t['date'], 'firma_id'=> $t[$company_field])).">".$trans_pon[$x]."</a>";
             }
             $t_czw = $transported->get_records(array('date' =>$date->add_days($date->monday_of_week($week_num), 3)),array(),array($company_field => "ASC"));
             foreach($t_czw as $t){
@@ -468,6 +480,10 @@ public function settings(){
                     $transports_sum_of_day[4] += $t[$amount];
                 }
             }
+            foreach($t_czw as $t){
+                $x = $t->get_val($company_field,$nolink = TRUE);
+                $trans_czw[$x] = "<a ".$this->create_href(array('mode' => 'firma' ,'date' => $t['date'], 'firma_id'=> $t[$company_field])).">".$trans_pon[$x]."</a>";
+            }
             $t_pt = $transported->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 4)),array(),array($company_field => "ASC"));
             foreach($t_pt as $t){
                 $x = $t->get_val($company_field,$nolink = TRUE);
@@ -477,6 +493,10 @@ public function settings(){
                     $all_transported_week +=  $t[$amount];
                     $transports_sum_of_day[5] += $t[$amount];
                 }
+            }
+            foreach($t_pt as $t){
+                $x = $t->get_val($company_field,$nolink = TRUE);
+                $trans_pt[$x] = "<a ".$this->create_href(array('mode' => 'firma' ,'date' => $t['date'], 'firma_id'=> $t[$company_field])).">".$trans_pon[$x]."</a>";
             }
             $week_trans = array();
             $week_transported = $transported->get_records(array('>=date' => $date->add_days($date->monday_of_week($week_num),0),
@@ -563,14 +583,14 @@ public function settings(){
                 foreach($mach_tr_with_week as $trans){
                     $exist = false;
                     foreach($mach_week_with_tr as $plan){
-                        if($trans['company'] == $plan['company_name']){
+                        if($trans[$company_field] == $plan['company_name']){
                             $exist = true;
                             break;
                         }
                     }
                     if($exist == false){
                         $ubojnia = true;
-                        $_transport = $companes->get_records(array('id' => $trans['company'], 'group' => 'baza_tr'),array(),array());
+                        $_transport = $companes->get_records(array('id' => $trans[$company_field], 'group' => 'baza_tr'),array(),array());
                         if($_transport != null){
                             $ubojnia = false;
                         }
@@ -668,9 +688,11 @@ public function settings(){
                 2
             );
             load_js('modules/planer/theme/design.js');
-            $transported = new RBO_RecordsetAccessor("custom_agrohandel_transporty");            //custom_agrohandel_transporty
+            $companes = new RBO_RecordsetAccessor("company");
+            $transported = new RBO_RecordsetAccessor("custom_agrohandel_transporty");            //custom_agrohandel_transporty Transport
             $bought = new RBO_RecordsetAccessor("custom_agrohandel_purchase_plans");
             $theme->assign("css", Base_ThemeCommon::get_template_dir());
+            $transports = null;
             $date = new PickDate();
             if($_REQUEST['mode'] == 'day'){
                 $data = $_REQUEST['date'];
@@ -683,6 +705,14 @@ public function settings(){
                 $end_date = $date->add_days($date->monday_of_week($week),4);
                 $theme->assign('day',"Tydzień: ".$week. " (".$start_date." - ".$end_date." )");
                 $transports = $transported->get_records(array('>=date' => $start_date, '<=date' => $end_date),array(),array());
+            }
+            else if ($_REQUEST['mode'] == 'firma'){
+                $data = $_REQUEST['date'];
+                $company = $_REQUEST['firma_id'];
+                $company = $companes->get_record($company);
+                $company_name = $company->get_val('company_name',$nolink=FALSE);
+                $theme->assign('day',"Dzień: ".$data. " - ".$company_name);
+                $transports = $transported->get_records(array('date' => $data,'company'=> $_REQUEST['firma_id']),array(),array());  
             }
             foreach($transports as $transport){
                 $transport['link'] = planerCommon::getVechicleInfo($transport);

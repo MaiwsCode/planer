@@ -5,7 +5,7 @@
 
 <div style='width:80%;margin-right:10%;margin-left:10%;position:relative;'>
 
-<h1 style='text-align:left;margin:5px;'> Dzień: {$day} </h1>
+<h1 style='text-align:left;margin:5px;'> {$day} </h1>
 
 
 

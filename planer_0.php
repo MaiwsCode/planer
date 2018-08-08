@@ -690,7 +690,7 @@ public function settings(){
                 }
 
             }
-            $transports = Rbo_Futures::set_related_fields($transports, 'company_name');
+            $transports = Rbo_Futures::set_related_fields($transports, 'company');
             $theme->assign("transports",$transports);
             $theme->display('day');
 

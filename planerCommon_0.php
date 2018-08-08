@@ -73,7 +73,7 @@ class planerCommon extends ModuleCommon {
 		$ret = "";
 		$args = array("vachicle"=>$record['vehicle'], 'driver'=> $record['driver_1'],'date'=>$record['date']);
 		$ret .= Utils_RecordBrowserCommon::record_link_open_tag ( 'custom_agrohandel_transporty', $record->id );
-		$ret .= Utils_TooltipCommon::ajax_create ( "<img src='data/Base_Theme/templates/default/planer/truck.png' width=30 height=25 /> ", array (
+		$ret .= Utils_TooltipCommon::ajax_create ( $record['number'], array (
 				'planerCommon',
 				'vechicle_get_tooltip'
 		), array ($args));

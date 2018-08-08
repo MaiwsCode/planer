@@ -687,7 +687,6 @@ public function settings(){
                 null,
                 2
             );
-            load_js('modules/planer/theme/design.js');
             $companes = new RBO_RecordsetAccessor("company");
             $transported = new RBO_RecordsetAccessor("custom_agrohandel_transporty");            //custom_agrohandel_transporty Transport
             $bought = new RBO_RecordsetAccessor("custom_agrohandel_purchase_plans");
@@ -719,8 +718,17 @@ public function settings(){
                 $zakupy = $transport['zakupy'];
                 foreach($zakupy as $zakup){
                     $record = $bought->get_record($zakup);
-                    $transport['bought'] = $record['amount'];        
+                    $transport['bought'] += $record['amount'];        
                 }
+                $args = array();
+                foreach($zakupy as $zakup){
+                    $record = $bought->get_record($zakup);
+                    $company = $companes->get_record($record['company']);
+                    $company_name = $company->get_val('company_name',$nolink=True);
+                    $args[$company_name] = $record['amount']."/".$record['sztukzal'];
+                }                
+                $infobox = Utils_TooltipCommon::format_info_tooltip($args);
+                $transport['bought'] = Utils_TooltipCommon::create($transport['bought'],$infobox,$help=true, $max_width=300);
                 if($transport['iloscrozl'] == "" or $transport['iloscrozl'] == null){
                     $transport['iloscrozl'] = 0;
                 }

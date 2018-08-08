@@ -1,6 +1,5 @@
 <head>
     <link rel="stylesheet" type='text/css' href='{$css}/planer/default.css' />
-    <script  scr='{$css}/planer/design.js' ></script>
 </head>
 
 <div style='width:80%;margin-right:10%;margin-left:10%;position:relative;'>
@@ -26,7 +25,7 @@
         {$transport.link}
         
          </td>
-         <td class='inter_future'>{$transport.company_name}</td>
+         <td class='inter_future'>{$transport.company}</td>
         <td class='inter_future'> {$transport.bought} </td>
         <td class='inter_future'> {$transport.iloscrozl}  </td>
         {assign var="roznica" value=$transport.bought-$transport.iloscrozl}
@@ -50,7 +49,9 @@
         {/if}
 
     </tr>
+    <tr class='separator'></tr>
   {/foreach}
+  
     </table>
 
 

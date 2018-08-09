@@ -805,7 +805,7 @@ public function settings(){
                 $id = $driver->id;
                 $raport[$id]['name'] = $name;
                 $transports = $rbo_transports->get_records(array('driver_1' => $id,'>=date' => $start ,
-                '<=date' => $stop, 'iloscrozl' > 0 ,'kmplan' > 0, 'kmprzej' > 0  ),array(),array());
+                '<=date' => $stop, '>iloscrozl' => 0 ,'>kmplan' => 0, '>kmprzej' => 0  ),array(),array());
                 foreach($transports as $transport){
                     $raport[$id]['szt'] += $transport['iloscrozl']; 
                     $raport_sumy[1] += $transport['iloscrozl'];

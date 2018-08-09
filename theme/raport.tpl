@@ -21,5 +21,10 @@
         <td>  {$raport.kmprzej}  </td>
     </tr>
 {/foreach}
-
+    <tr>
+        <td colspan='2'> Łącznie </td>
+        <td> <b>{$raport_sumy[1]}</b>   </td>
+        <td> <b> {$raport_sumy[2]} </b> </td>
+        <td> <b> {$raport_sumy[3]}</b>  </td>
+    </tr>
 </table>

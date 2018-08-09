@@ -796,25 +796,27 @@ public function settings(){
             $start = date('Y-m-01', strtotime($_date));
             $stop = date('Y-m-t', strtotime($_date));
             $name_of_month = date('F', strtotime($_date));
+            $name_of_month = __($name_of_month);
+            $name_of_month .= "(".$start." - ". $stop.")";
             $raport = array();
+            $raport_sumy = array(1=>0,2=>0,3=>0);
             foreach($drivers as $driver){
                 $name = $driver['last_name']." ".$driver['first_name'];
                 $id = $driver->id;
                 $raport[$id]['name'] = $name;
-                $transports = $rbo_transports->get_records(array('driver_1' => $id,'>=date' => $start ,'<=date' => $stop),array(),array());
+                $transports = $rbo_transports->get_records(array('driver_1' => $id,'>=date' => $start ,
+                '<=date' => $stop, 'iloscrozl' > 0 ,'kmplan' > 0, 'kmprzej' > 0  ),array(),array());
                 foreach($transports as $transport){
                     $raport[$id]['szt'] += $transport['iloscrozl']; 
+                    $raport_sumy[1] += $transport['iloscrozl'];
                     $raport[$id]['kmplan'] += $transport['kmplan']; 
+                    $raport_sumy[2] += $transport['kmplan'];
                     $raport[$id]['kmprzej'] += $transport['kmprzej']; 
+                    $raport_sumy[3] +=  $transport['kmprzej'];
                 }
 
             }
-            foreach($raport as $rap){
-                if(strlen($rap['szt']) == 0 && strlen($rap['kmplan']) == 0 && strlen($rap['kmprzej']) == 0){
-                    unset($raport[$rap]);
-                }
-
-            }
+            $theme->assign("raport_sumy",$raport_sumy);
             $theme->assign("name_of_month",$name_of_month);
             $theme->assign("raports",$raport);
             $theme->display('raport');

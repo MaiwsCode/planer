@@ -803,6 +803,7 @@ public function settings(){
             foreach($drviers as $driver){
                 $name = $driver['last_name']." ".$driver['first_name'];
                 $id = $driver->id;
+                print($id."<BR>");
                 $raport[$id]['name'] = $name;
                 $transports = $rbo_transports->get_records(array('driver_1' => $id,'>=date' => $start ,'<=date' => $stop),array(),array());
                 foreach($transports as $transport){

@@ -810,7 +810,7 @@ public function settings(){
 
             }
             foreach($raport as $rap){
-                if(str_len($rap['szt']) == 0 && str_len($rap['kmplan']) == 0 && str_len($rap['kmprzej']) == 0){
+                if(strlen($rap['szt']) == 0 && strlen($rap['kmplan']) == 0 && strlen($rap['kmprzej']) == 0){
                     unset($raport[$rap]);
                 }
 

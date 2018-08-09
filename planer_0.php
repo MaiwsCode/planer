@@ -801,11 +801,13 @@ public function settings(){
             $raport = array();
             $raport_sumy = array(1=>0,2=>0,3=>0);
             foreach($drivers as $driver){
-                $name = $driver['last_name']." ".$driver['first_name'];
-                $id = $driver->id;
-                $raport[$id]['name'] = $name;
                 $transports = $rbo_transports->get_records(array('driver_1' => $id,'>=date' => $start ,
                 '<=date' => $stop, '>iloscrozl' => 0  ),array(),array());
+                if($transports != null || count($transports) > 0){
+                    $name = $driver['last_name']." ".$driver['first_name'];
+                    $id = $driver->id;
+                    $raport[$id]['name'] = $name;
+                }
                 foreach($transports as $transport){
                     $raport[$id]['szt'] += $transport['iloscrozl']; 
                     $raport_sumy[1] += $transport['iloscrozl'];

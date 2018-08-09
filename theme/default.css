@@ -596,3 +596,7 @@ ul > li ul li:hover > a {
 	float: left;
 	width:33%;
 }
+
+.block_separator{
+	margin-left: 10px;
+}

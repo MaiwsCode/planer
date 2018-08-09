@@ -115,8 +115,8 @@
                         {if ($record === reset($day))}      
                             {assign var="selector" value="`$val``$val`"}
                             <td class="inter_company" rowspan="{$day|@count}" style='{$extra} text-align:center;font-size:15px;'>
-                                <a {$days_link[$val]} ><span>{$record.date}</span><br>
-                                <span>{$days_text[$val]}</span> </a><br>
+                               <span>{$record.date}</span><br>
+                                <span>{$days_text[$val]}</span><br>
                                 {$days_text[$selector]} </td>
 
                         {/if}
@@ -191,7 +191,7 @@
                       <tr>
                             <td colspan='2' class="inter_future"> <b>Razem: </b></td>
                             <td class="inter_future"> <b>{$days_zam[$val]}</b> </td>
-                            <td class="inter_future transported"> <b>{$transports_sum_of_day[$val]} </b> </td>
+                            <td class="inter_future transported">  <a style='color:#0a07bd;' {$days_link[$val]} ><b>{$transports_sum_of_day[$val]} </b> </a></td>
                             <td class="inter_future" colspan='3'>  </td>
                         </tr>
                         <tr class='separator'></tr>

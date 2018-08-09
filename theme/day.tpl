@@ -2,15 +2,15 @@
     <link rel="stylesheet" type='text/css' href='{$css}/planer/default.css' />
 </head>
 
-<div style='width:80%;margin-right:10%;margin-left:10%;position:relative;'>
+<div style='width:98%;margin-right:1%;margin-left:1%;position:relative;'>
 
 <h1 style='text-align:left;margin:5px;'>  {$day} </h1>
 
 
  <table class="Agrohandel__sale__week" style="margin-top:15px;margin-bottom:15px;"> 
     <thead>
-        <td class='header_future'> Number </td>
-         <td class='header_future'> Zakład </td>
+        <td class='header_future'> Numer transportu </td>
+         <td class='header_future' colspan='2'> Zakład docelowy </td>
         <td class='header_future'> Ilość sztuk zaplanowanych </td>
         <td class='header_future'> Ilość sztuk rozładowanych  </td>
         <td class='header_future'> Róznica  </td>
@@ -25,7 +25,7 @@
         {$transport.link}
         
          </td>
-         <td class='inter_future'>{$transport.company}</td>
+         <td class='inter_future' colspan='2'> {$transport.company}</td>
         <td class='inter_future'> {$transport.bought} </td>
         <td class='inter_future'> {$transport.iloscrozl}  </td>
         {assign var="bought" value=$transport.bought|strip_tags}
@@ -39,7 +39,7 @@
         {/if}
         <td class='inter_future'> {$transport.iloscpadle}  </td>
         <td class='inter_future'> {$transport.kmplan} </td>
-        <td class='inter_future'> {$transport.kmprzej} </td>
+        <td class='inter_future'> {$trnsport.kmprzej} </td>
         {assign var="km" value=$transport.kmplan-$transport.kmprzej}
         {if $km == 0}
             <td class='inter_future' >  {$km} </td>
@@ -53,7 +53,7 @@
     <tr class='separator'></tr>
   {/foreach}
     <tr class='info' style='font-weight:bold;'>
-        <td class='inter_future' colspan='2'>Suma: </td>
+        <td class='inter_future' colspan='3'>Suma: </td>
         <td class='inter_future'> {$sumy[1]} </td>
         <td class='inter_future'> {$sumy[2]} </td>
         <td class='inter_future'>  </td>

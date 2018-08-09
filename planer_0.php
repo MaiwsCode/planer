@@ -426,7 +426,7 @@ public function settings(){
             $transports_sum_of_day = array(1=>0,2=>0,3=>0,4=>0,5=> 0);
             $transports = [];
             $company_field = "company"; ///company company_name
-            $amount = "iloscrozl"; //iloscrozl amount
+            $amount = "amount"; //iloscrozl amount
             
             $t_pon = $transported->get_records(array('date' => $date->monday_of_week($week_num)),array(),array($company_field => "ASC"));
             foreach($t_pon as $t){
@@ -664,6 +664,7 @@ public function settings(){
             $theme->display();
         }
         else{
+            // dzienne zestawienie
             $day = $_REQUEST['date'];
             $day = strtotime($day);
             Base_ActionBarCommon::add(
@@ -673,32 +674,46 @@ public function settings(){
                 null,
                 0
             );
-            Base_ActionBarCommon::add(
-                Base_ThemeCommon::get_template_file($this->get_type(), 'prev.png'),
-                "Poprzedni dzień",
-                $this->create_href ( array ('date' => date('Y-m-d',($day-60*60*24)),'mode'=>'day')),
-                null,
-                1
-            );
-            Base_ActionBarCommon::add(
-                Base_ThemeCommon::get_template_file($this->get_type(), 'next.png'),
-                "Następny dzień",
-                $this->create_href ( array ('date' => date('Y-m-d',($day+60*60*24)),'mode'=>'day')),
-                null,
-                2
-            );
             $companes = new RBO_RecordsetAccessor("company");
             $transported = new RBO_RecordsetAccessor("custom_agrohandel_transporty");            //custom_agrohandel_transporty Transport
-            $bought = new RBO_RecordsetAccessor("custom_agrohandel_purchase_plans");
+            $bought = new RBO_RecordsetAccessor("custom_agrohandel_purchase_plans");//zmien przed produkcja
             $theme->assign("css", Base_ThemeCommon::get_template_dir());
-            $transports = null;
+            $transports = null; 
             $date = new PickDate();
             if($_REQUEST['mode'] == 'day'){
+                Base_ActionBarCommon::add(
+                    Base_ThemeCommon::get_template_file($this->get_type(), 'prev.png'),
+                    "Poprzedni dzień",
+                    $this->create_href ( array ('date' => date('Y-m-d',($day-60*60*24)),'mode'=>'day')),
+                    null,
+                    1
+                );
+                Base_ActionBarCommon::add(
+                    Base_ThemeCommon::get_template_file($this->get_type(), 'next.png'),
+                    "Następny dzień",
+                    $this->create_href ( array ('date' => date('Y-m-d',($day+60*60*24)),'mode'=>'day')),
+                    null,
+                    2
+                );
                 $data = $_REQUEST['date'];
                 $theme->assign('day',"Dzień: ".$data);
                 $transports = $transported->get_records(array('date' => $data),array(),array());  
             }
             else if ($_REQUEST['mode'] == 'week'){
+                Base_ActionBarCommon::add(
+                    Base_ThemeCommon::get_template_file($this->get_type(), 'prev.png'),
+                    "Poprzedni tydzień",
+                    $this->create_href ( array ('date' => ($_REQUEST['date'] - 1),'mode'=>'week')),
+                    null,
+                    1
+                );
+                Base_ActionBarCommon::add(
+                    Base_ThemeCommon::get_template_file($this->get_type(), 'next.png'),
+                    "Następny tydzień",
+                    $this->create_href ( array ('date' => ($_REQUEST['date'] + 1),'mode'=>'week')),
+                    null,
+                    2
+                );
                 $week = $_REQUEST['date'];
                 $start_date = $date->monday_of_week($week); ;
                 $end_date = $date->add_days($date->monday_of_week($week),4);
@@ -718,6 +733,8 @@ public function settings(){
             $suma_dead = 0;
             $suma_przej = 0;
             $suma_plan = 0;
+
+            //podliczenie 
             foreach($transports as $transport){
                 $suma_rozl += $transport['iloscrozl'];
                 $suma_dead += $transport['iloscpadle'];
@@ -726,14 +743,16 @@ public function settings(){
                 $transport['link'] = planerCommon::getVechicleInfo($transport);
                 $zakupy = $transport['zakupy'];
                 foreach($zakupy as $zakup){
+                    // suma z dnia poprzez zapupy przypiete pod tranport
                     $record = $bought->get_record($zakup);
                     $suma_bought += $record['amount'];
                     $transport['bought'] += $record['amount'];        
                 }
                 $args = array();
+                // wyswietlenie info w chmurze 
                 foreach($zakupy as $zakup){
                     $record = $bought->get_record($zakup);
-                    $company = $companes->get_record($record['company']);
+                    $company = $companes->get_record($record['company']);  //zmien przed produkcja
                     $company_name = $company->get_val('company_name',$nolink=True);
                     $args[$company_name] += $record['amount']."/".$record['sztukzal']."<br>";
                 }                
@@ -756,7 +775,7 @@ public function settings(){
 
 
             $theme->assign("sumy",$sumy);
-            $transports = Rbo_Futures::set_related_fields($transports, 'company');
+            $transports = Rbo_Futures::set_related_fields($transports, 'company'); //zmien przed produkcja
             $theme->assign("transports",$transports);
             $theme->display('day');
 

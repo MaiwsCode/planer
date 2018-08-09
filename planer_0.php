@@ -461,7 +461,7 @@ public function settings(){
             }
             foreach($t_wt as $t){
                 $x = $t->get_val($company_field,$nolink = TRUE);
-                $trans_wt[$x] = "<a style='color:#0a07bd;' ".$this->create_href(array('mode' => 'firma' ,'date' => $t['date'], 'firma_id'=> $t[$company_field])).">".$trans_pon[$x]."</a>";
+                $trans_wt[$x] = "<a style='color:#0a07bd;' ".$this->create_href(array('mode' => 'firma' ,'date' => $t['date'], 'firma_id'=> $t[$company_field])).">".$trans_wt[$x]."</a>";
             }
             $t_sr = $transported->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 2)),array(),array($company_field => "ASC"));
             foreach($t_sr as $t){
@@ -475,7 +475,7 @@ public function settings(){
             }
             foreach($t_sr as $t){
                 $x = $t->get_val($company_field,$nolink = TRUE);
-                $trans_sr[$x] = "<a style='color:#0a07bd;' ".$this->create_href(array('mode' => 'firma' ,'date' => $t['date'], 'firma_id'=> $t[$company_field])).">".$trans_pon[$x]."</a>";
+                $trans_sr[$x] = "<a style='color:#0a07bd;' ".$this->create_href(array('mode' => 'firma' ,'date' => $t['date'], 'firma_id'=> $t[$company_field])).">".$trans_sr[$x]."</a>";
             }
             $t_czw = $transported->get_records(array('date' =>$date->add_days($date->monday_of_week($week_num), 3)),array(),array($company_field => "ASC"));
             foreach($t_czw as $t){
@@ -489,7 +489,7 @@ public function settings(){
             }
             foreach($t_czw as $t){
                 $x = $t->get_val($company_field,$nolink = TRUE);
-                $trans_czw[$x] = "<a style='color:#0a07bd;' ".$this->create_href(array('mode' => 'firma' ,'date' => $t['date'], 'firma_id'=> $t[$company_field])).">".$trans_pon[$x]."</a>";
+                $trans_czw[$x] = "<a style='color:#0a07bd;' ".$this->create_href(array('mode' => 'firma' ,'date' => $t['date'], 'firma_id'=> $t[$company_field])).">".$trans_czw[$x]."</a>";
             }
             $t_pt = $transported->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 4)),array(),array($company_field => "ASC"));
             foreach($t_pt as $t){
@@ -503,7 +503,7 @@ public function settings(){
             }
             foreach($t_pt as $t){
                 $x = $t->get_val($company_field,$nolink = TRUE);
-                $trans_pt[$x] = "<a style='color:#0a07bd;' ".$this->create_href(array('mode' => 'firma' ,'date' => $t['date'], 'firma_id'=> $t[$company_field])).">".$trans_pon[$x]."</a>";
+                $trans_pt[$x] = "<a style='color:#0a07bd;' ".$this->create_href(array('mode' => 'firma' ,'date' => $t['date'], 'firma_id'=> $t[$company_field])).">".$trans_pt[$x]."</a>";
             }
             $week_trans = array();
             $week_transported = $transported->get_records(array('>=date' => $date->add_days($date->monday_of_week($week_num),0),

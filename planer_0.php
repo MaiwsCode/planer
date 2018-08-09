@@ -800,7 +800,7 @@ public function settings(){
             print($stop."<BR>");
             print(count($drivers)."<BR>");
             $raport = array();
-            foreach($drviers as $driver){
+            foreach($drivers as $driver){
                 $name = $driver['last_name']." ".$driver['first_name'];
                 $id = $driver->id;
                 print($id."<BR>");

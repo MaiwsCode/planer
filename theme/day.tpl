@@ -39,7 +39,7 @@
         {/if}
         <td class='inter_future'> {$transport.iloscpadle}  </td>
         <td class='inter_future'> {$transport.kmplan} </td>
-        <td class='inter_future'> {$trnsport.kmprzej} </td>
+        <td class='inter_future'> {$transport.kmprzej} </td>
         {assign var="km" value=$transport.kmplan-$transport.kmprzej}
         {if $km == 0}
             <td class='inter_future' >  {$km} </td>

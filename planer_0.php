@@ -796,14 +796,10 @@ public function settings(){
             $start = date('Y-m-01', strtotime($_date));
             $stop = date('Y-m-t', strtotime($_date));
             $name_of_month = date('F', strtotime($_date));
-            print($start."<BR>");
-            print($stop."<BR>");
-            print(count($drivers)."<BR>");
             $raport = array();
             foreach($drivers as $driver){
                 $name = $driver['last_name']." ".$driver['first_name'];
                 $id = $driver->id;
-                print($id."<BR>");
                 $raport[$id]['name'] = $name;
                 $transports = $rbo_transports->get_records(array('driver_1' => $id,'>=date' => $start ,'<=date' => $stop),array(),array());
                 foreach($transports as $transport){
@@ -813,7 +809,12 @@ public function settings(){
                 }
 
             }
-            print_r($raport);
+            foreach($raport as $rap){
+                if(str_len($rap['szt']) == 0 && str_len($rap['kmplan']) == 0 && str_len($rap['kmprzej']) == 0){
+                    unset($raport[$rap]);
+                }
+
+            }
             $theme->assign("name_of_month",$name_of_month);
             $theme->assign("raports",$raport);
             $theme->display('raport');

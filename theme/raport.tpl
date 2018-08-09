@@ -2,7 +2,7 @@
 <div style='width:80%;margin-right:10%;margin-left:10%;position:relative;'>
 
 <h1 style='text-align:left;margin:5px;'>  Raport z EPESI za {$name_of_month} </h1>
-<table>
+<table border='1' style='width:60%;'>
     <thead>
         <td  colspan='2'> Kierowca </td>
         <td  colspan='3'> Suma </td>

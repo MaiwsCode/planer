@@ -101,6 +101,13 @@ public function settings(){
                 }
                 return $new_list;
             }
+            Base_ActionBarCommon::add(
+                'view',
+                'Raport kierowców', 
+                $this->create_href ( array ('mode' => 'drivers', 'date' => $week_num)),
+                null,
+                10
+            );
             //nowy record
             $x = 0;
             Base_ActionBarCommon::add(
@@ -663,7 +670,7 @@ public function settings(){
             $theme->assign ( 'action_buttons', $buttons );
             $theme->display();
         }
-        else{
+        else if ($_REQUEST['mode'] == 'day' || $_REQUEST['mode'] == 'week' || $_REQUEST['mode'] == 'firma'){
             // dzienne zestawienie
             $day = $_REQUEST['date'];
             $day = strtotime($day);
@@ -779,6 +786,32 @@ public function settings(){
             $theme->assign("transports",$transports);
             $theme->display('day');
 
+        }
+        else if($_REQUEST['mode'] == 'drivers'){
+            $rbo_drivers = new RBO_RecordsetAccessor('contact');
+            $rbo_transports = new RBO_RecordsetAccessor("custom_agrohandel_transporty"); 
+            $drivers = $rbo_drivers->get_records(array('group' => array('u_driver')),array(),array());
+            $date = new PickDate();
+            $_date = $date->monday_of_week($_REQUEST['date']);
+            $start = date('Y-m-01', strtotime($_date));
+            $stop = date('Y-m-t', strtotime($_date));
+            $name_of_month = date('F', strtotime($_date));
+            $raport = array();
+            foreach($drviers as $driver){
+                $name = $driver['last_name']." ".$driver['first_name'];
+                $id = $driver->id;
+                $raport[$id]['name'] = $name;
+                $transports = $rbo_transports->get_records(array('driver_1' => $id,'>=date' => $start ,'<=date' => $stop),array(),array());
+                foreach($transports as $transport){
+                    $raport[$id]['szt'] += $transport['iloscrozl']; 
+                    $raport[$id]['kmplan'] += $transport['kmplan']; 
+                    $raport[$id]['kmprzej'] += $transport['kmprzej']; 
+                }
+
+            }
+            $theme->assign("name_of_month",$name_of_month);
+            $theme->assign("raports",$raport);
+            $theme->display('raport');
         }
     }
     public function sum_records($records,$columnName){

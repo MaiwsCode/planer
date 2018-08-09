@@ -796,6 +796,9 @@ public function settings(){
             $start = date('Y-m-01', strtotime($_date));
             $stop = date('Y-m-t', strtotime($_date));
             $name_of_month = date('F', strtotime($_date));
+            print($start."<BR>");
+            print($stop."<BR>");
+            print(count($drivers)."<BR>");
             $raport = array();
             foreach($drviers as $driver){
                 $name = $driver['last_name']." ".$driver['first_name'];
@@ -809,6 +812,7 @@ public function settings(){
                 }
 
             }
+            print_r($raport);
             $theme->assign("name_of_month",$name_of_month);
             $theme->assign("raports",$raport);
             $theme->display('raport');

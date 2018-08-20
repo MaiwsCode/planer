@@ -13,7 +13,7 @@ public function settings(){
     public function body(){
 
     //see record
-        //Base_ThemeCommon::install_default_theme($this->get_type());
+        Base_ThemeCommon::install_default_theme($this->get_type());
         Base_ThemeCommon::install_default_theme('planer');
         $theme = $this->init_module('Base/Theme');
         // --------------------------DEFAULT .TPL -------------------------
@@ -795,9 +795,19 @@ public function settings(){
             $_date = $date->monday_of_week($_REQUEST['date']);
             $start = date('Y-m-01', strtotime($_date));
             $stop = date('Y-m-t', strtotime($_date));
+            $last = date("t",strtotime($_date));
+            $first = date("N",strtotime($start)); 
+            $days= array();
+            for($i=1;$i<$first;$i++){
+                $days[] = array('num' => " ");
+            }
+            for($i=1;$i<=$last;$i++){
+                $x = $i + $first;
+                $days[$x] = array('num' =>  $i, 'ilosc' => 0);
+            }
             $name_of_month = date('F', strtotime($_date));
             $name_of_month = __($name_of_month);
-            $name_of_month .= "(".$start." - ". $stop.")";
+            $name_of_month .= " (".$start." - ". $stop.")";
             $raport = array();
             $raport_sumy = array(1=>0,2=>0,3=>0);
             foreach($drivers as $driver){
@@ -809,6 +819,10 @@ public function settings(){
                     $raport[$id]['name'] = $name;
                 }
                 foreach($transports as $transport){
+                    $index = date("j",strtotime($transport['date']));
+                    $index += $first;
+                    $days[$index]['ilosc'] += $transport['iloscrozl']; 
+                    $days[$index]['km'] += $transport['kmprzej']; 
                     $raport[$id]['szt'] += $transport['iloscrozl']; 
                     $raport_sumy[1] += $transport['iloscrozl'];
                     $raport[$id]['kmplan'] += $transport['kmplan']; 
@@ -819,6 +833,7 @@ public function settings(){
 
             }
             $theme->assign("raport_sumy",$raport_sumy);
+            $theme->assign("days",$days);
             $theme->assign("name_of_month",$name_of_month);
             $theme->assign("raports",$raport);
             $theme->display('raport');

@@ -1,30 +1,63 @@
 
-<div style='width:80%;margin-right:10%;margin-left:10%;position:relative;'>
+<div style='width:90%;margin-right:5%;margin-left:5%;position:relative;'>
 
-<h1 style='text-align:left;margin:5px;'>  Raport z EPESI za {$name_of_month} </h1>
-<table border='1' style='width:60%;'>
+<h1 style='text-align:left;margin:5px;'>  {$name_of_month} </h1><br>
+
+<div style='width:80%;margin-left:10%;margin-right:10%;position:relative;font-size:18px;'>
+    <div style='width:100%;height:50px;font-weight:bold;'>
+        <div style='width:14%;float:left;'>Poniedziałek</div>
+        <div style='width:14%;float:left;'>Wtorek</div>
+        <div style='width:14%;float:left;'>Środa</div>
+        <div style='width:14%;float:left;'>Czwartek</div>
+        <div style='width:14%;float:left;'>Piątek</div>
+        <div style='width:14%;float:left;'>Sobota</div>
+        <div style='width:14%;float:left;'>Niedziela</div>
+        <div style='clear:both;'></div>
+    </div>
+    <div style='width:100%;height:50px;'>
+    {foreach from=$days item=day}
+        <div style='width:14%;float:left;border:1px solid black;min-height:50px;margin-top:5px;margin-bottom:5px;'>
+        {$day.num}
+        {if 'ilosc'|array_key_exists:$day } 
+        <p style='font-size:10px;'> 
+        Sztuk: {$day.ilosc}<br>
+        Km przej: {$day.km}
+        </p>
+        {/if}
+        </div>
+    {/foreach}
+
+    </div>  
+
+
+</div>
+<div style='margin-top:50px;margin-bottom:50px;clear:both;'>&nbsp;</div>
+<br>
+<h3>Zestawienie z całego miesiąca</h3>
+<table class="Agrohandel__sale__week" cellspacing=0 style="margin-top:15px;margin-bottom:15px;">
     <thead>
-        <td  colspan='2'> Kierowca </td>
-        <td  colspan='3'> Suma </td>
+        <td class='inter_future'  colspan='2'> Kierowca </td>
+        <td class='inter_future' colspan='3'> Suma </td>
     </thead>
     <tr>
-        <td colspan='2'>    </td>
-        <td >   szt </td>
-        <td >Plan km    </td>
-        <td >  km  </td>
+        <td class='inter_future' colspan='2'>    </td>
+        <td class='inter_future' >   szt </td>
+        <td class='inter_future' >Plan km    </td>
+        <td class='inter_future' >  km  </td>
     </tr>
     {foreach from=$raports item=raport}
     <tr>
-        <td colspan='2'> {$raport.name}  </td>
-        <td> {$raport.szt}   </td>
-        <td>  {$raport.kmplan}  </td>
-        <td>  {$raport.kmprzej}  </td>
+        <td class='inter_future' colspan='2'> {$raport.name}  </td>
+        <td class='inter_future'> {$raport.szt}   </td>
+        <td class='inter_future'>  {$raport.kmplan}  </td>
+        <td class='inter_future'>  {$raport.kmprzej}  </td>
     </tr>
 {/foreach}
     <tr>
-        <td colspan='2'> Łącznie </td>
-        <td> <b>{$raport_sumy[1]}</b>   </td>
-        <td> <b> {$raport_sumy[2]} </b> </td>
-        <td> <b> {$raport_sumy[3]}</b>  </td>
+        <td  class='inter_future' colspan='2'> Łącznie </td>
+        <td class='inter_future'> <b>{$raport_sumy[1]}</b>   </td>
+        <td class='inter_future'> <b> {$raport_sumy[2]} </b> </td>
+        <td class='inter_future'> <b> {$raport_sumy[3]}</b>  </td>
     </tr>
 </table>
+</div>

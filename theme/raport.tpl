@@ -14,16 +14,32 @@
         <div style='width:14%;float:left;'>Niedziela</div>
         <div style='clear:both;'></div>
     </div>
-    <div style='width:100%;height:50px;'>
+    <div style='width:100%;height:50px;position:relative;'>
     {foreach from=$days item=day}
-        <div style='width:14%;float:left;border:1px solid black;min-height:50px;margin-top:5px;margin-bottom:5px;'>
-        {$day.num}
+        {if $day.num != ' '}
+            <div style='width:14%;float:left;border:1px solid black;min-height:50px;margin-top:5px;margin-bottom:5px;' >
+        {else}
+            <div style='width:14%;float:left;min-height:50px;margin-top:5px;margin-bottom:5px;'>
+        {/if}
+       <span class='slideDown'> {$day.num} </span>
         {if 'ilosc'|array_key_exists:$day } 
         <p style='font-size:10px;'> 
         Sztuk: {$day.ilosc}<br>
         Km przej: {$day.km}
         </p>
         {/if}
+        <div class='day_drivers hidden'>
+        <button style='position:absolute;right:0;top:0;z-index:120;margin-right:3px;margin-top:3px;' class='cls' onclick='hidd(this)'> X </button>
+            <ul>
+            {if $drivers[day.num]|@count > 0}
+               {foreach from=$drivers[day.num] item=driver}
+                    <li>{$driver.name} - dostarczono: {$driver.name.ilosc}  |  przejechano: {$driver.name.km} km</li>
+               {/foreach}
+            {else}
+                    <li style='color:red;'>  Nic nie zostało dostarczone tego dnia  </li>
+            {/if}
+            </ul>
+        </div>
         </div>
     {/foreach}
 

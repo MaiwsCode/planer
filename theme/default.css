@@ -600,3 +600,23 @@ ul > li ul li:hover > a {
 .block_separator{
 	margin-left: 10px;
 }
+
+.day_drivers{
+	width:100%;
+	position: absolute;
+	top:0;
+	left:0;
+	z-index:100;
+	background-color: white;
+}
+
+.hidden{
+	display: none;
+}
+.visable{
+	display: block;
+}
+.slideDown{
+	cursor: pointer;
+	font-size: 18px;
+}

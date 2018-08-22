@@ -809,6 +809,7 @@ public function settings(){
             $name_of_month = __($name_of_month);
             $name_of_month .= " (".$start." - ". $stop.")";
             $raport = array();
+            $drivers = array();
             $raport_sumy = array(1=>0,2=>0,3=>0);
             foreach($drivers as $driver){
                 $id = $driver->id;
@@ -820,6 +821,8 @@ public function settings(){
                 }
                 foreach($transports as $transport){
                     $index = date("j",strtotime($transport['date']));
+                    $drivers[$index][$name]['ilosc'] += $transport['iloscrozl']; 
+                    $drivers[$index][$name]['km'] += $transport['kmprzej']; 
                     $index += $first;
                     $days[$index]['ilosc'] += $transport['iloscrozl']; 
                     $days[$index]['km'] += $transport['kmprzej']; 
@@ -832,11 +835,24 @@ public function settings(){
                 }
 
             }
+            $theme->assign("raports",$raport);
             $theme->assign("raport_sumy",$raport_sumy);
             $theme->assign("days",$days);
+            $theme->assign("drivers",$drivers);
             $theme->assign("name_of_month",$name_of_month);
-            $theme->assign("raports",$raport);
             $theme->display('raport');
+            //Epesi::load_js("modules/planer/theme/drivers.js");
+            Epesi::js(' function hidd(el){
+                jq(el).parent().addClass("hidden");
+                jq(el).parent().removeClass("visable");
+            }');
+            Epesi::js('
+                jq(".slideDown").bind("click",function(){
+                    var x = jq(this).parent().children(".day_drivers");
+                    jq(x[0]).addClass("visable");
+                    jq(x[0]).removeClass("hidden");
+                    });
+                    ');
         }
     }
     public function sum_records($records,$columnName){

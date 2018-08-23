@@ -31,11 +31,8 @@
         <div class='day_drivers hidden'>
         <button style='position:absolute;right:0;top:0;z-index:120;margin-right:3px;margin-top:3px;' class='cls' onclick='hidd(this)'> X </button>
             <ul>
-               {foreach from=$drivers[$day.num] item=driver}
-                   {assign var=driv value=$driver}
-                    {foreach from=$driv item=d}
-                        <li>{$d.name} - dostarczono: {$d.ilosc}  |  przejechano: {$d.km} km</li>
-                    {/foreach}
+               {foreach from=$drivers[day.num] item=driver}
+                        <li>{$driver.name} - dostarczono: {$driver.ilosc}  |  przejechano: {$driver.km} km</li>
                {/foreach}
             </ul>
         </div>

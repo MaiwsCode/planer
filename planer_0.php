@@ -747,7 +747,9 @@ public function settings(){
                 $suma_dead += $transport['iloscpadle'];
                 $suma_przej += $transport['kmprzej'];
                 $suma_plan += $transport['kmplan'] ;
-                $transport['link'] = planerCommon::getVechicleInfo($transport);
+                $jump = Utils_RecordBrowserCommon::create_record_href("custom_agrohandel_transporty", $transport->id, 'view');
+                $click = "<a ".$jump.">".planerCommon::getVechicleInfo($transport)."</a>";
+                $transport['link'] = $click;
                 $zakupy = $transport['zakupy'];
                 foreach($zakupy as $zakup){
                     // suma z dnia poprzez zapupy przypiete pod tranport
@@ -823,6 +825,7 @@ public function settings(){
                     $index = date("j",strtotime($transport['date']));
                     $drivers[$index][$name]['ilosc'] += $transport['iloscrozl']; 
                     $drivers[$index][$name]['km'] += $transport['kmprzej']; 
+                    $drivers[$index][$name]['name'] = $name; 
                     $index += $first;
                     $days[$index]['ilosc'] += $transport['iloscrozl']; 
                     $days[$index]['km'] += $transport['kmprzej']; 

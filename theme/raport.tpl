@@ -33,7 +33,9 @@
             <ul>
             {if $drivers[day.num]|@count > 0}
                {foreach from=$drivers[day.num] item=driver}
-                    <li>{$driver.name} - dostarczono: {$driver.name.ilosc}  |  przejechano: {$driver.name.km} km</li>
+                    {foreach from=$driver item=driver_}
+                        <li>{$driver_.name} - dostarczono: {$driver_.ilosc}  |  przejechano: {$driver_.km} km</li>
+                    {/foreach}
                {/foreach}
             {else}
                     <li style='color:red;'>  Nic nie zostało dostarczone tego dnia  </li>

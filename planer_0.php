@@ -747,8 +747,10 @@ public function settings(){
                 $suma_dead += $transport['iloscpadle'];
                 $suma_przej += $transport['kmprzej'];
                 $suma_plan += $transport['kmplan'] ;
-                $jump = Utils_RecordBrowserCommon::create_record_href("custom_agrohandel_transporty", $transport->id, 'view');
-                $click = "<a ".$jump.">".planerCommon::getVechicleInfo($transport)."</a>";
+                $jump = Base_BoxCommon::create_href('Custom/Agrohandel/Transporty','Custom/Agrohandel/Transporty', null, array(), array(), array('__jump_to_RB_table'=> 'custom_agrohandel_transporty','__jump_to_RB_record' => 
+                $transport->id,'__jump_to_RB_action'=> 'view'));
+                $popup = planerCommon::getVechicleInfo($transport);
+                $click = "<a ".$jump.">".$popup."</a>";
                 $transport['link'] = $click;
                 $zakupy = $transport['zakupy'];
                 foreach($zakupy as $zakup){

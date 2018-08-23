@@ -14,14 +14,14 @@
         <div style='width:14%;float:left;'>Niedziela</div>
         <div style='clear:both;'></div>
     </div>
-    <div style='width:100%;height:50px;position:relative;'>
+    <div class='calendar' style='width:100%;height:50px;position:relative;'>
     {foreach from=$days item=day}
         {if $day.num != ' '}
-            <div style='width:14%;float:left;border:1px solid black;min-height:50px;margin-top:5px;margin-bottom:5px;' >
+            <div class='day' style='width:14%;float:left;min-height:50px;margin-top:5px;margin-bottom:5px;' >
         {else}
             <div style='width:14%;float:left;min-height:50px;margin-top:5px;margin-bottom:5px;'>
         {/if}
-       <span class='slideDown'> {$day.num} </span>
+       <p class='slideDown'> {$day.num} </p>
         {if 'ilosc'|array_key_exists:$day } 
         <p style='font-size:10px;'> 
         Sztuk: {$day.ilosc}<br>
@@ -31,8 +31,8 @@
         <div class='day_drivers hidden'>
         <button style='position:absolute;right:0;top:0;z-index:120;margin-right:3px;margin-top:3px;' class='cls' onclick='hidd(this)'> X </button>
             <ul>
-            {if $drivers[day.num]|@count > 0}
-               {foreach from=$drivers[day.num] item=driver}
+            {if $drivers[$day.num]|@count > 0}
+               {foreach from=$drivers[$day.num] item=driver}
                     {foreach from=$driver item=driver_}
                         <li>{$driver_.name} - dostarczono: {$driver_.ilosc}  |  przejechano: {$driver_.km} km</li>
                     {/foreach}
@@ -52,7 +52,7 @@
 <div style='margin-top:50px;margin-bottom:50px;clear:both;'>&nbsp;</div>
 <br>
 <h3>Zestawienie z całego miesiąca</h3>
-<table class="Agrohandel__sale__week" cellspacing=0 style="margin-top:15px;margin-bottom:15px;">
+<table class="Agrohandel__sale__week" cellspacing=0 style="margin-top:15px;margin-bottom:15px;user-select: text;">
     <thead>
         <td class='inter_future'  colspan='2'> Kierowca </td>
         <td class='inter_future' colspan='3'> Suma </td>

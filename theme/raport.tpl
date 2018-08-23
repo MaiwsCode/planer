@@ -30,11 +30,20 @@
         {/if}
         <div class='day_drivers hidden'>
         <button style='position:absolute;right:0;top:0;z-index:120;margin-right:3px;margin-top:3px;' class='cls' onclick='hidd(this)'> X </button>
-            <ul>
+           <table class="Agrohandel__sale__week" cellspacing=0 style="margin-top:15px;margin-bottom:15px;user-select: text;">
+                <tr>
+                    <td colspan='2' class='inter_future'>Kierowca</td>
+                    <td class='inter_future'>Dostarczono</td>
+                    <td class='inter_future'>Przejechano</td>
+                </tr>
                {foreach from=$drivers[$day.num] item=driver}
-                        <li>{$driver.name} - dostarczono: {$driver.ilosc}  |  przejechano: {$driver.km} km</li>
+                    <tr>
+                        <td colspan='2' class='inter_future'> {$driver.name}  </td>
+                        <td class='inter_future'>  {$driver.ilosc} szt </td>
+                        <td class='inter_future'>   {$driver.km} km </td>
+                    </tr>
                {/foreach}
-            </ul>
+            </table>
         </div>
         </div>
     {/foreach}

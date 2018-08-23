@@ -830,9 +830,9 @@ public function settings(){
                 }
                 foreach($transports as $transport){
                     $index = date("j",strtotime($transport['date']));
-                    $driver_array[$index][$id]['ilosc'] += $transport['iloscrozl']; 
-                    $driver_array[$index][$id]['km'] += $transport['kmprzej']; 
-                    $driver_array[$index][$id]['name'] = $name; 
+                    $driver_array[$index][$identify]['ilosc'] += $transport['iloscrozl']; 
+                    $driver_array[$index][$identify]['km'] += $transport['kmprzej']; 
+                    $driver_array[$index][$identify]['name'] = $name; 
                     $index += $first;
                     $days[$index]['ilosc'] += $transport['iloscrozl']; 
                     $days[$index]['km'] += $transport['kmprzej']; 

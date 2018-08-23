@@ -31,16 +31,12 @@
         <div class='day_drivers hidden'>
         <button style='position:absolute;right:0;top:0;z-index:120;margin-right:3px;margin-top:3px;' class='cls' onclick='hidd(this)'> X </button>
             <ul>
-            {if $drivers}
                {foreach from=$drivers[$day.num] item=driver}
                <p class='Y' > {$driver}</p>
                     {foreach from=$driver item=driver_}
                         <li>{$driver_.name} - dostarczono: {$driver_.ilosc}  |  przejechano: {$driver_.km} km</li>
                     {/foreach}
                {/foreach}
-            {else}
-                    <li style='color:red;'>  Nic nie zostało dostarczone tego dnia  </li>
-            {/if}
             </ul>
         </div>
         </div>

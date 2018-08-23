@@ -17,6 +17,13 @@ public function settings(){
         Base_ThemeCommon::install_default_theme('planer');
         $theme = $this->init_module('Base/Theme');
         // --------------------------DEFAULT .TPL -------------------------
+
+        if( isset(  $_REQUEST['__jump_to_RB_table'])){
+
+            $tab =  new RBO_RecordsetAccessor($_REQUEST['__jump_to_RB_table']);
+            $tab->view_entry( 	$mode = 'view',  $id = $_REQUEST['__jump_to_RB_record'],  $defaults = array(),  $show_actions = true );
+        }
+
         if(!isset($_REQUEST['mode']) && !isset($_REQUEST['__jump_to_RB_table']) ){
 
          /*   Base_ActionBarCommon::add(

@@ -848,7 +848,6 @@ public function settings(){
             $theme->assign("raports",$raport);
             $theme->assign("raport_sumy",$raport_sumy);
             $theme->assign("days",$days);
-            print_r($driver_array);
             $theme->assign("drivers",$driver_array);
             $theme->assign("name_of_month",$name_of_month);
             $theme->display('raport');

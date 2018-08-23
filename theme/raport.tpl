@@ -31,8 +31,9 @@
         <div class='day_drivers hidden'>
         <button style='position:absolute;right:0;top:0;z-index:120;margin-right:3px;margin-top:3px;' class='cls' onclick='hidd(this)'> X </button>
             <ul>
-            {if $drivers[$day.num]|@count > 0}
-               {foreach from=$drivers[$day.num] item=driver}
+            {if $drivers[day.num] > 0}
+               {foreach from=$drivers[day.num] item=driver}
+               <p class='Y' > {$driver}</p>
                     {foreach from=$driver item=driver_}
                         <li>{$driver_.name} - dostarczono: {$driver_.ilosc}  |  przejechano: {$driver_.km} km</li>
                     {/foreach}
@@ -59,9 +60,9 @@
     </thead>
     <tr>
         <td class='inter_future' colspan='2'>    </td>
-        <td class='inter_future' >   szt </td>
-        <td class='inter_future' >Plan km    </td>
-        <td class='inter_future' >  km  </td>
+        <td class='inter_future' >   Szt </td>
+        <td class='inter_future' >Planowane km    </td>
+        <td class='inter_future' > Przejechane km  </td>
     </tr>
     {foreach from=$raports item=raport}
     <tr>

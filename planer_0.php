@@ -19,9 +19,9 @@ public function settings(){
         // --------------------------DEFAULT .TPL -------------------------
 
         if( isset(  $_REQUEST['__jump_to_RB_table'])){
-
-            $tab =  new RBO_RecordsetAccessor($_REQUEST['__jump_to_RB_table']);
-            $tab->view_entry( 	$mode = 'view',  $id = $_REQUEST['__jump_to_RB_record'],  $defaults = array(),  $show_actions = true );
+            $rs = new  RBO_RecordsetAccessor("custom_agrohandel_transporty");
+            // default values and column properties moved to recordset class
+            $rb = $rs->create_rb_module ( $this );
         }
 
         if(!isset($_REQUEST['mode']) && !isset($_REQUEST['__jump_to_RB_table']) ){

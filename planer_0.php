@@ -829,9 +829,9 @@ public function settings(){
                 }
                 foreach($transports as $transport){
                     $index = date("j",strtotime($transport['date']));
-                    $drivers[$index][$name]['ilosc'] += $transport['iloscrozl']; 
+                   /* $drivers[$index][$name]['ilosc'] += $transport['iloscrozl']; 
                     $drivers[$index][$name]['km'] += $transport['kmprzej']; 
-                    $drivers[$index][$name]['name'] = $name; 
+                    $drivers[$index][$name]['name'] = $name; */
                     $index += $first;
                     $days[$index]['ilosc'] += $transport['iloscrozl']; 
                     $days[$index]['km'] += $transport['kmprzej']; 
@@ -847,7 +847,7 @@ public function settings(){
             $theme->assign("raports",$raport);
             $theme->assign("raport_sumy",$raport_sumy);
             $theme->assign("days",$days);
-            $theme->assign("drivers",$drivers);
+           // $theme->assign("drivers",$drivers);
             $theme->assign("name_of_month",$name_of_month);
             $theme->display('raport');
             //Epesi::load_js("modules/planer/theme/drivers.js");

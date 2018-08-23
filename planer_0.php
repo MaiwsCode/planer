@@ -17,7 +17,7 @@ public function settings(){
         Base_ThemeCommon::install_default_theme('planer');
         $theme = $this->init_module('Base/Theme');
         // --------------------------DEFAULT .TPL -------------------------
-        if(!isset($_REQUEST['mode'])){
+        if(!isset($_REQUEST['mode']) && !isset($_REQUEST['__jump_to_RB_table']) ){
 
          /*   Base_ActionBarCommon::add(
                 'back',
@@ -747,10 +747,7 @@ public function settings(){
                 $suma_dead += $transport['iloscpadle'];
                 $suma_przej += $transport['kmprzej'];
                 $suma_plan += $transport['kmplan'] ;
-                $jump = Base_BoxCommon::create_href('Custom/Agrohandel/Transporty','Custom/Agrohandel/Transporty', null, array(), array(), array('__jump_to_RB_table'=> 'custom_agrohandel_transporty','__jump_to_RB_record' => 
-                $transport->id,'__jump_to_RB_action'=> 'view'));
-                $popup = planerCommon::getVechicleInfo($transport);
-                $click = "<a ".$jump.">".$popup."</a>";
+                $click = planerCommon::getVechicleInfo($transport);
                 $transport['link'] = $click;
                 $zakupy = $transport['zakupy'];
                 foreach($zakupy as $zakup){

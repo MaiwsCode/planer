@@ -826,12 +826,13 @@ public function settings(){
                 if($transports != null || count($transports) > 0){
                     $name = $driver['last_name']." ".$driver['first_name'];
                     $raport[$id]['name'] = $name;
+                    $identify = $driver['last_name'];
                 }
                 foreach($transports as $transport){
                     $index = date("j",strtotime($transport['date']));
-                    $driver_array[$index][$name]['ilosc'] += $transport['iloscrozl']; 
-                    $driver_array[$index][$name]['km'] += $transport['kmprzej']; 
-                    $driver_array[$index][$name]['name'] = $name; 
+                    $driver_array[$index][$identify]['ilosc'] += $transport['iloscrozl']; 
+                    $driver_array[$index][$identify]['km'] += $transport['kmprzej']; 
+                    $driver_array[$index][$identify]['name'] = $name; 
                     $index += $first;
                     $days[$index]['ilosc'] += $transport['iloscrozl']; 
                     $days[$index]['km'] += $transport['kmprzej']; 

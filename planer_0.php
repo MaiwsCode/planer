@@ -18,11 +18,11 @@ public function settings(){
         $theme = $this->init_module('Base/Theme');
         // --------------------------DEFAULT .TPL -------------------------
 
-        if( isset(  $_REQUEST['__jump_to_RB_table'])){
-            $rs = new  RBO_RecordsetAccessor("custom_agrohandel_transporty");
-            // default values and column properties moved to recordset class
+        if(isset($_REQUEST['__jump_to_RB_table'])){    
+            $rs = new RBO_RecordsetAccessor($_REQUEST['__jump_to_RB_table']);
             $rb = $rs->create_rb_module ( $this );
-        }
+            $this->display_module ( $rb);
+        }    
 
         if(!isset($_REQUEST['mode']) && !isset($_REQUEST['__jump_to_RB_table']) ){
 
@@ -48,12 +48,7 @@ public function settings(){
                 null, $dont_notify=false);
 
             }
-            }
-            if(isset($_REQUEST['__jump_to_RB_table'])){    
-                $rs = new RBO_RecordsetAccessor($_REQUEST['__jump_to_RB_table']);
-                $rb = $rs->create_rb_module ( $this );
-                $this->display_module ( $rb);
-            }      
+            }  
             if(!isset($_REQUEST['week_number']) && !isset($_SESSION['week'])){
                 $today = date("Y-m-d");
                 $week_num = $date->get_week_number($today);  

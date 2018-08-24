@@ -21,6 +21,7 @@
         <td class="header_future">Zakład</td> 
         <td class="header_future">Suma zamówionych</td>
         <td class="header_future">Suma dostarczonych</td>
+		<td class="header_future">Suma załadowanych</td>
         <td class="header_future">Suma kupionych</td>
     </thead>
    {foreach from=$sumary_week item=company}
@@ -39,6 +40,15 @@
         </td>
         {else}
             {$week_transported.$last}
+        </td>
+        {/if}
+		
+		<td class="inter_future " style='color:#ffa31a;'>
+        {if $week_loads.$last == ""}
+            0
+        </td>
+        {else}
+            {$week_loads.$last}
         </td>
         {/if}
         {if ($company === reset($sumary_week))}      
@@ -61,6 +71,7 @@
     <td class="inter_future" colspan="2"><span style='font-size:18px;'><b>Razem:</b></span></td>
     <td class="inter_future"><span style='font-size:18px;'><b>{$all_zam}</b></span></td>
     <td class="inter_future transported"><span style='font-size:18px;'><a style='color:#0a07bd;' {$week_link} ><b>{$all_transp}</b></a></span></td>
+	<td class="inter_future"> <span style='font-size:18px;color:#ffa31a;'> <b> {$all_loaded_week} </b></span> <br> <span style='color:#ffa31a;'>(w tym {$reload_sum} przeładowanych) </span></td>
     <td class="inter_future bought"><span style='font-size:18px;'><b>{$all_bought}</b></span></td>
 </tr>
 
@@ -73,6 +84,7 @@
             <td class="header_future">Zakład</td>
             <td class="header_future">Zamówione</td>
             <td class="header_future">Dostarczone</td>
+			<td class="header_future">Załadowane</td>
             <td class="header_future">Kupione</td>
             <td class="header_future">Cena</td>
             <td class="header_future">Informacje</td>
@@ -81,6 +93,7 @@
      <tr class='separator'></tr>
         {assign var=val value=1}
         {assign var=arr value=$trans[1]}
+		{assign var=loadA value=$load[1]}
         {assign var=transported value=$week_trans}
         {assign var=row value=1}
         {assign var=iter value=1}
@@ -141,14 +154,18 @@
                             {if $arr.$last}
                                 {if ($record === end($day)) && $extra ==''} 
                                     <td class="inter_future transported" style='border-bottom: 1px solid #B3B3B3;font-size:15px;'  rowspan="{$indexer[$iter]}">{$arr.$last}</td>
+									<td class="inter_future transported" style='border-bottom: 1px solid #B3B3B3;font-size:15px;color:#ffa31a;'  rowspan="{$indexer[$iter]}">{$loadA.$last}</td>
                                 {else}
                                     <td class="inter_future transported" style='{$extra} font-size:15px;'  rowspan="{$indexer[$iter]}">{$arr.$last}</td>
+									<td class="inter_future " style='border-bottom: 1px solid #B3B3B3;font-size:15px;color:#ffa31a;'  rowspan="{$indexer[$iter]}">{$loadA.$last}</td>
                                 {/if}
                             {else}
                                 {if ($record === end($day)) && $extra ==''} 
                                     <td class="inter_future transported" style='border-bottom: 1px solid #B3B3B3; font-size:15px;'  rowspan="{$indexer[$iter]}">0</td>
+									<td class="inter_future " style='border-bottom: 1px solid #B3B3B3;font-size:15px;color:#ffa31a;'  rowspan="{$indexer[$iter]}">0</td>
                                 {else}
-                                    <td class="inter_future transported" style="font-size:15px;"   rowspan="{$indexer[$iter]}">0</td>
+                                    <td class="inter_future transported" style="font-size:15px;"   rowspan="{$indexer[$iter]}"> 0 </td>
+									<td class="inter_future" style="font-size:15px;color:#ffa31a;"   rowspan="{$indexer[$iter]}"> 0 </td>
                                 {/if}
                             {/if}
                             {assign var=row value=$row+$indexer[$iter]}
@@ -182,16 +199,28 @@
                                  <td class="inter_future">---</td>
                                  <td class="inter_future">{$rec.amm}</td>
                                  <td class="inter_future">{$rec.iloscrozl}</td>
-                                 <td class="inter_future">---</td>
+                                 <td class="inter_future" >---</td>
                                  </tr>
                             {/foreach}
                         {/if}
                     {/foreach}
+					{if $reloads[$val] != null } 
+						{foreach from=$reloads[$val] item=reload}
+								<tr>
+								<td class="inter_future">Przeładunek</td>
+									<td class="inter_future" colspan='3'> {$reload.name}</td>
+									<td class="inter_future" style='color:#ffa31a;'>{$reload.count}</td>
+									<td class="inter_future" colspan='3'></td>
+								</tr>
+						{/foreach}
+					{/if}	
                     {if $days_zam[$val] != null }
+					  <tr class='separator' style='font-size:14px;'></tr>
                       <tr>
                             <td colspan='2' class="inter_future"> <b>Razem: </b></td>
                             <td class="inter_future"> <b>{$days_zam[$val]}</b> </td>
                             <td class="inter_future transported">  <a style='color:#0a07bd;' {$days_link[$val]} ><b>{$transports_sum_of_day[$val]} </b> </a></td>
+							<td class="inter_future" style='color:#ffa31a;'> <b>{$loadings_sum_of_day[$val]}</b> </td>
                             <td class="inter_future" colspan='3'>  </td>
                         </tr>
                         <tr class='separator'></tr>
@@ -199,6 +228,7 @@
                         {/if}
                    {assign var=val value=$val+1}
                    {assign var=arr value=$trans[$val]}
+				   {assign var=loadA value=$load[$val]}
                 {/foreach}      
                 </table>
             <br><br><br>

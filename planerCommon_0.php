@@ -41,8 +41,8 @@ class planerCommon extends ModuleCommon {
 			if($week< 10){
 				$week = "0".$week;
 			}
-			$Y = date('Y');
-			$week = date("Y-m-d", strtotime($Y.'W'.$week));
+			$Y = $_SESSION['year'];
+			$week = date("$Y-m-d", strtotime($Y.'W'.$week));
 			$defaults['date'] = $week;
 			$records = Utils_RecordBrowserCommon::get_records('Sales_plan', $crits = array("date" =>$week ), $cols = array(), $order = array(), 
 			$limit = array(), $admin = false);

@@ -12,6 +12,7 @@
         <td class='header_future'> Numer transportu </td>
          <td class='header_future' colspan='2'> Zakład docelowy </td>
         <td class='header_future'> Ilość sztuk zaplanowanych </td>
+        <td class='header_future'> Ilość sztuk załadowanych </td>
         <td class='header_future'> Ilość sztuk rozładowanych  </td>
         <td class='header_future'> Róznica  </td>
         <td class='header_future'> Sztuki padłe  </td>
@@ -27,8 +28,9 @@
          </td>
          <td class='inter_future' colspan='2'> {$transport.company}</td>
         <td class='inter_future'> {$transport.bought} </td>
+        <td class='inter_future'> {$transport.loaded} </td>
         <td class='inter_future'> {$transport.iloscrozl}  </td>
-        {assign var="bought" value=$transport.bought|strip_tags}
+        {assign var="bought" value=$transport.loaded|strip_tags}
         {assign var="roznica" value=$bought-$transport.iloscrozl}
         {if $roznica == 0}
             <td class='inter_future'>  {$roznica} </td>
@@ -55,6 +57,7 @@
     <tr class='info' style='font-weight:bold;'>
         <td class='inter_future' colspan='3'>Suma: </td>
         <td class='inter_future'> {$sumy[1]} </td>
+        <td class='inter_future'> {$sumy[6]}  </td>
         <td class='inter_future'> {$sumy[2]} </td>
         <td class='inter_future'>  </td>
         <td class='inter_future'> {$sumy[3]} </td>

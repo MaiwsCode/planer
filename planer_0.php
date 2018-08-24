@@ -49,6 +49,11 @@ public function settings(){
 
             }
             }
+            if(isset($_REQUEST['__jump_to_RB_table'])){    
+                $rs = new RBO_RecordsetAccessor($_REQUEST['__jump_to_RB_table']);
+                $rb = $rs->create_rb_module ( $this );
+                $this->display_module ( $rb);
+            }      
             if(!isset($_REQUEST['week_number']) && !isset($_SESSION['week'])){
                 $today = date("Y-m-d");
                 $week_num = $date->get_week_number($today);  

@@ -54,6 +54,16 @@ public function settings(){
             $date = new PickDate($year);
             if(!isset($_REQUEST['week_number']) && !isset($_SESSION['week'])){
                 $today = date("Y-m-d");
+               // $today = date("Y-m-d",strtotime("2019-01-04"));
+                $time = strtotime($today);
+                $day_in_week = date("N", $time);
+                $week = date("W", $time);
+                if($day_in_week > 1 && date("n", $time) == 1 && $week == 1){
+                    $time -= ($day_in_week-1)  * 60*60*24;
+                    $year = date("Y",$time);
+                    $date->update_year($year);
+                }
+                $today = date("Y-m-d",$time);
                 $week_num = $date->get_week_number($today);  
                 $_SESSION['week'] = $week_num;     
             }
@@ -68,6 +78,7 @@ public function settings(){
                 $delete_record = $_REQUEST['delete_record'];
                 $rbo->delete_record($delete_record);
             }
+           // print("$week_num -- $year");
             if(isset($_REQUEST['copy'])){
                 if(Addons::can_copy($week_num,$year)){
                     $sales = new RBO_RecordsetAccessor("Sales_plan");
@@ -100,7 +111,8 @@ public function settings(){
                     Addons::copied($week_num,$year);
                 }
             }
-            //test print($week_num." > ".$year);
+            //test 
+            //print($week_num." > ".$year);
             //sortowanie wg nazw firm
             function sortByCompanyName($array){
                 $list_of_company = [];
@@ -1106,6 +1118,7 @@ public function settings(){
 
 class PickDate{
     private $year;
+
     function __construct($y) {
         $this->year = $y;
     }
@@ -1113,7 +1126,10 @@ class PickDate{
         $date = date("$this->year-m-d");
         return $date; 
     }
-    
+
+    function update_year($year){
+        $this->year = $year;
+    }
     public function this_week_start($date){
         $week = date("$this->year-m-d", strtotime('monday this week',strtotime($date)));
         return $week;
@@ -1130,20 +1146,11 @@ class PickDate{
         return $week;
     }
     public function add_days($start_date,$numbers_of_day_to_add){
-        $next_year_day = date("j",strtotime($start_date));
-        $next_year_month = date("m",strtotime($start_date));
-        $incress = false;
-        if(($next_year_day + $numbers_of_day_to_add) > 31 && $next_year_month == 12){
-            $this->year = $this->year +1;
-            $incress = true;
-        }
+
         $date = strtotime($start_date);
         $days = $numbers_of_day_to_add*(60*60*24);
         $date = $date + $days;
-        $date = date("$this->year-m-d",$date);
-    if($incress){
-        $this->year = $this->year -1;
-    }
+        $date = date("Y-m-d",$date);
         return $date;
     }
     

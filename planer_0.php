@@ -54,13 +54,13 @@ public function settings(){
             $date = new PickDate($year);
             if(!isset($_REQUEST['week_number']) && !isset($_SESSION['week'])){
                 $today = date("Y-m-d");
-               // $today = date("Y-m-d",strtotime("2019-01-04"));
+                //$today = date("Y-m-d",strtotime("2019-01-04"));
                 $time = strtotime($today);
                 $day_in_week = date("N", $time);
                 $week = date("W", $time);
                 if($day_in_week > 1 && date("n", $time) == 1 && $week == 1){
                     $time -= ($day_in_week-1)  * 60*60*24;
-                    $year = date("Y",$time);
+                    $year = date("Y", $time);
                     $date->update_year($year);
                 }
                 $today = date("Y-m-d",$time);
@@ -78,7 +78,6 @@ public function settings(){
                 $delete_record = $_REQUEST['delete_record'];
                 $rbo->delete_record($delete_record);
             }
-           // print("$week_num -- $year");
             if(isset($_REQUEST['copy'])){
                 if(Addons::can_copy($week_num,$year)){
                     $sales = new RBO_RecordsetAccessor("Sales_plan");
@@ -444,6 +443,76 @@ public function settings(){
                     $p["edit"] = '';
                     }
             }
+            $sob = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 5)),array(),array('company_name' => "ASC"));
+            $sob = Rbo_Futures::set_related_fields($sob, 'company_name');
+            foreach($sob as $p){
+                $all_zam += $p["amount"];
+                $days_zam[6] += $p["amount"];
+                $p['amount'] = $p->record_link($p['amount'],$nolink = false,$action = 'view');
+                if($is_manager || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
+                    if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
+                        $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].
+                            "</div>", "Manager: " => "<div class='custom_info'>".$p['Description Manager']."</div>");
+                        $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
+                        $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
+                    }
+                    else{
+                        $infobox = "---";
+                    }
+                    $p['notka'] = $infobox;
+                    $p["edit"] = $p->record_link('<img class="action_button" src="data/Base_Theme/templates/default/Utils/GenericBrowser/edit.png" border="0" alt="Edytuj">',$nolink=false,'edit');
+                    $del = $this->create_href(array("delete_record" => $p['id']));
+                    $del = "<a $del> <img border='0' src='data/Base_Theme/templates/default/Utils/Calendar/delete.png' alt='Usuń' /></a>";
+                    $p["delete"] = $del;
+                }
+                else{
+                    if(strlen($p['Description trader']) > 0){
+                        $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader']. "</div>");
+                        $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
+                        $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
+                    }else{
+                        $infobox = "---";
+                    }
+                    $p['notka'] = $infobox;
+                    $p["delete"] = '';
+                    $p["edit"] = '';
+                }
+            }
+            $nd = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 6)),array(),array('company_name' => "ASC"));
+            $nd = Rbo_Futures::set_related_fields($nd, 'company_name');
+            foreach($nd as $p){
+                $all_zam += $p["amount"];
+                $days_zam[7] += $p["amount"];
+                $p['amount'] = $p->record_link($p['amount'],$nolink = false,$action = 'view');
+                if($is_manager || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
+                    if(strlen($p['Description trader']) > 0 || strlen($p['Description Manager']) > 0){
+                        $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader'].
+                            "</div>", "Manager: " => "<div class='custom_info'>".$p['Description Manager']."</div>");
+                        $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
+                        $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
+                    }
+                    else{
+                        $infobox = "---";
+                    }
+                    $p['notka'] = $infobox;
+                    $p["edit"] = $p->record_link('<img class="action_button" src="data/Base_Theme/templates/default/Utils/GenericBrowser/edit.png" border="0" alt="Edytuj">',$nolink=false,'edit');
+                    $del = $this->create_href(array("delete_record" => $p['id']));
+                    $del = "<a $del> <img border='0' src='data/Base_Theme/templates/default/Utils/Calendar/delete.png' alt='Usuń' /></a>";
+                    $p["delete"] = $del;
+                }
+                else{
+                    if(strlen($p['Description trader']) > 0){
+                        $ar = array("Handlowiec: " => "<div class='custom_info'>".$p['Description trader']. "</div>");
+                        $infobox = Utils_TooltipCommon::format_info_tooltip($ar);
+                        $infobox = Utils_TooltipCommon::create("Informacje dodatkowe",$infobox,$help=true, $max_width=300);
+                    }else{
+                        $infobox = "---";
+                    }
+                    $p['notka'] = $infobox;
+                    $p["delete"] = '';
+                    $p["edit"] = '';
+                }
+            }
             $all_bought_week =0;
             $all_transported_week = 0;
         //  $pt = sortByCompanyName($pt);
@@ -459,12 +528,18 @@ public function settings(){
                                             array("Company" => "ASC"));
             $pt_bought = $bought->get_records(array('planed_purchase_date' => $date->add_days($date->monday_of_week($week_num), 4),'~status' => "%purchased%"),
                                             array("Company" => "ASC"));
+            $sob_bought = $bought->get_records(array('planed_purchase_date' => $date->add_days($date->monday_of_week($week_num), 5),'~status' => "%purchased%"),
+                array("Company" => "ASC"));
+            $nd_bought = $bought->get_records(array('planed_purchase_date' => $date->add_days($date->monday_of_week($week_num), 6),'~status' => "%purchased%"),
+                array("Company" => "ASC"));
             // kupione
             $pon_companes = array();
             $wt_companes = array();
             $sr_companes = array();
             $czw_companes = array();
             $pt_companes = array();
+            $sob_companes = array();
+            $nd_companes = array();
             foreach($pon as $pone){
                 array_push($pon_companes , $pone['company_name']);
             }
@@ -480,11 +555,20 @@ public function settings(){
             foreach($pt as $pone){
                 array_push($pt_companes , $pone['company_name']);
             }
+            foreach($sob as $pone){
+                array_push($sob_companes , $pone['company_name']);
+            }
+            foreach($nd as $pone){
+                array_push($nd_companes , $pone['company_name']);
+            }
             $pon_companes = array_count_values($pon_companes);
             $wt_companes = array_count_values($wt_companes);
             $sr_companes = array_count_values($sr_companes);
             $czw_companes = array_count_values($czw_companes);
             $pt_companes = array_count_values($pt_companes);
+            $sob_companes = array_count_values($sob_companes);
+            $nd_companes = array_count_values($nd_companes);
+
             $i  = 1;
             $indexer = array();
             foreach($pon_companes as $com){
@@ -507,7 +591,14 @@ public function settings(){
                 $indexer[$i] = $com;
                 $i++;
             }
-			
+            foreach($sob_companes as $com){
+                $indexer[$i] = $com;
+                $i++;
+            }
+            foreach($nd_companes as $com){
+                $indexer[$i] = $com;
+                $i++;
+            }
 		
            //dostarczone && zaladowane
             //potrzena tabela z Raport z rozladunku
@@ -517,7 +608,10 @@ public function settings(){
             $trans_sr = array();
             $trans_czw = array();
             $trans_pt = array();
-            $transports_sum_of_day = array(1=>0,2=>0,3=>0,4=>0,5=> 0);
+            $trans_sob = array();
+            $trans_nd = array();
+
+            $transports_sum_of_day = array(1=>0,2=>0,3=>0,4=>0,5=>0, 6=>0,7=>0);
             $transports = [];
             $amount = "iloscrozl"; //iloscrozl amount
 			$week_loads = array();
@@ -527,18 +621,22 @@ public function settings(){
             $loaded_sr = array();
             $loaded_czw = array();
             $loaded_pt = array();
-			
+            $loaded_sob = array();
+            $loaded_nd = array();
+
 			$reload_pon = array();
 			$reload_wt = array();
 			$reload_sr = array();
 			$reload_czw = array();
 			$reload_pt = array();
-			
+            $reload_sob = array();
+            $reload_nd = array();
+
 			$reload_sum = 0;
 			
 			$loaded_field_name = 'sztukzal';
 			
-			$loadings_sum_of_day = array(1=>0,2=>0,3=>0,4=>0,5=> 0);
+			$loadings_sum_of_day = array(1=>0,2=>0,3=>0,4=>0,5=> 0,6=>0,7=>0);
           
             $t_pon = $transported->get_records(array('date' => $date->monday_of_week($week_num)),array(),array($company_field => "ASC"));
             foreach($t_pon as $t){
@@ -716,9 +814,80 @@ public function settings(){
                 $x = $t->get_val($company_field,$nolink = TRUE);
                 $trans_pt[$x] = "<a style='color:#0a07bd;' ".$this->create_href(array('mode' => 'firma' ,'date' => $t['date'], 'firma_id'=> $t[$company_field])).">".$trans_pt[$x]."</a>";
             }
+            $t_sob = $transported->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 5)),array(),array($company_field => "ASC"));
+            foreach($t_sob as $t){
+                $x = $t->get_val($company_field,$nolink = TRUE);
+                $trans_sr[$x] += $t[$amount];
+                $is_ubojnia = $companes->get_record($t['company']);
+                if($is_ubojnia['group']['baza_tr']){
+                    $once = $t["zakupy"];
+                    foreach($once as $one){
+                        $purchase_plan  = $bought->get_record($one);//purchase_plan_
+                        $reload_sr[$t->id]['name'] = $x;
+                        $reload_sr[$t->id]['count'] += $purchase_plan[$loaded_field_name];
+                        $reload_sum += $purchase_plan[$loaded_field_name];
+                        $days_load[6] +=  $purchase_plan[$loaded_field_name];
+                        $all_loaded_week +=  $purchase_plan[$loaded_field_name];
+                        $loadings_sum_of_day[6] += $purchase_plan[$loaded_field_name];
+                        $week_loads[$x] += $purchase_plan[$loaded_field_name];
+                    }
+                }else{
+                    $all_transported_week +=  $t[$amount];
+                    $transports_sum_of_day[6] += $t[$amount];
+                    $once = $t["zakupy"];
+                    foreach($once as $one){
+                        $purchase_plan  = $bought->get_record($one);//purchase_plan_
+                        $loaded_sr[$x] += $purchase_plan[$loaded_field_name];
+                        $days_load[6] +=  $purchase_plan[$loaded_field_name];
+                        $all_loaded_week +=  $purchase_plan[$loaded_field_name];
+                        $loadings_sum_of_day[6] += $purchase_plan[$loaded_field_name];
+                        $week_loads[$x] += $purchase_plan[$loaded_field_name];
+                    }
+                }
+            }
+            foreach($t_sob as $t){
+                $x = $t->get_val($company_field,$nolink = TRUE);
+                $trans_sob[$x] = "<a style='color:#0a07bd;' ".$this->create_href(array('mode' => 'firma' ,'date' => $t['date'], 'firma_id'=> $t[$company_field])).">".$trans_sob[$x]."</a>";
+            }
+            $t_nd = $transported->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 6)),array(),array($company_field => "ASC"));
+            foreach($t_nd as $t){
+                $x = $t->get_val($company_field,$nolink = TRUE);
+                $trans_sr[$x] += $t[$amount];
+                $is_ubojnia = $companes->get_record($t['company']);
+                if($is_ubojnia['group']['baza_tr']){
+                    $once = $t["zakupy"];
+                    foreach($once as $one){
+                        $purchase_plan  = $bought->get_record($one);//purchase_plan_
+                        $reload_sr[$t->id]['name'] = $x;
+                        $reload_sr[$t->id]['count'] += $purchase_plan[$loaded_field_name];
+                        $reload_sum += $purchase_plan[$loaded_field_name];
+                        $days_load[7] +=  $purchase_plan[$loaded_field_name];
+                        $all_loaded_week +=  $purchase_plan[$loaded_field_name];
+                        $loadings_sum_of_day[7] += $purchase_plan[$loaded_field_name];
+                        $week_loads[$x] += $purchase_plan[$loaded_field_name];
+                    }
+                }else{
+                    $all_transported_week +=  $t[$amount];
+                    $transports_sum_of_day[3] += $t[$amount];
+                    $once = $t["zakupy"];
+                    foreach($once as $one){
+                        $purchase_plan  = $bought->get_record($one);//purchase_plan_
+                        $loaded_sr[$x] += $purchase_plan[$loaded_field_name];
+                        $days_load[7] +=  $purchase_plan[$loaded_field_name];
+                        $all_loaded_week +=  $purchase_plan[$loaded_field_name];
+                        $loadings_sum_of_day[7] += $purchase_plan[$loaded_field_name];
+                        $week_loads[$x] += $purchase_plan[$loaded_field_name];
+                    }
+                }
+            }
+            foreach($t_nd as $t){
+                $x = $t->get_val($company_field,$nolink = TRUE);
+                $trans_nd[$x] = "<a style='color:#0a07bd;' ".$this->create_href(array('mode' => 'firma' ,'date' => $t['date'], 'firma_id'=> $t[$company_field])).">".$trans_nd[$x]."</a>";
+            }
+
             $week_trans = array();
             $week_transported = $transported->get_records(array('>=date' => $date->add_days($date->monday_of_week($week_num),0),
-            '<=date' => $date->add_days($date->monday_of_week($week_num), 4)),array(),array($company_field => "ASC"));
+            '<=date' => $date->add_days($date->monday_of_week($week_num), 6)),array(),array($company_field => "ASC"));
             foreach($week_transported as $t){
                 $x = $t->get_val($company_field,$nolink = TRUE);
                 $week_trans[$x] += $t[$amount];
@@ -729,6 +898,8 @@ public function settings(){
             $transports[3] = $trans_sr;
             $transports[4] = $trans_czw;
             $transports[5] = $trans_pt;
+            $transports[6] = $trans_sob;
+            $transports[7] = $trans_nd;
 			
 			$loadings = [];
 			$loadings[1] = $loaded_pon;
@@ -736,6 +907,8 @@ public function settings(){
 			$loadings[3] = $loaded_sr;
 			$loadings[4] = $loaded_czw;
 			$loadings[5] = $loaded_pt;
+            $loadings[6] = $loaded_sob;
+            $loadings[7] = $loaded_nd;
 			
 			$reloads  = [];
 			$reloads[1] = $reload_pon;
@@ -743,7 +916,8 @@ public function settings(){
 			$reloads[3] = $reload_sr;
 			$reloads[4] = $reload_czw;
 			$reloads[5] = $reload_pt;
-			
+            $reloads[6] = $reload_sob;
+            $reloads[7] = $reload_nd;
 
 			$theme->assign('reload_sum',$reload_sum);
 			$theme->assign('reloads',$reloads);
@@ -758,12 +932,14 @@ public function settings(){
             $amount_sum = array(1=>$this->sum_records($pon_bought,'Amount'),
             2=>$this->sum_records($wt_bought,'Amount'),3=>$this->sum_records($sr_bought,'Amount'),
             4=>$this->sum_records($czw_bought,'Amount'),
-            5=>$this->sum_records($pt_bought,'Amount'));
+            5=>$this->sum_records($pt_bought,'Amount'),
+            6=>$this->sum_records($sob_bought,'Amount'),
+            7=>$this->sum_records($nd_bought,'Amount'));
             foreach($amount_sum as $sum){
                 $all_bought_week += $sum;
             }
 
-            for($i = 1;$i<6;$i++){
+            for($i = 1;$i<8;$i++){
                 $amount_sum[$i] = "<a ". Base_BoxCommon::create_href('Custom/Agrohandel/Transporty','Custom/Agrohandel/Transporty', null, array(), array(), array('day'=> $date->add_days($date->monday_of_week($week_num),($i-1)))).">".$amount_sum[$i]."</a>";
             }
             array_push($days,$pon);
@@ -771,7 +947,8 @@ public function settings(){
             array_push($days,$sr);
             array_push($days,$czw);
             array_push($days,$pt);
-
+            array_push($days,$sob);
+            array_push($days,$nd);
 
             //dni tygodnia
             $days_text = array(
@@ -780,19 +957,24 @@ public function settings(){
                 3=>"ŚRODA",
                 4=>"CZWARTEK",
                 5=>"PIĄTEK",
+                6=>"SOBOTA",
+                7=>"NIEDZIELA",
+
             );
             $days_link = array(
                 1=>$this->create_href(array('mode' => 'day' ,'date' => $date->add_days($date->monday_of_week($week_num), 0))),
                 2=>$this->create_href(array('mode' => 'day' ,'date' => $date->add_days($date->monday_of_week($week_num), 1))),
                 3=>$this->create_href(array('mode' => 'day' ,'date' => $date->add_days($date->monday_of_week($week_num), 2))),
                 4=>$this->create_href(array('mode' => 'day' ,'date' => $date->add_days($date->monday_of_week($week_num), 3))),
-                5=>$this->create_href(array('mode' => 'day' ,'date' => $date->add_days($date->monday_of_week($week_num), 4)))
+                5=>$this->create_href(array('mode' => 'day' ,'date' => $date->add_days($date->monday_of_week($week_num), 4))),
+                6=>$this->create_href(array('mode' => 'day' ,'date' => $date->add_days($date->monday_of_week($week_num), 5))),
+                7=>$this->create_href(array('mode' => 'day' ,'date' => $date->add_days($date->monday_of_week($week_num), 6)))
             );
             $week_number_link = $this->create_href(array('mode' => 'week' ,'date' => $week_num));
             $theme->assign('week_link',$week_number_link);
             $theme->assign('days_link',$days_link);
             if($is_manager || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
-                for($i = 0; $i<5;$i++){
+                for($i = 0; $i<7;$i++){
                     $sel_opt = "";
                     $sel_opt .= "<a style='z-index:5;' ".$this->create_href(array('change_status' => $date->add_days($date->monday_of_week($week_num), $i),'status'=> '2'))."><img src='data/Base_Theme/templates/default/planer/good.png'  width=15 height=15 /></a>";
                     $sel_opt .= "<a style='z-index:5;' ".$this->create_href(array('change_status' => $date->add_days($date->monday_of_week($week_num), $i),'status'=> '1'))."><img src='data/Base_Theme/templates/default/planer/normal.png'  width=15 height=15 /></a>";
@@ -804,18 +986,20 @@ public function settings(){
                 }
             }
             $sumary_week = $rbo->get_records(array('>=date' => $date->monday_of_week($week_num), 
-            '<=date' => $date->add_days($date->monday_of_week($week_num), 4)), 
+            '<=date' => $date->add_days($date->monday_of_week($week_num), 6)),
             array(),array());
             $mach_week_with_tr = $rbo->get_records(array('>=date' => $date->monday_of_week($week_num), 
-            '<=date' => $date->add_days($date->monday_of_week($week_num), 4)), 
+            '<=date' => $date->add_days($date->monday_of_week($week_num), 6)),
             array(),array());
             $mach_tr_with_week = $transported->get_records(array('>=date' => $date->monday_of_week($week_num), 
-            '<=date' => $date->add_days($date->monday_of_week($week_num), 4)),array(),array());  
+            '<=date' => $date->add_days($date->monday_of_week($week_num), 6)),array(),array());
             $missing_pon = array();
             $missing_wt = array();
             $missing_sr = array();
             $missing_czw = array();
             $missing_pt = array();
+            $missing_sob = array();
+            $missing_nd = array();
             $missing_all = array();
             if(count($mach_week_with_tr) != count($mach_tr_with_week)){
                 foreach($mach_tr_with_week as $trans){
@@ -849,13 +1033,15 @@ public function settings(){
                             else if($dayofweek == 2){ $missing_wt[] = $trans;}
                             else if($dayofweek == 3){ $missing_sr[] = $trans;}
                             else if($dayofweek == 4){ $missing_czw[] = $trans;}
-                            else if($dayofweek == 5){ $missing_pt[] = $trans;} 
+                            else if($dayofweek == 5){ $missing_pt[] = $trans;}
+                            else if($dayofweek == 6){ $missing_sob[] = $trans;}
+                            else if($dayofweek == 7){ $missing_nd[] = $trans;}
                         }               
                     }
                 }
             }       
             $week_amount_sum = 0;   
-            for($i=0;$i<=4;$i++){
+            for($i=0;$i<=6;$i++){
                 $week_bought = $transported->get_records(array('date' =>$date->add_days($date->monday_of_week($week_num), $i)),array(),array());
                 foreach($week_bought as $day){
                     $once = $day->to_array();
@@ -872,6 +1058,8 @@ public function settings(){
             $missing[3] = $missing_sr;
             $missing[4] = $missing_czw;
             $missing[5] = $missing_pt;
+            $missing[6] = $missing_sob;
+            $missing[7] = $missing_nd;
             // missing[0] = missing_pon -> records
             $sum_week = array();
             foreach($sumary_week as $sum){
@@ -962,7 +1150,7 @@ public function settings(){
                 );
                 $week = $_REQUEST['date'];
                 $start_date = $date->monday_of_week($week); ;
-                $end_date = $date->add_days($date->monday_of_week($week),4);
+                $end_date = $date->add_days($date->monday_of_week($week),6);
                 $theme->assign('day',"Tydzień: ".$week. " (".$start_date." - ".$end_date." )");
                 $transports = $transported->get_records(array('>=date' => $start_date, '<=date' => $end_date),array(),array());
             }

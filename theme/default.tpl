@@ -134,9 +134,9 @@
 
                         {/if}
                         {if ($record === end($day)) && $extra ==''}  
-                            <td class="inter_future" style='font-size:15px;border-bottom: 1px solid #B3B3B3;'> {$record.company_name}</td>
+                            <td class="inter_future" style='font-size:15px;border-bottom: 1px solid #B3B3B3;'> {$record.company_name} {$record.word} </td>
                         {else}
-                            <td class="inter_future" style='font-size:15px;'> {$record.company_name}</td> 
+                            <td class="inter_future" style='font-size:15px;'> {$record.company_name} {$record.word} </td>
                         {/if}
                         {if ($record === end($day)) && $extra ==''}  
                             <td class="inter_future" style="border-bottom: 1px solid #B3B3B3;"><span style='font-size:18px;'> {$record.amount} </span> &nbsp;
@@ -200,6 +200,7 @@
                                  <td class="inter_future">{$rec.amm}</td>
                                  <td class="inter_future">{$rec.iloscrozl}</td>
                                  <td class="inter_future" >---</td>
+                                <td class="inter_future" ></td>
                                  </tr>
                             {/foreach}
                         {/if}

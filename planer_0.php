@@ -7,14 +7,13 @@ defined("_VALID_ACCESS") || die('Direct access forbidden');
  */
 class planer extends Module { 
 
-public function settings(){
-    }    
 
     public function body(){
 
 		Base_ThemeCommon::install_default_theme($this->get_type());
         $theme = $this->init_module('Base/Theme');
         // --------------------------DEFAULT .TPL -------------------------
+        $wordPNG = '<img src="data/Base_Theme/templates/default/planer/word.png" height="16" width="16" />';
 
         if(isset($_REQUEST['__jump_to_RB_table'])){    
             $rs = new RBO_RecordsetAccessor($_REQUEST['__jump_to_RB_table']);
@@ -265,9 +264,14 @@ public function settings(){
             $days_zam = array();
             $loginContact = CRM_ContactsCommon::get_contact_by_user_id(Base_AclCommon::get_user ());
             $is_manager = $loginContact['access']['manager'];
-            $pon = $rbo->get_records(array('date' => $date->monday_of_week($week_num)),array(),array('company_name' => "ASC"));
-            $pon = Rbo_Futures::set_related_fields($pon, 'company_name');
+            $day = $date->monday_of_week($week_num);
+            $pon = $rbo->get_records(array('date' => $day),array(),array('company_name' => "ASC"));
+            //$pon = Rbo_Futures::set_related_fields($pon, 'company_name');
+
             foreach($pon as $p){
+                $href = 'href="modules/planer/word.php?'.http_build_query(array('date'=> $day , 'company' => $p['company_name'] , 'cid'=>CID)).'"';
+                $p['word'] = " <a ".$href ." > ".$wordPNG. "</a>" ;
+                $p['company_name'] =  $p->get_val('company_name',false);
                 $days_zam[1] += $p["amount"];
                 $all_zam += $p["amount"];
                 $p['amount'] = $p->record_link($p['amount'],$nolink = false,$action = 'view');
@@ -301,10 +305,13 @@ public function settings(){
                 
             }
             //$pon = sortByCompanyName($pon);
-
-            $wt = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 1)),array(),array('company_name' => "ASC"));
-            $wt = Rbo_Futures::set_related_fields($wt, 'company_name');
+            $day = $date->add_days($date->monday_of_week($week_num), 1);
+            $wt = $rbo->get_records(array('date' => $day),array(),array('company_name' => "ASC"));
+           // $wt = Rbo_Futures::set_related_fields($wt, 'company_name');
             foreach($wt as $p){
+                $href = 'href="modules/planer/word.php?'.http_build_query(array('date'=> $day , 'company' => $p['company_name'] , 'cid'=>CID)).'"';
+                $p['word'] = " <a ".$href ." > ".$wordPNG. "</a>" ;
+                $p['company_name'] =  $p->get_val('company_name',false);
                 $all_zam += $p["amount"];
                 $days_zam[2] += $p["amount"];
                 $p['amount'] = $p->record_link($p['amount'],$nolink = false,$action = 'view');
@@ -339,9 +346,13 @@ public function settings(){
             }
         // print(count($pon));
         // $wt = sortByCompanyName($wt);
-            $sr = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 2)),array(),array('company_name' => "ASC"));
-            $sr = Rbo_Futures::set_related_fields($sr, 'company_name');
+            $day = $date->add_days($date->monday_of_week($week_num), 2);
+            $sr = $rbo->get_records(array('date' => $day),array(),array('company_name' => "ASC"));
+        //    $sr = Rbo_Futures::set_related_fields($sr, 'company_name');
             foreach($sr as $p){
+                $href = 'href="modules/planer/word.php?'.http_build_query(array('date'=> $day , 'company' => $p['company_name'] , 'cid'=>CID)).'"';
+                $p['word'] = " <a ".$href ." > ".$wordPNG. "</a>" ;
+                $p['company_name'] =  $p->get_val('company_name',false);
                 $days_zam[3] += $p["amount"];
                 $all_zam += $p["amount"];
                 $p['amount'] = $p->record_link($p['amount'],$nolink = false,$action = 'view');
@@ -374,9 +385,13 @@ public function settings(){
                 }
             }
         //  $sr = sortByCompanyName($sr);
-            $czw = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 3)),array(),array('company_name' => "ASC"));
-            $czw = Rbo_Futures::set_related_fields($czw, 'company_name');
+            $day = $date->add_days($date->monday_of_week($week_num), 3);
+            $czw = $rbo->get_records(array('date' => $day),array(),array('company_name' => "ASC"));
+         //   $czw = Rbo_Futures::set_related_fields($czw, 'company_name');
             foreach($czw as $p){
+                $href = 'href="modules/planer/word.php?'.http_build_query(array('date'=> $day , 'company' => $p['company_name'] , 'cid'=>CID)).'"';
+                $p['word'] = " <a ".$href ." > ".$wordPNG. "</a>" ;
+                $p['company_name'] =  $p->get_val('company_name',false);
                 $days_zam[4] += $p["amount"];
                 $all_zam += $p["amount"];
                 $p['amount'] = $p->record_link($p['amount'],$nolink = false,$action = 'view');
@@ -409,9 +424,13 @@ public function settings(){
                 }
             }
         //   $czw = sortByCompanyName($czw);
-            $pt = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 4)),array(),array('company_name' => "ASC"));
-            $pt = Rbo_Futures::set_related_fields($pt, 'company_name');
+            $day = $date->add_days($date->monday_of_week($week_num), 4);
+            $pt = $rbo->get_records(array('date' => $day),array(),array('company_name' => "ASC"));
+         //   $pt = Rbo_Futures::set_related_fields($pt, 'company_name');
             foreach($pt as $p){
+                $href = 'href="modules/planer/word.php?'.http_build_query(array('date'=> $day , 'company' => $p['company_name'] , 'cid'=>CID)).'"';
+                $p['word'] = " <a ".$href ." > ".$wordPNG. "</a>" ;
+                $p['company_name'] =  $p->get_val('company_name',false);
                 $all_zam += $p["amount"];
                 $days_zam[5] += $p["amount"];
                 $p['amount'] = $p->record_link($p['amount'],$nolink = false,$action = 'view');
@@ -443,9 +462,13 @@ public function settings(){
                     $p["edit"] = '';
                     }
             }
-            $sob = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 5)),array(),array('company_name' => "ASC"));
-            $sob = Rbo_Futures::set_related_fields($sob, 'company_name');
+            $day = $date->add_days($date->monday_of_week($week_num), 5);
+            $sob = $rbo->get_records(array('date' => $day),array(),array('company_name' => "ASC"));
+         //   $sob = Rbo_Futures::set_related_fields($sob, 'company_name');
             foreach($sob as $p){
+                $href = 'href="modules/planer/word.php?'.http_build_query(array('date'=> $day , 'company' => $p['company_name'] , 'cid'=>CID)).'"';
+                $p['word'] = " <a ".$href ." > ".$wordPNG. "</a>" ;
+                $p['company_name'] =  $p->get_val('company_name',false);
                 $all_zam += $p["amount"];
                 $days_zam[6] += $p["amount"];
                 $p['amount'] = $p->record_link($p['amount'],$nolink = false,$action = 'view');
@@ -478,9 +501,13 @@ public function settings(){
                     $p["edit"] = '';
                 }
             }
-            $nd = $rbo->get_records(array('date' => $date->add_days($date->monday_of_week($week_num), 6)),array(),array('company_name' => "ASC"));
-            $nd = Rbo_Futures::set_related_fields($nd, 'company_name');
+            $day = $date->add_days($date->monday_of_week($week_num), 6);
+            $nd = $rbo->get_records(array('date' => $day),array(),array('company_name' => "ASC"));
+           // $nd = Rbo_Futures::set_related_fields($nd, 'company_name');
             foreach($nd as $p){
+                $href = 'href="modules/planer/word.php?'.http_build_query(array('date'=> $day , 'company' => $p['company_name'] , 'cid'=>CID)).'"';
+                $p['word'] = " <a ".$href ." > ".$wordPNG. "</a>" ;
+                $p['company_name'] =  $p->get_val('company_name',false);
                 $all_zam += $p["amount"];
                 $days_zam[7] += $p["amount"];
                 $p['amount'] = $p->record_link($p['amount'],$nolink = false,$action = 'view');
@@ -1227,7 +1254,7 @@ public function settings(){
         }
         else if($_REQUEST['mode'] == 'drivers'){
             $rbo_drivers = new RBO_RecordsetAccessor('contact');
-            $rbo_transports = new RBO_RecordsetAccessor("custom_agrohandel_transporty"); 
+            $rbo_transports = new RBO_RecordsetAccessor("custom_agrohandel_transporty");
             $drivers = $rbo_drivers->get_records(array('group' => array('u_driver')),array(),array());
             $date = new PickDate($year);
             $_date = $date->monday_of_week($_REQUEST['date']);
@@ -1294,6 +1321,7 @@ public function settings(){
                     });
                     ');
         }
+
     }
     public function sum_records($records,$columnName){
         $value = 0;
@@ -1301,7 +1329,7 @@ public function settings(){
            $value += $record[$columnName];
         }
         return $value;
-    }  
+    }
 }
 
 class PickDate{

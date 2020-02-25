@@ -9,9 +9,13 @@ defined("_VALID_ACCESS") || die('Direct access forbidden');
 class planerCommon extends ModuleCommon {
 	
    public static function menu() {
+	if (Base_AclCommon::check_permission('Plan sprzedaży') || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
 		return array(__('Module') => array('__submenu__' => 1, __('Plan sprzedaży') => array(
 	    	'__icon__'=>'pig.png','__icon_small__'=>'pig.png'
 			)));
+		}else{
+			return array();
+		}
 	}
     public static function watchdog_label($rid = null, $events = array(), $details = true)
     {

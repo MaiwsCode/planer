@@ -13,6 +13,7 @@ class planerInstall extends ModuleInstall {
         Base_LangCommon::install_translations('planer');
         Base_ThemeCommon::install_default_theme ('planer');
         Base_ThemeCommon::install_default_theme($this->get_type());
+        Base_AclCommon::add_permission(_M('Plan sprzedaży'),array("ALL"));
         Utils_RecordBrowserCommon::register_processing_callback('Sales_plan', array($this->get_type () . 'Common', 'on_create_new'));
         $fields1 = new planer_Recordset2();
         $success = $fields1->install();

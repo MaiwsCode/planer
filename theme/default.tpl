@@ -12,7 +12,7 @@
         <a class="button" {$button.href}>{$button.label}</a>
     {/foreach}
     <br><br>
-    {$select}
+   <div style='text-align:right;margin-right:20px;'> {$select} </div>
     {$test}
 <br>
  <table class="Agrohandel__sale__week" style="margin-top:15px;margin-bottom:15px;"> 

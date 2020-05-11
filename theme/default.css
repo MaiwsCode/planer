@@ -448,74 +448,6 @@
 {
     color: #e01c2a;
 }
-ul {
-	list-style: none;
-	float: left;
-}
-
-ul > li {
-	margin: 0;
-	padding: 0;
-	float: left; 
-	position: relative;
-	height: 30px;
-}
-
-ul > li > a {
-	padding: 10px; 
-	color: #444;
-	text-decoration: none;
-}
-
-ul > li > a:hover, 
-ul > li:hover > a {
-	color: #de5f44;
-	text-decoration: underline;
-}
-
-ul > li ul {
-	padding: 0;
-	position: absolute; 
-	display: none; 
-	left: 0px; 
-	top: 30px; 
-	width: 200px; 
-	text-align: left;
-	background-color: #fcfcfc;
-	border: 1px solid #ccc;
-}
-
-ul li:hover > ul {
-	display: block;
-	text-align: center;
-}
-
-ul > li ul ul {
-	left: 200px; 
-	top: -1px;
-}
-
-ul > li ul li {
-	margin: 0; 
-	padding: 0;
-	position: relative; 
-	float: none; 
-	height: auto;
-}
-
-ul > li ul li a {
-	padding: 10px 20px; 
-	color: #505050; 
-	text-decoration: none;
-	display: block;
-}
-
-ul > li ul li a:hover,
-ul > li ul li:hover > a {
-	text-decoration: none;
-	color: #fff;
-	background-color: #f26c4f;
-}
 .drops {
     cursor: pointer;
     word-wrap: break-word;
@@ -536,7 +468,74 @@ ul > li ul li:hover > a {
     -webkit-transition: width .1s ease,-webkit-box-shadow .1s ease;
     transition: width .1s ease,-webkit-box-shadow .1s ease;
     transition: box-shadow .1s ease,width .1s ease;
-    transition: box-shadow .1s ease,width .1s ease,-webkit-box-shadow .1s ease;
+	transition: box-shadow .1s ease,width .1s ease,-webkit-box-shadow .1s ease;
+	z-index: 777;
+	list-style: none;
+}
+
+.drops li {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	float: left; 
+	position: relative;
+	height: 30px;
+}
+
+.drops li a {
+	padding: 3px; 
+	color: #444;
+	text-decoration: none;
+}
+
+.drops li ul a:hover, 
+.drops li:hover a {
+	color: #de5f44;
+	text-decoration: underline;
+}
+
+.drops li ul {
+	z-index: 777;
+	padding: 3px;
+	position: absolute; 
+	display: none; 
+	left: 0px; 
+	top: 30px; 
+	width: 200px; 
+	text-align: left;
+	background-color: #fcfcfc;
+	border: 1px solid #ccc;
+}
+
+.drops li:hover ul {
+	padding:3px;
+	z-index: 777;
+	display: block;
+	text-align: left;
+}
+
+
+.drops li ul li {
+	z-index: 777;
+	margin: 0; 
+	padding: 3px;
+	position: relative; 
+	float: none; 
+	height: auto;
+}
+
+.drops li ul li a {
+	padding: 3px 3px; 
+	color: #505050; 
+	text-decoration: none;
+	display: block;
+}
+
+.drops li ul li a:hover,
+.drops li ul li:hover a {
+	text-decoration: none;
+	color: #fff;
+	background-color: #f26c4f;
 }
 .custom_info{
 	padding-right: 5px;

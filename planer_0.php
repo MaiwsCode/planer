@@ -253,10 +253,11 @@ class planer extends Module {
             }
             
             $select = "<ul class='drops'>
-                        <li>
-                            <a href='#'>Wybierz tydzień </a> <img src='data/Base_Theme/templates/default/planer/drop.png' width=25 height=25 />
-                                <ul>".$select_options."
-                            </ul></li></ul>";
+                            <li>
+                                <a href='#'>Wybierz tydzień </a> <img src='data/Base_Theme/templates/default/planer/drop.png' width=25 height=25 />
+                                <ul>".$select_options."</ul>
+                            </li>
+                        </ul>";
             // zamowione 
 			$company_field = "company"; ///company company_name
             $all_zam = 0;
@@ -1003,9 +1004,9 @@ class planer extends Module {
             if($is_manager || Base_AclCommon::i_am_sa() == "1" || Base_AclCommon::i_am_admin() == "1" ){
                 for($i = 0; $i<7;$i++){
                     $sel_opt = "";
-                    $sel_opt .= "<a style='z-index:5;' ".$this->create_href(array('change_status' => $date->add_days($date->monday_of_week($week_num), $i),'status'=> '2'))."><img src='data/Base_Theme/templates/default/planer/good.png'  width=15 height=15 /></a>";
-                    $sel_opt .= "<a style='z-index:5;' ".$this->create_href(array('change_status' => $date->add_days($date->monday_of_week($week_num), $i),'status'=> '1'))."><img src='data/Base_Theme/templates/default/planer/normal.png'  width=15 height=15 /></a>";
-                    $sel_opt .= "<a style='z-index:5;' ".$this->create_href(array('change_status' => $date->add_days($date->monday_of_week($week_num), $i),'status'=> '3'))."><img src='data/Base_Theme/templates/default/planer/bad.png'  width=15 height=15 /></a>";
+                    $sel_opt .= "<a style='position:relative;z-index:5;' ".$this->create_href(array('change_status' => $date->add_days($date->monday_of_week($week_num), $i),'status'=> '2'))."><img src='data/Base_Theme/templates/default/planer/good.png'  width=15 height=15 /></a>";
+                    $sel_opt .= "<a style='position:relative;z-index:5;' ".$this->create_href(array('change_status' => $date->add_days($date->monday_of_week($week_num), $i),'status'=> '1'))."><img src='data/Base_Theme/templates/default/planer/normal.png'  width=15 height=15 /></a>";
+                    $sel_opt .= "<a style='position:relative;z-index:5;' ".$this->create_href(array('change_status' => $date->add_days($date->monday_of_week($week_num), $i),'status'=> '3'))."><img src='data/Base_Theme/templates/default/planer/bad.png'  width=15 height=15 /></a>";
                     $sel = "<div style='position:relative;text-align:center;'><br>Zmień status:<br>".$sel_opt."</div>";
                     $x = $i;
                     $x++;

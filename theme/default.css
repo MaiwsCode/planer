@@ -625,3 +625,21 @@
 	cursor: pointer;
 	border-radius: 15px 15px;
 }
+
+.priceTD {
+	padding:5px;
+	border-collapse: collapse;
+	border-right:1px solid black;
+}
+.priceTD:last-child{
+	padding:5px;
+	border-collapse: collapse;
+	border-right:0px solid black;
+}
+.pricesTable{
+	border-collapse: collapse;
+	border:1px solid black;
+	margin:2px;
+	padding:2px;
+	font-size: 14px;
+}

@@ -15,14 +15,27 @@
 
     ModuleManager::load_modules();
     $phpWord = new \PhpOffice\PhpWord\PhpWord();
+
+    //custom_agrohandel_purchase_plans custom_agrohandel_transporty  custom_agrohandel_vehicle
+    $rboTransports = new RBO_RecordsetAccessor("custom_agrohandel_transporty");
+    $rboVehicles = new RBO_RecordsetAccessor("custom_agrohandel_vehicle");
+    $rboPurchasePlans = new RBO_RecordsetAccessor("custom_agrohandel_purchase_plans");
+    $rboCompany = new RBO_RecordsetAccessor("company");
+    $rboContact = new RBO_RecordsetAccessor("contact");
+
     $section = $phpWord->addSection();
+    $company = $_REQUEST['company'];
+    $companyRecord = $rboCompany->get_record($company);
+    $contactRecord = $rboContact->get_records(array("postal_code" => $companyRecord['postal_code'], 'group' => ['vet'] ), array(), array()); 
+    foreach ($contactRecord as $cr) { $contactRecord = $cr; }
+
     $styleT = array('color' => '000000', 'name' => 'Calibri', 'size' => '12', 'bold' => true);
     $styleP = array("alignment" => 'right');
     $section->addText("Szewce \${data}", $styleT, $styleP);
     $section->addTextBreak(1);
     $section->addText("\${firma}", array('color' => '000000', 'name' => 'Calibri', 'size' => '14', 'bold' => true), $styleP);
     $section->addText("\${adres}", $styleT, $styleP);
-    $section->addText("\${telefon} \${email}", $styleT, $styleP);
+    $section->addText("\${email}", $styleT, $styleP);
     $section->addTextBreak(1);
     $styleT = array('color' => '000000', 'name' => 'Calibri', 'size' => '12');
     $phpWord->addParagraphStyle('pJustify', array('align' => 'both', 'spaceBefore' => 0, 'spaceAfter' => 0, 'spacing' => 0));
@@ -31,7 +44,7 @@
     $text->addText("\${day}" , array('color' => '000000', 'name' => 'Calibri', 'size' => '14' , 'bold'=>true));
     $section->addTextBreak(1);
     $section->addText("Szanowni Państwo, ", array('color' => '000000', 'name' => 'Calibri', 'size' => '11'));
-    $section->addText("Uprzejmie informujemy, iż na dzień \${day}  dostawy tucznika planujemy w następujących godzinach:",
+    $section->addText("Uprzejmie informujemy, iż na dzień \${day}  dostawy tucznika planujemy w następujących ilościach:",
         array('color' => '000000', 'name' => 'Calibri', 'size' => '11') );
     $section->addTextBreak(1);
     $pCell = array("spacing" => '25');
@@ -45,18 +58,8 @@
     $txt->addText("Numer rejestracyjny środka transportu ", array("bold" => true), $pCell);
     $txt->addText(" [Naczepa / przyczepa]", array("bold" => false , 'size' => '8'), $pCell);
     $table->addCell()->addText("Ilość sztuk ", array("bold" => true), $pStyle=array('alignment'=> 'center'));
-    $table->addCell()->addText("Planowana godzina przyjazdu do zakładu ", array("bold" => true), $pStyle=array('alignment'=> 'center'));
-    $table->addCell()->addText("Numery ubojowe ", array("bold" => true), $pStyle=array('alignment'=> 'center'));
-
-    //custom_agrohandel_purchase_plans custom_agrohandel_transporty  custom_agrohandel_vehicle
-    $rboTransports = new RBO_RecordsetAccessor("custom_agrohandel_transporty");
-    $rboVehicles = new RBO_RecordsetAccessor("custom_agrohandel_vehicle");
-    $rboPurchasePlans = new RBO_RecordsetAccessor("custom_agrohandel_purchase_plans");
-    $rboCompany = new RBO_RecordsetAccessor("company");
 
     $date =  $_REQUEST['date'];
-    $company = $_REQUEST['company'];
-    $companyRecord = $rboCompany->get_record($company);
     $transports = $rboTransports->get_records(array("company" => $company, 'date' => $date , 'type' => 'tucznik'), array(), array('load_time'=>'ASC'));
     $index = 1;
     foreach ($transports as $transport){
@@ -69,15 +72,6 @@
             $purchase = $rboPurchasePlans->get_record($zakup);
             $amountSum += $purchase['amount'];
             $rolnik = $rboCompany->get_record($purchase['company']);
-            $postal = $rolnik->get_val("postal_code", false);
-            $string ="";
-            if($postal[0] == "0" || $postal[0] == "1" || $postal[0] == "2" || $postal[0] == "3"  ){
-                $string = $purchase['numer_ubojowy']."(".$purchase['amount']." szara), ";
-            }
-            else{
-                $string = $purchase['numer_ubojowy']."(".$purchase['amount']."), ";
-            }
-            $numbers .= $string;
         }
 
         $subs = $transport['transporty'];
@@ -105,14 +99,10 @@
         $table->addCell()->addText($vehicle['vehicle_rn'],array(), $pStyle=array('alignment'=> 'center'));
         $table->addCell()->addText($vehicle['trailer_rn'],array(), $pStyle=array('alignment'=> 'center'));
         $table->addCell()->addText($amountSum,array(), $pStyle=array('alignment'=> 'center'));
-        $table->addCell()->addText($loadTime,array(), $pStyle=array('alignment'=> 'center'));
-        $table->addCell()->addText($numbers,array(), $pStyle=array('alignment'=> 'center'));
         $index++;
     }
 
     $section->addTextBreak(2);
-    $section->addText("Powyższe godziny proszę  traktować z tolerancja   ± 1 godzina  , ilość sztuk może również zmienić się    ± 10 sztuk.",
-        array('color' => '000000', 'name' => 'Calibri', 'size' => '11'));
     $text = $section->addTextRun();
     $footer = "Kontakt do ";
     $text->addText($footer, $styleT);
@@ -122,16 +112,13 @@
 
     $template = new \PhpOffice\PhpWord\TemplateProcessor("data/template.docx");
     $now = date("Y-m-d");
-    $now .= " g.";
-    $now .= date("H:m");
     $template->setValue("data", $now);
 
-    $address = $companyRecord->get_val('address_1',true).", ".$companyRecord->get_val('postal_code',true)." ".$companyRecord->get_val('city',true);
+    $address = $contactRecord['address_1'].", ".$contactRecord['postal_code']." ".$contactRecord['city'];
 
-    $template->setValue("firma", $companyRecord->get_val("company_name",true));
+    $template->setValue("firma", $contactRecord["title"]);
     $template->setValue("adres", $address);
-    $template->setValue("telefon", $companyRecord->get_val("phone",true));
-    $template->setValue("email", $companyRecord->get_val("email",true));
+    $template->setValue("email", $contactRecord["email"]);
     $template->setValue("day", $date);
 
     $template->saveAs("data/template.docx");

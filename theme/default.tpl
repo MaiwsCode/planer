@@ -8,6 +8,39 @@
 <div class="css3_content_shadow">
 <div style="padding: 5px; background-color: #FFFFFF;">
 <h1 style="text-align: left;margin-left: 5px;">PLANY SPRZEDAŻY TUCZNIKA </h1>
+<br>
+<table class='pricesTable'>
+    <tr style="text-align:center;">
+        <th colspan='3'> Tydzień {$thisWeekZMP.week} ({$prevWeekZMP.date}) </th>
+    </tr>
+    <tr>
+        <td class='priceTD'>
+            ZMP: {$prevWeekZMP.zmp} €
+        </td>
+        <td class='priceTD'>
+            Kurs: {$prevWeekZMP.euro} zł
+        </td>
+        <td class='priceTD'>
+            Cena: {$prevWeekZMP.price} zł
+        </td>
+    </tr>
+</table>
+<table class='pricesTable'>
+    <tr style="text-align:center;">
+        <th colspan='3'> Tydzień {$prevWeekZMP.week}  ({$thisWeekZMP.date}) </th>
+    </tr>
+    <tr>
+        <td class='priceTD'>
+            ZMP: {$thisWeekZMP.zmp} €
+        </td>
+        <td class='priceTD'>
+            Kurs: {$thisWeekZMP.euro} zł
+        </td>
+        <td class='priceTD'>
+            Cena: {$thisWeekZMP.price} zł
+        </td>
+    </tr>
+</table>
     {foreach from=$action_buttons item=button}
         <a class="button" {$button.href}>{$button.label}</a>
     {/foreach}

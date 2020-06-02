@@ -20,7 +20,6 @@ class planer extends Module {
             $rb = $rs->create_rb_module ( $this );
             $this->display_module ( $rb);
         }    
-
         if(!isset($_REQUEST['mode']) && !isset($_REQUEST['__jump_to_RB_table']) ){
 
             $theme->assign("css", Base_ThemeCommon::get_template_dir());
@@ -545,7 +544,7 @@ class planer extends Module {
             $all_transported_week = 0;
         //  $pt = sortByCompanyName($pt);
             //potrzeba wstawić prawidłową nazwe tabeli
-            $bought = new RBO_RecordsetAccessor('custom_agrohandel_purchase_plans');
+            $bought = new RBO_RecordsetAccessor("custom_agrohandel_purchase_plans"); //EDIT
             $pon_bought = $bought->get_records(array('planed_purchase_date' => $date->monday_of_week($week_num),'~status' => "%purchased%"),
                                             array("Company" => "ASC"));
             $wt_bought = $bought->get_records(array('planed_purchase_date' => $date->add_days($date->monday_of_week($week_num), 1),'~status' => "%purchased%"),
@@ -1098,9 +1097,54 @@ class planer extends Module {
                 $sum_week[$sum->get_val("company_name",$nolink=true)] = array("val" => $value,
                                                                             "name" =>$sum->get_val("company_name",$nolink=true));
             }
-			
-		
-			$theme->assign('week_loads',$week_loads);
+
+            $wn = $week_num;
+            if($wn == 53){
+                $wn = 1;
+            }
+
+            $thisWeek = $date->add_days($date->monday_of_week($wn), - 5);
+            $prevWeek = $date->add_days($date->monday_of_week($wn), 2);
+
+            $rbo = new RBO_RecordsetAccessor("currency_history");
+            $prevWeekRecords = $rbo->get_records(array('date' => $prevWeek, '!euro' => '', '!zmp' => ''), array(), array());
+            foreach($prevWeekRecords as $p){$prevWeekRecords = $p;}
+            $thisWeekRecords = $rbo->get_records(array('date' => $thisWeek, '!euro' => '', '!zmp' => ''), array(), array());
+            foreach($thisWeekRecords as $t){$thisWeekRecords = $t;}
+            if( $prevWeekRecords == null){
+                planerCommon::downloadDay($prevWeek);
+            }
+            else if($prevWeekRecords['euro'] == 0 || $prevWeekRecords['zmp'] == 0 ) {
+                planerCommon::downloadDay($prevWeek);
+            }
+
+            if( $thisWeekRecords == null){
+                planerCommon::downloadDay($thisWeek);
+            }
+            else if($thisWeekRecords['euro'] == 0 || $thisWeekRecords['zmp'] == 0 ) {
+                planerCommon::downloadDay($thisWeek);
+            }
+    
+            $prevWeekRecords = $rbo->get_records(array('date' => $prevWeek), array(), array());
+            $thisWeekRecords = $rbo->get_records(array('date' => $thisWeek), array(), array());
+            foreach($prevWeekRecords as $p){$prevWeekRecords = $p;}
+            foreach($thisWeekRecords as $t){$thisWeekRecords = $t;}
+            $prevWeekRecords['price'] = $prevWeekRecords['euro'] * $prevWeekRecords['zmp'];
+            $thisWeekRecords['price'] = $thisWeekRecords['euro'] * $thisWeekRecords['zmp'];
+
+            $prevWeekRecords['price'] = str_replace(".", ",", round($prevWeekRecords['price'],2));
+            $prevWeekRecords['euro'] = str_replace(".", ",", $prevWeekRecords['euro']);
+            $prevWeekRecords['zmp'] = str_replace(".", ",", $prevWeekRecords['zmp']);
+            $prevWeekRecords['week'] = $wn - 1;
+
+            $thisWeekRecords['price'] = str_replace(".", ",", round($thisWeekRecords['price'],2));
+            $thisWeekRecords['euro'] = str_replace(".", ",", $thisWeekRecords['euro']);
+            $thisWeekRecords['zmp'] = str_replace(".", ",", $thisWeekRecords['zmp']);
+            $thisWeekRecords['week'] = $wn;
+
+			$theme->assign('thisWeekZMP', $thisWeekRecords);
+			$theme->assign('prevWeekZMP', $prevWeekRecords);
+			$theme->assign('week_loads', $week_loads);
 			$theme->assign('all_loaded_week',$all_loaded_week);
 			$theme->assign('loadings_sum_of_day',$loadings_sum_of_day);
             $theme->assign("transports_sum_of_day",$transports_sum_of_day);
@@ -1117,10 +1161,6 @@ class planer extends Module {
             $theme->assign('amount_sum',$amount_sum);
             $theme->assign('start',1);
             $theme->assign('days',$days);
-            $wn = $week_num;
-            if($wn == 53){
-                $wn = 1;
-            }
             $theme->assign('week_number', $wn);
             $theme->assign ( 'action_buttons', $buttons );
             $theme->display();
@@ -1138,7 +1178,7 @@ class planer extends Module {
             );
             $companes = new RBO_RecordsetAccessor("company");
             $transported = new RBO_RecordsetAccessor("custom_agrohandel_transporty");            //custom_agrohandel_transporty Transport
-            $bought = new RBO_RecordsetAccessor("custom_agrohandel_purchase_plans");//zmien przed produkcja
+            $bought = new RBO_RecordsetAccessor("custom_agrohandel_purchase_plans");//zmien przed produkcja 
             $theme->assign("css", Base_ThemeCommon::get_template_dir());
             $transports = null; 
             $date = new PickDate($year);

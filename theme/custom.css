@@ -1,0 +1,43 @@
+.tableHeaders{
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.zones {
+    padding: 5px;
+    margin: 5px;
+    text-align: left;
+    border-radius: 25%;
+    -moz-border-radius: 25%;
+    -webkit-border-radius: 25%;
+}
+
+.dodgerBlue {
+    box-shadow: 4px 1px 2px 0px dodgerblue;
+    padding-right: 1px;
+    
+}
+
+.red {
+    box-shadow: 4px 1px 2px 0px red;
+    padding-right: 1px;
+    
+}
+
+.yellow {
+    box-shadow: 4px 1px 2px 0px yellow;
+    padding-right: 1px;
+}
+
+.darkblue {
+    box-shadow: 4px 1px 2px 0px darkblue;
+    padding-right: 1px;
+}
+
+.deliveredColor {
+    color: rgb(15, 144, 250);
+}
+
+.loadedColor {
+    color: #c8a500;
+}

@@ -122,7 +122,7 @@ class planerCommon extends ModuleCommon
 		if ($index == 0) {
 			$offset = 0;
 		} else if ($index >= 1) {
-			$offset = 6 * $index;
+			$offset = 7 * $index;
 		}
 
 		if ($currentWeek >= 0) {
@@ -145,7 +145,7 @@ class planerCommon extends ModuleCommon
 			return [
 				'week'  =>  $td[0 + $offset]->nodeValue,
 				'date'  =>  $td[1 + $offset]->nodeValue,
-				'price' =>  $td[5 + $offset]->nodeValue,
+				'price' =>  $td[3 + $offset]->nodeValue,
 				'priceValue' => $price,
 			];
 		} else {

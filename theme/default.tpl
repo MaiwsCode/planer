@@ -1,272 +1,340 @@
-<head>
-    <link rel="stylesheet" type='text/css' href='{$css}/planer/default.css' />
-    
-</head>
-
-<div class="layer" style="padding: 9px; width: 98%;">
-<div style="text-align: left; height:30px">
-<div class="css3_content_shadow">
-<div style="padding: 5px; background-color: #FFFFFF;">
-<h1 style="text-align: left;margin-left: 5px;">PLANY SPRZEDAŻY TUCZNIKA </h1>
-<br>
-<table class='pricesTable'>
-    <tr style="text-align:center;">
-        <th colspan='3'> Tydzień {$thisWeekZMP.week} ({$prevWeekZMP.date}) </th>
-    </tr>
-    <tr>
-        <td class='priceTD'>
-            ZMP: {$prevWeekZMP.zmp} €
-        </td>
-        <td class='priceTD'>
-            Kurs: {$prevWeekZMP.euro} zł
-        </td>
-        <td class='priceTD'>
-            Cena: {$prevWeekZMP.price} zł
-        </td>
-    </tr>
-</table>
-<table class='pricesTable'>
-    <tr style="text-align:center;">
-        <th colspan='3'> Tydzień {$prevWeekZMP.week}  ({$thisWeekZMP.date}) </th>
-    </tr>
-    <tr>
-        <td class='priceTD'>
-            ZMP: {$thisWeekZMP.zmp} €
-        </td>
-        <td class='priceTD'>
-            Kurs: {$thisWeekZMP.euro} zł
-        </td>
-        <td class='priceTD'>
-            Cena: {$thisWeekZMP.price} zł
-        </td>
-    </tr>
-</table>
-    {foreach from=$action_buttons item=button}
-        <a class="button" {$button.href}>{$button.label}</a>
-    {/foreach}
-    <br><br>
-   <div style='text-align:right;margin-right:20px;'> {$select} </div>
-    {$test}
-<br>
- <table class="Agrohandel__sale__week" style="margin-top:15px;margin-bottom:15px;"> 
-    <thead>
-        <td class="header_future"> SUMA Z TYGODNIA </td> 
-        <td class="header_future">Zakład</td> 
-        <td class="header_future">Suma zamówionych</td>
-        <td class="header_future">Suma dostarczonych</td>
-		<td class="header_future">Suma załadowanych</td>
-        <td class="header_future">Suma kupionych</td>
-    </thead>
-   {foreach from=$sumary_week item=company}
-    <tr class="changing" style="font-size:15px;">
-        {if ($company === reset($sumary_week))}      
-            <td class="inter_future" rowspan="{$sumary_week|@count}" style="color:black;background-color:#FFFFFF;">
-            <span style='font-size:18px;'><b>Tydzień - {$week_number} </b></span>
-            </td>
-        {/if}
-        {assign var=last value=$company.name}
-        <td class="inter_future" >{$company.name}</td>
-        <td class="inter_future" >{$company.val}</td>  
-        <td class="inter_future transported">
-        {if $week_transported.$last == ""}
-            0
-        </td>
-        {else}
-            {$week_transported.$last}
-        </td>
-        {/if}
-		
-		<td class="inter_future " style='color:#ffa31a;'>
-        {if $week_loads.$last == ""}
-            0
-        </td>
-        {else}
-            {$week_loads.$last}
-        </td>
-        {/if}
-        {if ($company === reset($sumary_week))}      
-        <td class="inter_future bought"  rowspan="{$sumary_week|@count}">{$all_bought}  </td>
-        {/if}
-    </tr>
-    {/foreach}
-    {foreach from=$missing_all item=company}
-    <tr class="changing">  
-      {if ($company === reset($missing_all))}   
-        <td class="inter_future" rowspan="{$missing_all|@count}" style="color:red;background-color:#FFFFFF;"> Brakujące plany</td>
-      {/if}
-        <td class="inter_future" >{$company.company}</td>
-        <td class="inter_future" >---</td>
-        <td class="inter_future" >{$company.amm}</td>
-        <td class="inter_future " >{$company.iloscrozl}</td>
-    </tr>
-    {/foreach}
-<tr class="changing">
-    <td class="inter_future" colspan="2"><span style='font-size:18px;'><b>Razem:</b></span></td>
-    <td class="inter_future"><span style='font-size:18px;'><b>{$all_zam}</b></span></td>
-    <td class="inter_future transported"><span style='font-size:18px;'><a style='color:#0a07bd;' {$week_link} ><b>{$all_transp}</b></a></span></td>
-	<td class="inter_future"> <span style='font-size:18px;color:#ffa31a;'> <b> {$all_loaded_week} </b></span> <br> <span style='color:#ffa31a;'>(w tym {$reload_sum} przeładowanych) </span></td>
-    <td class="inter_future bought"><span style='font-size:18px;'><b>{$all_bought}</b></span></td>
-</tr>
-
-    </table>
-    <br><br><br>
-    <table  class="Agrohandel__sale__week" cellspacing=0 style="margin-top:15px;margin-bottom:15px;">
-     <thead>
-        <tr>
-            <td class="header_company"><span style='font-size:15px;'>Dzień tygodnia</span> <br></td>
-            <td class="header_future">Zakład</td>
-            <td class="header_future">Zamówione</td>
-            <td class="header_future">Dostarczone</td>
-			<td class="header_future">Załadowane</td>
-            <td class="header_future">Kupione</td>
-            <td class="header_future">Cena</td>
-            <td class="header_future">Informacje</td>
-        </tr>
-     </thead>
-     <tr class='separator'></tr>
-        {assign var=val value=1}
-        {assign var=arr value=$trans[1]}
-		{assign var=loadA value=$load[1]}
-        {assign var=transported value=$week_trans}
-        {assign var=row value=1}
-        {assign var=iter value=1}
-        {assign var=extra value=""}
-        {assign var=last value="testLocal"}
-                {foreach from=$days item=day}
-                    {foreach from=$day item=record name=y}
-                        {if $smarty.now|date_format:"%Y-%m-%d" == $record.date} 
-                            {if ($record === reset($day)) && $day|@count == 1}  
-                                {assign var=useClass value="lineUp lineDown"}
-                                {assign var=extra value="border-bottom: 2px solid #336699;"}
-                            {elseif ($record === reset($day))}
-                                {assign var=useClass value="lineUp"}
-                                {assign var=extra value="border-bottom: 2px solid #336699;"}
-                            {elseif ($record === end($day))} 
-                                {assign var=useClass value="lineDown"}
-                            {else}
-                                {assign var=useClass value=""}
-                                {assign var=extra value=""}
-                            {/if}
-                        {else}
-                            {assign var=useClass value=""}
-                            {assign var=extra value=""}
-                        {/if}
-                        {if $record.difficulty_level == 2}
-                            <tr class="prop100 {$useClass}">
-                        {elseif  $record.difficulty_level == 3}
-                            <tr class="prop30 {$useClass}">
-                        {else}
-                            <tr class="prop50 {$useClass}" >
-                        {/if}
-                        {if ($record === reset($day))}      
-                            {assign var="selector" value="`$val``$val`"}
-                            <td class="inter_company" rowspan="{$day|@count}" style='{$extra} text-align:center;font-size:15px;'>
-                               <span>{$record.date}</span><br>
-                                <span>{$days_text[$val]}</span><br>
-                                {$days_text[$selector]} </td>
-
-                        {/if}
-                        {if ($record === end($day)) && $extra ==''}  
-                            <td class="inter_future" style='font-size:15px;border-bottom: 1px solid #B3B3B3;'> {$record.company_name} {$record.word} </td>
-                        {else}
-                            <td class="inter_future" style='font-size:15px;'> {$record.company_name} {$record.word} </td>
-                        {/if}
-                        {if ($record === end($day)) && $extra ==''}  
-                            <td class="inter_future" style="border-bottom: 1px solid #B3B3B3;"><span style='font-size:18px;'> {$record.amount} </span> &nbsp;
-                                {$record.edit}
-                                {$record.delete}
-                            </td>
-                        {else}
-                            <td class="inter_future"><span style='font-size:18px;'> {$record.amount} </span> &nbsp;
-                            {$record.edit}
-                            {$record.delete}
-                            </td>
-                        {/if}
-                        {if $iter == $row}
-                            {assign var=last value=$record.company_name|strip_tags:false|substr:0}
-                            {if $arr.$last}
-                                {if ($record === end($day)) && $extra ==''} 
-                                    <td class="inter_future transported" style='border-bottom: 1px solid #B3B3B3;font-size:15px;'  rowspan="{$indexer[$iter]}">{$arr.$last}</td>
-									<td class="inter_future transported" style='border-bottom: 1px solid #B3B3B3;font-size:15px;color:#ffa31a;'  rowspan="{$indexer[$iter]}">{$loadA.$last}</td>
-                                {else}
-                                    <td class="inter_future transported" style='{$extra} font-size:15px;'  rowspan="{$indexer[$iter]}">{$arr.$last}</td>
-									<td class="inter_future " style='border-bottom: 1px solid #B3B3B3;font-size:15px;color:#ffa31a;'  rowspan="{$indexer[$iter]}">{$loadA.$last}</td>
-                                {/if}
-                            {else}
-                                {if ($record === end($day)) && $extra ==''} 
-                                    <td class="inter_future transported" style='border-bottom: 1px solid #B3B3B3; font-size:15px;'  rowspan="{$indexer[$iter]}">0</td>
-									<td class="inter_future " style='border-bottom: 1px solid #B3B3B3;font-size:15px;color:#ffa31a;'  rowspan="{$indexer[$iter]}">0</td>
-                                {else}
-                                    <td class="inter_future transported" style="font-size:15px;"   rowspan="{$indexer[$iter]}"> 0 </td>
-									<td class="inter_future" style="font-size:15px;color:#ffa31a;"   rowspan="{$indexer[$iter]}"> 0 </td>
-                                {/if}
-                            {/if}
-                            {assign var=row value=$row+$indexer[$iter]}
-                            {assign var=iter value=$iter+1}
-                        {else}
-                                {assign var=row value=$row-1}
-                        {/if}
-                        {if ($record === reset($day))}      
-                            <td class="inter_future bought" style="{$extra} font-size:15px;" rowspan="{$day|@count}"> {$amount_sum[$val]} </td>
-                        {/if}
-                          {if ($record === end($day)) && $extra ==''}  
-                            <td class="inter_future" style="border-bottom: 1px solid #B3B3B3;font-size:15px;">{$record.Price|floatval|replace:'.':','}</td>
-                        {else}
-                            <td class="inter_future" style='font-size:15px;'>{$record.Price|floatval|replace:'.':','}</td>
-                        {/if}
-                            {if ($record === end($day)) && $extra ==''} 
-                                <td class="inter_future" style="border-bottom: 1px solid #B3B3B3;">{$record.notka}</td>
-                            {else}
-                                <td class="inter_future" >{$record.notka}</td>
-                            {/if}
-                        </tr>
-                        {if ($record === end($day))} 
-                        <tr class='separator' style='font-size:14px;'></tr>
-                            {foreach from=$missing[$val] item=rec}
-                            <tr class="changing">
-                                 {if ($rec === reset($missing[$val]))}   
-                                    <td class="inter_future" rowspan="{$missing[$val]|@count}" style="color:red;background-color:#F0F0F0;"> Brakujące plany</td>
-                                 {/if}
-                                 <td class="inter_future">{$rec.company}</td>
-                                 <td class="inter_future">---</td>
-                                 <td class="inter_future">---</td>
-                                 <td class="inter_future">{$rec.amm}</td>
-                                 <td class="inter_future">{$rec.iloscrozl}</td>
-                                 <td class="inter_future" >---</td>
-                                <td class="inter_future" ></td>
-                                 </tr>
-                            {/foreach}
-                        {/if}
-                    {/foreach}
-					{if $reloads[$val] != null } 
-						{foreach from=$reloads[$val] item=reload}
-								<tr>
-								<td class="inter_future">Przeładunek</td>
-									<td class="inter_future" colspan='3'> {$reload.name}</td>
-									<td class="inter_future" style='color:#ffa31a;'>{$reload.count}</td>
-									<td class="inter_future" colspan='3'></td>
-								</tr>
-						{/foreach}
-					{/if}	
-                    {if $days_zam[$val] != null }
-					  <tr class='separator' style='font-size:14px;'></tr>
-                      <tr>
-                            <td colspan='2' class="inter_future"> <b>Razem: </b></td>
-                            <td class="inter_future"> <b>{$days_zam[$val]}</b> </td>
-                            <td class="inter_future transported">  <a style='color:#0a07bd;' {$days_link[$val]} ><b>{$transports_sum_of_day[$val]} </b> </a></td>
-							<td class="inter_future" style='color:#ffa31a;'> <b>{$loadings_sum_of_day[$val]}</b> </td>
-                            <td class="inter_future" colspan='3'>  </td>
-                        </tr>
-                        <tr class='separator'></tr>
-                        <tr class='separator'></tr>
-                        {/if}
-                   {assign var=val value=$val+1}
-                   {assign var=arr value=$trans[$val]}
-				   {assign var=loadA value=$load[$val]}
-                {/foreach}      
-                </table>
-            <br><br><br>
+<div class="bootstrap-iso" id='moduleBody' style="font-size: 14px;background-color:#fff;padding:2px;color:#000000;">
+    <div class="container-fluid" style="padding-left: 6px; padding-right: 6px;">
+        <!-- row -->
+        <div class="row">
+            <!-- col -->
+            <div class='col-6'>
+                <h4 class='text-left' style='padding:5px;'>PLANY SPRZEDAŻY TUCZNIKA</h4>
             </div>
+            <!-- col -->
         </div>
+        <!-- row -->
+        <div class='row'>
+            <div class='col-1'>
+                <!-- dropdown -->
+                <div class="dropdown" id='dropdownMenu'>
+                    <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Wybierz tydzień
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                      {$dropdownWeekItems}
+                    </div>
+                </div>
+                <!-- dropdown -->
+            </div>
+            <!-- col -->
+            <div class='col-4'></div>
+            <div class='col-1'>
+
+            </div>
+            <div class='col-3'>
+                <h6> Cena z tygodnia {math equation='x - y' x=$weekSummary.week y=1 } </h6>
+                <table class='table table-bordered table-sm text-center'>
+                    <thead style='color:#000000;'>
+                        <tr>
+                            <th>
+                                Cena Euro
+                            </th>
+                            <th>
+                                Cena ZMP
+                            </th>
+                            <th>
+                                Cena tucznika (PLN)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody style='color:#000000;'>
+                        <tr>
+                            <td> 
+                                {$prevWeekZMP.euro} zł
+                            </td>
+                            <td>
+                                {$prevWeekZMP.zmp} €
+                            </td>
+                            <td>
+                                {$prevWeekZMP.price} zł
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+            <div class='col-3'>
+                <h6> Cena z tygodnia {$weekSummary.week} </h6>
+                <table class='table table-bordered table-sm text-center'>
+                    <thead style='color:#000000;'>
+                        <tr>
+                            <th>
+                                Cena Euro
+                            </th>
+                            <th>
+                                Cena ZMP
+                            </th>
+                            <th>
+                                Cena tucznika (PLN)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody style='color:#000000;'>
+                        <tr>
+                            <td> 
+                                {$thisWeekZMP.euro} zł
+                            </td>
+                            <td>
+                                {$thisWeekZMP.zmp} €
+                            </td>
+                            <td>
+                                {$thisWeekZMP.price} zł
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+            <!-- col -->
+        </div>
+        <!-- row -->
+        <!-- row -->
+        <div classs="row">
+            <!-- col -->
+            <div class='col-12'>
+                <table class='table table-stripped'>
+                    <thead style='color:#000000;'>
+                        <tr class='tableHeaders text-center bg-warning'>
+                            <th>
+                                SUMA Z TYGODNIA
+                            </th>
+                            <th>
+                                Zakład
+                            </th>
+                            <th>
+                                Suma zamówionych
+                            </th>
+                            <th>
+                                Suma dostarczonych
+                            </th>
+                            <th>
+                                Suma załadowanych
+                            </th>
+                            <th>
+                                Suma kupionych
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class='text-center' style='color:#000000;font-size:16px;'>
+                        <!-- script -->
+                        {assign var="reloaded" value=0 }
+                        {foreach from=$weekSummary.records item=week name=records}
+                            <tr >
+                                {if $smarty.foreach.records.index == 0 }
+                                    <td rowspan='{$weekSummary.rowSpan}' style='vertical-align:middle;border-right: 1px solid #eceeef;color:#000000;'>
+                                        <h6> Tydzień - {$weekSummary.week} </h6>
+                                    </td>
+                                {/if}
+                                <td style='color:#000000;' > {if $week.company == ''} Przeładunek {assign var="reloaded" value=$reloaded+$week.loaded } {else} {$week.company} {/if} </td>
+                                <td style='color:#000000;'>
+                                    {$week.amount}
+                                </td>
+                                <td class='deliveredColor'>
+                                    {$week.delivered}
+                                </td>
+                                <td class='loadedColor'>
+                                    {$week.loaded}
+                                </td>
+                                {if $smarty.foreach.records.index == 0 }
+                                    <td rowspan='{$weekSummary.rowSpan}' style='vertical-align:middle;border-left: 1px solid #eceeef;color:#000000;'>
+                                    </td>
+                                {/if}
+                            </tr>
+                        {/foreach}
+                        <!-- footer -->
+                        <tr class='tableHeaders text-center' style='vertical-align:middle;' >
+                            <td colspan='2'>
+                                Łacznie:
+                            </td>
+                            <td style='color:#000000;'> <!-- suma zamówionych -->
+                                {$weekSummary.sumPlanned}
+                            </td>
+                            <td style='color:#000000;' class='deliveredColor'><!-- suma dostarczonych -->
+                                {$weekSummary.sumDelivered}
+                            </td>
+                            <td style='color:#000000;' class='loadedColor'><!-- suma załadowanych -->
+                                {$weekSummary.sumLoaded}
+                                <br>
+                                <small>(w tym {$reloaded} przeładowanych) </small>
+                            </td>
+                             <td style='color:#000000;'><!-- suma kupionych -->
+                                {$weekSummary.sumBought}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <hr />
+                <div style="width:100%;height:35px;" class="mt-5 mb-5"> </div>
+                <table class='table table-bordered'>
+                    <thead class='text-center' style='color:#000000;'>
+                        <tr class='bg-warning'>
+                            <th>
+                                Dzień tygodnia
+                            </th>
+                            <th style='width:100px;'>
+                            </th>
+                            <th colspan='2'>
+                                Zakład
+                            </th>
+                            <th>
+                                Zamówione
+                            </th>
+                            <th>
+                                Dostarczone
+                            </th>
+                            <th>
+                                Załadowane
+                            </th>
+                            <th>
+                                Kupione
+                            </th>
+                            <th>
+                                Cena
+                            </th>
+                            <th>
+                                Informacje
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody style='color:#000000;font-size:16px;'>
+                        {foreach from=$planned item=planedArray key=k name=days}
+                           {if $planedArray.rowspan > 0 }
+                                {foreach from=$planedArray.records item=planRecords key=nameKey name=planArray}
+                                    {foreach from=$planRecords item=plan name=planRecord}
+                                        <tr> 
+                                            {if $smarty.foreach.planArray.index == 0 && $smarty.foreach.planRecord.index == 0}
+                                                <td rowspan='{$planedArray.rowspan}' class='{$plan.statusColor} text-center'  style='vertical-align:middle;' >
+                                                    <h5>
+                                                        <a {$plan.transportHref} style="text-decoration:none;color:white;" >{$plan.day} </a>
+                                                    </h5>
+                                                        <hr />
+                                                    <h6>
+                                                        {$plan.dayText}
+                                                    </h6>
+                                                    <hr />
+                                                    <h6>
+                                                        {$planedArray.easyButton} {$planedArray.normalButton} {$planedArray.hardButton} 
+                                                    </h6>
+                                                </td>
+                                            {/if}
+                                            <td style='width:100px;'>
+                                               {$plan.view} {$plan.edit} {$plan.delete} {$plan.word}
+                                            </td>
+                                            <td colspan='2'  class='text-left'>
+                                                {if $plan.company}
+                                                    {$plan.company}
+                                                {elseif $plan.missing_comany}
+                                                    Brakujący plan: {$plan.missing_comany}
+                                                {/if}
+                                            </td>
+                                            <td class='text-center' >
+                                                {if $plan.amount == ''} 0 {else} <div class='zones {$plan.color} list-inline-item'> {$plan.amount} </div> {/if}
+                                            </td>
+                                            {if $smarty.foreach.planRecord.index == 0}
+                                                <td class='text-center deliveredColor'  rowspan='{$planRecords|@count}'  style='vertical-align:middle;' >
+                                                     {if $plan.delivered == ''} 0 {else} {$plan.delivered} {/if}
+                                                </td>
+                                                <td class='text-center loadedColor' rowspan='{$planRecords|@count}'  style='vertical-align:middle;' >
+                                                    {if $plan.loaded == ''} 0 {else} {$plan.loaded} {/if}
+                                                </td>
+                                            {/if}
+                                            {if $smarty.foreach.planArray.index == 0 && $smarty.foreach.planRecord.index == 0 }
+                                                <td rowspan='{$planedArray.rowspan}' class='text-center'  style='vertical-align:middle;'>
+                                                {if $planedArray.zone.white > 0}
+                                                    <span class='zones white'>
+                                                        {$planedArray.zone.white }
+                                                    </span> <br /> <br />
+                                                {/if}
+                                                {if $planedArray.zone.yellow > 0}
+                                                    <span class='zones yellow'>
+                                                        {$planedArray.zone.yellow }
+                                                    </span> <br /> <br />
+                                                {/if}
+                                                {if $planedArray.zone.red > 0}
+                                                    <span class='zones red'>
+                                                        {$planedArray.zone.red }
+                                                    </span> <br /> <br />
+                                                {/if}
+                                                {if $planedArray.zone.dodgerBlue > 0}
+                                                    <span class='zones dodgerBlue'>
+                                                        {$planedArray.zone.dodgerBlue }
+                                                    </span> <br /> <br />
+                                                {/if}
+                                                {if $planedArray.zone.darkblue >0}
+                                                    <span class='zones darkblue'>
+                                                        {$planedArray.zone.darkblue }
+                                                    </span> <br /> <br />
+                                                {/if}
+                                                </td>
+                                            {/if}
+                                            {if $plan.day == $today}
+                                                <td  class='text-center font-weight-bold'>
+                                            {else}
+                                                 <td  class='text-center'>
+                                            {/if}
+                                                {if $plan.price == ''} 0 {else} {$plan.price} {/if}
+
+                                            </td>
+                                            <td  class='text-left'>
+                                                {$plan.notka}
+                                            </td>
+                                        </tr>
+                                    {/foreach}
+                                {/foreach}
+                                <tr></tr>
+                                {foreach from=$planedArray.reloads item=reload name=reloadsArray}
+                                    <tr>
+                                        <td colspan='2' class='text-right text-weight-bold'> Przeładunek:  </td>
+                                        <td colspan='2' class='text-right text-weight-bold'>
+                                            {$reload.company}
+                                        </td>
+                                        <td></td>
+                                        <td class='text-center deliveredColor'>
+                                            {$reload.delivered}
+                                        </td>
+                                        <td class='text-center loadedColor'>
+                                            {$reload.loaded}
+                                        </td>
+                                        <td colspan='3'>
+                                        </td>
+                                    </tr>
+                                {/foreach}
+                                    <tr>
+                                        <td colspan='4' class='text-right tableHeaders'>
+                                            Łącznie:
+                                        </td>
+                                        <td class='text-center tableHeaders' style='color:#000000;'>
+                                            {if $planedArray.sum.sumPlanned == ''} 0 {else} {$planedArray.sum.sumPlanned } {/if}
+                                        </td>
+                                        <td class='text-center deliveredColor tableHeaders' style='color:#000000;'>
+                                            {if $planedArray.sum.sumDelivered == ''} 0 {else} {$planedArray.sum.sumDelivered } {/if}
+                                        </td>
+                                        <td class='text-center loadedColor tableHeaders' style='color:#000000;'>
+                                            {if $planedArray.sum.sumLoaded == ''} 0 {else} {$planedArray.sum.sumLoaded } {/if}
+                                        </td>
+                                        <td class='text-center tableHeaders' style='color:#000000;'>
+                                            {if $planedArray.sum.sumBought == ''} 0 {else} {$planedArray.sum.sumBought } {/if}
+                                        </td>
+                                                                                            
+                                        <td colspan='2'></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan='10'></td>
+                                    </tr>
+                                {/if}
+                          {/foreach}
+                    </tbody>
+                </table>
+            </div>
+            <!-- col -->
+        </div>
+        <!-- row -->
+
     </div>
 </div>
